@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 function Test() {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://192.168.3.103:3001/courses`).then((res) => {
+    axios.get(`${Config.API_URL}/courses`).then((res) => {
       setCourses(res.data);
     });
   }, []);
 
   return (
     <View>
-      <Text style={styles.text}>Hello</Text>
+      <Text style={styles.text}>Localhost: {Config.API_URL}</Text>
 
       <Text>These course name is fetch from server!</Text>
       {courses.map((course, index) => {
