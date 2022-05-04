@@ -25,6 +25,7 @@ function Home({navigation}) {
           title={'Đăng nhập'}
           colorText={'#ffffff'}
           width = {160}
+          onPressFunction={() => navigation.navigate('Login')}
         />
       </View>
     </View>

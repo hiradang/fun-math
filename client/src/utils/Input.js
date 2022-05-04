@@ -3,13 +3,14 @@ import { Text, StyleSheet, View } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextInput } from 'react-native-gesture-handler';
 
+
 const Input = (props) => {
   return (
     <View style={[props.style, styles.view]}>
       <Text style={styles.text}>{props.title}</Text>
       <View style={styles.row}>
         <View style={[styles.icon, props.error && styles.iconError]}>
-          <FontAwesome5 name={props.icon} size={25} color={'#000000'} />
+          <FontAwesome5 name={props.icon} size={20} color={'#000000'} />
         </View>
         <TextInput
           value={props.value}
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    width: 280,
+    // width: '280',
+    width: '80%',
     height: 50,
     backgroundColor: '#ffffff',
     borderTopRightRadius: 20,
@@ -49,11 +51,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   inputError: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: 'red',
-    borderRightWidth: 1,
+    borderRightWidth: 2,
     borderRightColor: 'red',
-    borderTopWidth: 1,
+    borderTopWidth: 2,
     borderTopColor: 'red',
   },
   icon: {
@@ -68,11 +70,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconError: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: 'red',
-    borderLeftWidth: 1,
+    borderLeftWidth: 2,
     borderLeftColor: 'red',
-    borderTopWidth: 1,
+    borderTopWidth: 2,
     borderTopColor: 'red',
   },
 });
