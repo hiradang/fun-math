@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import axios from 'axios';
-import Config from 'react-native-config';
 import CustomButton from '../utils/CustomButton';
 
-function Home({navigation}) {
+function Start({navigation}) {
   return (
     <View style={styles.body}>
       <View style={styles.main}>
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-export default Home;
+export default Start;

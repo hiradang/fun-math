@@ -34,7 +34,7 @@ function SignUp({ navigation }) {
               text1: 'Đăng ký thành công',
               visibilityTime: 2000,
             });
-            navigation.goBack();
+            navigation.navigate('Login');
           }
         });
     } else if (!username || !name || !password || !checkPass) {
@@ -57,7 +57,7 @@ function SignUp({ navigation }) {
         <TouchableOpacity
           style={styles.back}
           onPress={() => {
-            navigation.navigate('Login');
+            navigation.goBack();
           }}
         >
           <Ionicons name="chevron-back" size={25} color="#ffffff" />

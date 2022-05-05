@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 router.post('/login', async (req, res) => {
     const {username, password} = req.body;
-    console.log(username, password)
     const user = await User.findOne({ where: { username: username } });
     if (user) {
         bcrypt.compare(password, user.password).then((match) => {
@@ -17,14 +16,12 @@ router.post('/login', async (req, res) => {
             //   });
             //   res.cookie('token', accessToken);
             //  res.json({ username: user.username, role: user.role, accessToken });
-            res.json({username: user.username, name: user.name})
+            res.json({username: user.username, name: user.name, role_id: user.role_id})
             }
           });
     } else {
         res.json({error: 'Tài khoản chưa tồn tại'})
     }
-  const users = await User.findAll();
-  res.json(users);
 });
 
 router.post('/', async (req, res) => {

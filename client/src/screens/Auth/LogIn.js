@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
@@ -18,37 +19,39 @@ function LogIn({ navigation }) {
   //   });
   // }, []);
 
-    const submit = () => {
-      setOnSubmit(true);
-      console.log(username, password);
-      if (username && password) {
-        axios
-          .post(`${Config.API_URL}/users/login`, { username, password})
-          .then((res) => {
-            if (res.data.error) {
-              Toast.show({
-                type: 'error',
-                text1: res.data.error,
-                visibilityTime: 2000,
-              });
-            //   setErrorText(true);
-            } else {
-              Toast.show({
-                type: 'success',
-                text1: 'Đăng nhập thành công',
-                visibilityTime: 2000,
-              });
-              navigation.goBack();
-            }
+  const submit = () => {
+    setOnSubmit(true);
+    if (username && password) {
+      axios.post(`${Config.API_URL}/users/login`, { username, password }).then((res) => {
+        if (res.data.error) {
+          Toast.show({
+            type: 'error',
+            text1: res.data.error,
+            visibilityTime: 2000,
           });
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Bạn chưa điền đầy đủ thông tin',
-          visibilityTime: 2000,
-        });
-      } 
-    };
+          //   setErrorText(true);
+        } else {
+          Toast.show({
+            type: 'success',
+            text1: 'Đăng nhập thành công',
+            visibilityTime: 2000,
+          });
+          AsyncStorage.setItem(
+            'user',
+            JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
+          ).then(() => {
+            navigation.navigate('Start');
+          });
+        }
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Bạn chưa điền đầy đủ thông tin',
+        visibilityTime: 2000,
+      });
+    }
+  };
   return (
     <View style={styles.body}>
       <ScrollView>
@@ -61,7 +64,7 @@ function LogIn({ navigation }) {
           <Ionicons name="chevron-back" size={25} color="#ffffff" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
-        <View style = {styles.container}>
+        <View style={styles.container}>
           <Input
             title="Tên đăng nhập"
             placeholder="Tên đăng nhập"
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   container: {
-    marginTop: '15%'
+    marginTop: '15%',
   },
   LogIn: {
     marginTop: '30%',
