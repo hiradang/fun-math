@@ -40,7 +40,7 @@ function LogIn({ navigation }) {
             'user',
             JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
           ).then(() => {
-            navigation.navigate('Start');
+            navigation.navigate('Test');
           });
         }
       });

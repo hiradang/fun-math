@@ -7,27 +7,39 @@ import Toast from 'react-native-toast-message';
 import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
+import Splash from './screens/Splash';
+import Test from './screens/Test';
 
 const Stack = createStackNavigator();
 
-
 const App = () => {
-  const [userParse, setUserParse] = useState()
-  useEffect(()=> {
-    AsyncStorage.getItem('user').then((user)=> {
-      console.log(1, user, typeof user)
-      setUserParse(JSON.parse(user))
-      console.log(2, userParse, typeof userParse)
-    })
-  },[])
+  const [userParse, setUserParse] = useState();
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((user) => {
+      setUserParse(JSON.parse(user));
+    });
+  }, []);
   axios.interceptors.request.use((config) => {
     config.headers.Authorization = userParse;
     return config;
   });
-  console.log(3, userParse)
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName= {userParse !== undefined ? "Start": "Login"}>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Test"
+          component={Test}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="Start"
           component={Start}

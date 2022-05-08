@@ -2,27 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import CustomButton from '../utils/CustomButton';
 
-function Start({navigation}) {
+function Start({ navigation }) {
   return (
     <View style={styles.body}>
       <View style={styles.main}>
         <Image style={styles.image} source={require('../../assets/logo.png')}></Image>
-        <Text style={styles.text}>FunMath</Text>
       </View>
       <View style={styles.button}>
+        <Text style={styles.text}>
+          Chào mừng đến với FunMath. Hãy bắt đầu ngay để khám phá thế giới kỳ diệu của những con số
+          nào!
+        </Text>
         <CustomButton
-          color={'#ffffff'}
+          color={'#000000'}
           title={'Đăng ký'}
-          colorText={'#000000'}
+          colorText={'#ffffff'}
           style={styles.signup}
-          width = {160}
+          width={'60%'}
           onPressFunction={() => navigation.navigate('Signup')}
         />
         <CustomButton
           color={'#000000'}
           title={'Đăng nhập'}
           colorText={'#ffffff'}
-          width = {160}
+          width={'60%'}
           onPressFunction={() => navigation.navigate('Login')}
         />
       </View>
@@ -32,11 +35,15 @@ function Start({navigation}) {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#3D67FF',
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   main: {
-    flex: 7,
+    flex: 3,
+    width: '100%',
+    backgroundColor: '#3D67FF',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -46,15 +53,26 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   text: {
-    fontSize: 50,
-    color: '#ffffff',
+    fontSize: 26,
+    width: '80%',
+    textAlign: 'center',
+    color: '#000000',
   },
   button: {
-    flexDirection: 'row',
-    flex: 1,
-    marginBottom: 20,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 2,
+    width: '80%',
+    height: '15%',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'grey',
+    marginTop: -150,
+    marginBottom: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
   },
 });
 export default Start;
