@@ -4,7 +4,7 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 
 // props.pos = 'left' hoặc 'right' để chọn vị trí cho icon
 
-export default function CsButton(props) {
+export default function CustomButton(props) {
   return (
     <TouchableOpacity style={[styles.button, props.buttonStyles]} onPress={props.onPressFunc}>
         {props.pos === 'left' && (
