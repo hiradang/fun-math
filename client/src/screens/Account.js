@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import Config from 'react-native-config/';
 
 function Account() {
-  const [courses, setCourses] = useState([]);
-
   useEffect(() => {}, []);
 
   return (
