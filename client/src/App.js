@@ -16,13 +16,14 @@ const App = () => {
   const [userParse, setUserParse] = useState();
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
-      setUserParse(JSON.parse(user));
+      axios.interceptors.request.use((config) => {
+        console.log(typeof user)
+        config.headers.authorization = JSON.parse(user);
+        return config;
+      });
     });
   }, []);
-  axios.interceptors.request.use((config) => {
-    config.headers.Authorization = userParse;
-    return config;
-  });
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">

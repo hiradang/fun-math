@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
+import { Dimensions } from 'react-native';
 import Input from '../../utils/Input';
 import CustomButton from '../../utils/CustomButton';
 
@@ -107,21 +108,21 @@ const styles = StyleSheet.create({
   },
   back: {
     marginLeft: 20,
-    marginTop: '10%',
+    marginTop: Dimensions.get('window').height * 0.1,
   },
   text: {
     fontSize: 36,
     color: '#ffffff',
     marginTop: 10,
     marginLeft: 20,
-    marginBottom: '10%',
+    marginBottom: Dimensions.get('window').height * 0.15,
     fontWeight: '500',
   },
   container: {
-    marginTop: '15%',
+    // marginTop: Dimensions.get('window').height * 0.05,
   },
   LogIn: {
-    marginTop: '30%',
+    marginTop: Dimensions.get('window').height * 0.2,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
