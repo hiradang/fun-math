@@ -3,12 +3,18 @@ import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
+
+import Account from './screens/Account';
 import Toast from 'react-native-toast-message';
 import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
 import Splash from './screens/Splash';
 import Test from './screens/Test';
+import Setting from './screens/Setting';
+import EditProfile from './screens/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -61,6 +67,65 @@ const App = () => {
           options={{
             headerShown: false,
           }}
+          />
+        <Stack.Screen
+          name="Tài khoản"
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <AntDesign
+                name="arrowleft"
+                size={30}
+                style={{ marginLeft: 20 }}
+                color="black"
+                onPress={() => navigation.goBack()}
+              />
+            ),
+            headerRight: () => (
+              <AntDesign
+                name="setting"
+                size={30}
+                style={{ marginRight: 20 }}
+                color="black"
+                onPress={() => navigation.navigate('Cài đặt')}
+              />
+            ),
+          })}
+          component={Account}
+        />
+        <Stack.Screen
+          name="Cài đặt"
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <AntDesign
+                name="arrowleft"
+                size={30}
+                style={{ marginLeft: 20 }}
+                color="black"
+                onPress={() => navigation.goBack()}
+              />
+            ),
+          })}
+          component={Setting}
+        />
+        <Stack.Screen
+          name="Chỉnh sửa tài khoản"
+          options={({ navigation, route }) => ({
+            headerLeft: () => (
+              <AntDesign
+                name="arrowleft"
+                size={30}
+                style={{ marginLeft: 20 }}
+                color="black"
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Feather name="check" size={30} style={{ marginRight: 20 }} color="black" />
+            ),
+          })}
+          component={EditProfile}
         />
       </Stack.Navigator>
       <Toast />
