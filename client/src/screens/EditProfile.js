@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, ScrollView } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 /* 
 Note: 
-1. Đẩy màn hình lên khi ấn vào input của mật khẩu, nếu không sẽ che mất màn hình
-2. Chỉnh sửa lại được link ảnh
-3. Cách lưu ảnh
+1. Chỉnh sửa lại được link ảnh
+2. Cách lưu ảnh
 */
 
 function EditProfile() {
@@ -14,53 +13,55 @@ function EditProfile() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/defaultProfile-girl.png')}
-        />
-
-        <View style={styles.editIconContainer}>
-          <FontAwesome5
-            size={30}
-            color="#14D39A"
-            name="pencil-alt"
-            onPress={() => navigation.navigate('Chỉnh sửa tài khoản')}
+      <ScrollView>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/images/defaultProfile-girl.png')}
           />
-        </View>
-      </View>
 
-      <View style={styles.row}>
-        <Text style={styles.title}>Tên đăng nhập</Text>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="UtLoanPhoBo" />
-          <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="user-alt" />
+          <View style={styles.editIconContainer}>
+            <FontAwesome5
+              size={30}
+              color="#14D39A"
+              name="pencil-alt"
+              onPress={() => navigation.navigate('Chỉnh sửa tài khoản')}
+            />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <Text style={styles.title}>Tên người dùng</Text>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Sở thú Hà Nội" />
-          <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="user-alt" />
+        <View style={styles.row}>
+          <Text style={styles.title}>Tên đăng nhập</Text>
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.input} placeholder="UtLoanPhoBo" />
+            <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="user-alt" />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <Text style={styles.title}>Mật khẩu cũ</Text>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} secureTextEntry placeholder="Mật khẩu cũ" />
-          <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="lock" />
+        <View style={styles.row}>
+          <Text style={styles.title}>Tên người dùng</Text>
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.input} placeholder="Sở thú Hà Nội" />
+            <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="user-alt" />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <Text style={styles.title}>Mật khẩu mới</Text>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} secureTextEntry placeholder="Mật khẩu mới" />
-          <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="lock" />
+        <View style={styles.row}>
+          <Text style={styles.title}>Mật khẩu cũ</Text>
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.input} secureTextEntry placeholder="Mật khẩu cũ" />
+            <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="lock" />
+          </View>
         </View>
-      </View>
+
+        <View style={styles.row}>
+          <Text style={styles.title}>Mật khẩu mới</Text>
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.input} secureTextEntry placeholder="Mật khẩu mới" />
+            <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="lock" />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }

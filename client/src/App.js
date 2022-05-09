@@ -12,7 +12,6 @@ import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
 import Splash from './screens/Splash';
-import Test from './screens/Test';
 import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
 
@@ -23,26 +22,19 @@ const App = () => {
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
       axios.interceptors.request.use((config) => {
-        console.log(typeof user)
+        console.log(typeof user);
         config.headers.authorization = JSON.parse(user);
         return config;
       });
     });
   }, []);
-  
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"
           component={Splash}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Test"
-          component={Test}
           options={{
             headerShown: false,
           }}
@@ -67,7 +59,7 @@ const App = () => {
           options={{
             headerShown: false,
           }}
-          />
+        />
         <Stack.Screen
           name="Tài khoản"
           options={({ navigation }) => ({

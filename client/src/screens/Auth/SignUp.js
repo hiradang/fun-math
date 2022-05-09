@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -121,18 +121,18 @@ const styles = StyleSheet.create({
   },
   back: {
     marginLeft: 20,
-    marginTop: '5%',
+    marginTop: Dimensions.get('window').height * 0.05,
   },
   text: {
     fontSize: 36,
     color: '#ffffff',
     marginTop: 10,
     marginLeft: 20,
-    marginBottom: '5%',
+    marginBottom: Dimensions.get('window').height * 0.05,
     fontWeight: '500',
   },
   signup: {
-    marginTop: 20,
+    marginTop: Dimensions.get('window').height * 0.1,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

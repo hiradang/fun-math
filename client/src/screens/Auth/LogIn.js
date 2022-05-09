@@ -41,7 +41,7 @@ function LogIn({ navigation }) {
             'user',
             JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
           ).then(() => {
-            navigation.navigate('Test');
+            navigation.navigate('Tài khoản');
           });
         }
       });
