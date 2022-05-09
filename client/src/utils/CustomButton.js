@@ -7,15 +7,15 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 export default function CustomButton(props) {
   return (
     <TouchableOpacity style={[styles.button, props.buttonStyles]} onPress={props.onPressFunc}>
-        {props.pos === 'left' && (
-          <FontAwesome name={props.iconName} size={props.iconSize} color={props.iconColor} />
-        )}
-        <Text style={[styles.text, props.textStyles]} numberOfLines={1}>
-          {props.text}
-        </Text>
-        {props.pos === 'right' && (
-          <FontAwesome name={props.iconName} size={props.iconSize} color={props.iconColor} />
-        )}
+      {props.pos === 'left' && (
+        <FontAwesome name={props.iconName} size={props.iconSize} color={props.iconColor} />
+      )}
+      <Text style={[styles.text, props.textStyles]} numberOfLines={1}>
+        {props.text}
+      </Text>
+      {props.pos === 'right' && (
+        <FontAwesome name={props.iconName} size={props.iconSize} color={props.iconColor} />
+      )}
     </TouchableOpacity>
   );
 }
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   text: {
     fontSize: 20,
     textAlign: 'center',

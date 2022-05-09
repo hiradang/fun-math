@@ -15,14 +15,13 @@ export default function Home({ navigation, route }) {
   let currentCourse = 'Phép cộng';
   if (typeof route.params?.newCourse !== 'undefined') currentCourse = route.params.newCourse;
   const userIconHandler = () => {
-    navigation.navigate('');
+    navigation.navigate('Tài khoản');
   };
 
   const barsIconHandler = () => {
-    navigation.navigate('ListCourses', { currentCourse: currentCourse});
+    navigation.navigate('ListCourses', { currentCourse: currentCourse });
   };
 
-  
   const header = {
     title: currentCourse,
     headerRight: () => {
@@ -51,6 +50,7 @@ export default function Home({ navigation, route }) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -67,9 +67,9 @@ export default function Home({ navigation, route }) {
         },
         tabBarStyle: { height: '10%', borderTopColor: '#DDDDDD', borderTopWidth: 3 },
       })}
-      tabBarOptions={{
-        showLabel: false,
-      }}
+      // tabBarOptions={{
+      //   showLabel: false,
+      // }}
     >
       <Tab.Screen name="Overview" component={Overview} options={header} />
       <Tab.Screen name="Study" component={Study} options={header} />

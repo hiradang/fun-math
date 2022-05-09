@@ -41,7 +41,7 @@ function LogIn({ navigation }) {
             'user',
             JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
           ).then(() => {
-            navigation.navigate('Tài khoản');
+            navigation.navigate('Home');
           });
         }
       });
@@ -88,11 +88,10 @@ function LogIn({ navigation }) {
           />
           <View style={styles.LogIn}>
             <CustomButton
-              color={'#000000'}
-              title={'Đăng nhập'}
-              colorText={'#ffffff'}
-              width={300}
-              onPressFunction={submit}
+              buttonStyles={{ backgroundColor: '#000000', width: 300, height: 60, marginTop: 20 }}
+              textStyles={{ color: 'white' }}
+              text={'Đăng nhập'}
+              onPressFunc={submit}
             />
           </View>
         </View>

@@ -1,10 +1,3 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-import Home from './screens/Home';
-import ListCourses from './screens/ListCourses';
-import HeaderStyles from './utils/HeaderStyles';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,9 +5,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-
-import Account from './screens/Account';
 import Toast from 'react-native-toast-message';
+
+import ListCourses from './screens/ListCourses';
+import HeaderStyles from './utils/HeaderStyles';
+import Account from './screens/Account';
+import Home from './screens/Home';
 import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
@@ -103,6 +99,7 @@ const App = () => {
                 onPress={() => navigation.navigate('Cài đặt')}
               />
             ),
+            ...HeaderStyles,
           })}
           component={Account}
         />

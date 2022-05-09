@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Setting({ navigation }) {
   const [isRemind, setRemind] = useState(false);
@@ -15,6 +16,11 @@ function Setting({ navigation }) {
    * 2. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
    * 3. xử lý khi nhấn vào nút đăng xuất.
    */
+
+  const logOut = () => {
+    AsyncStorage.removeItem('user');
+    navigation.navigate('Start');
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -147,7 +153,7 @@ function Setting({ navigation }) {
         <View style={styles.content}>
           <View style={styles.row}>
             <Text style={styles.text}>Đăng xuất</Text>
-            <MaterialIcons size={24} color="#E46B6B" name="logout" />
+            <MaterialIcons size={24} color="#E46B6B" name="logout" onPress={logOut} />
           </View>
         </View>
       </View>

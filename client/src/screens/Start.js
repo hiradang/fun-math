@@ -14,19 +14,16 @@ function Start({ navigation }) {
           nào!
         </Text>
         <CustomButton
-          color={'#000000'}
-          title={'Đăng ký'}
-          colorText={'#ffffff'}
-          style={styles.signup}
-          width={'60%'}
-          onPressFunction={() => navigation.navigate('Signup')}
+          buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
+          textStyles={{ color: 'white' }}
+          text={'Đăng ký'}
+          onPressFunc={() => navigation.navigate('Signup')}
         />
         <CustomButton
-          color={'#000000'}
-          title={'Đăng nhập'}
-          colorText={'#ffffff'}
-          width={'60%'}
-          onPressFunction={() => navigation.navigate('Login')}
+          buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
+          textStyles={{ color: 'white' }}
+          text={'Đăng nhập'}
+          onPressFunc={() => navigation.navigate('Login')}
         />
       </View>
     </View>

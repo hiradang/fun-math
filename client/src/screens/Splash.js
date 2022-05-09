@@ -7,7 +7,7 @@ function Splash({ navigation }) {
     setTimeout(() => {
       AsyncStorage.getItem('user').then((user) => {
         if (!JSON.parse(user)) navigation.replace('Start');
-        else navigation.replace('Tài khoản');
+        else navigation.replace('Home');
       });
     }, 2000);
   }, []);

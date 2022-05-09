@@ -102,11 +102,10 @@ function SignUp({ navigation }) {
         />
         <View style={styles.signup}>
           <CustomButton
-            color={'#000000'}
-            title={'Đăng ký'}
-            colorText={'#ffffff'}
-            width={300}
-            onPressFunction={submit}
+            buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
+            textStyles={{ color: 'white' }}
+            text={'Đăng ký'}
+            onPressFunc={submit}
           />
         </View>
       </ScrollView>
