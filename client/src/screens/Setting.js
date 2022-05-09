@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -17,7 +17,7 @@ function Setting({ navigation }) {
    */
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Tài khoản */}
       <View style={styles.item}>
         <Text style={styles.title}>TÀI KHOẢN</Text>
@@ -151,7 +151,7 @@ function Setting({ navigation }) {
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   title: {
     textTransform: 'uppercase',
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     paddingLeft: 20,
     marginBottom: 10,
   },
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#2662BB',
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   row: {
     display: 'flex',
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 14,
   },
   textLeft: {
     maxWidth: '90%',
