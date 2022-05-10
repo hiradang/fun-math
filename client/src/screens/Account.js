@@ -18,6 +18,12 @@ function Account() {
       name: 'Đặng Thị Bình',
     },
     {
+      url: 'https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-6/240591961_276169177692117_2281620348846835296_n.jpg?_nc_cat=102&ccb=1-6&_nc_sid=730e14&_nc_ohc=NBjAFVibN84AX9OgAif&_nc_ht=scontent.fhan15-1.fna&oh=00_AT8EpTWT2u9Cia8t1o0NyNGqbJEczEi8Dqc-RFMG_3wlzw&oe=627FD616',
+      exp: 400,
+      userName: 'Hoa453',
+      name: 'Đặng Thị Thanh Hoa',
+    },
+    {
       url: 'https://scontent.fhan5-2.fna.fbcdn.net/v/t39.30808-6/273709088_1353888431729563_3232172361839707412_n.jpg?_nc_cat=104&ccb=1-6&_nc_sid=174925&_nc_ohc=CvX6na0kXtcAX_nOwBm&_nc_ht=scontent.fhan5-2.fna&oh=00_AT_B-t12CsNB93G6wdBTSA7Ejm6Yo_Xm-qytH2Acf6R3ag&oe=627C7A6A',
       exp: 10,
       userName: 'hiraBui789',
@@ -30,6 +36,7 @@ function Account() {
       name: 'Le Minh Huong',
     },
   ];
+
 
   const crUserName = 'MinhHoa01'; // user name của thằng người dùng hiện tại ném vào đây
 
@@ -67,38 +74,31 @@ function Account() {
           </View>
         </View>
       </View>
-      <UserRanking dataExp={dataExp} userName={crUserName} />
+      <UserRanking dataExp={dataExp} userName={crUserName} topExp={4} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#2662BB',
-    height: '100%',
-    textAlign: 'center',
     flex: 1,
+    backgroundColor: '#2662BB',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 24,
-    color: '#999',
-  },
   info: {
-    display: 'flex',
+    flex: 0.24,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 40,
+    paddingVertical: '8%',
     backgroundColor: '#3D67FF',
-    marginBottom: '20%',
+    marginBottom: '10%',
   },
   infoLeft: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
+    flex: 0.25,
+    marginHorizontal: 20,
     textAlign: 'center',
+    alignItems: 'center',
   },
   profileImage: {
     width: 80,
@@ -107,14 +107,13 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: 'white',
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   infoRight: {
-    flex: 3,
-    marginLeft: 20,
-    marginRight: 20,
+    flex: 0.75,
+    marginLeft: 30,
   },
   item: {
     display: 'flex',

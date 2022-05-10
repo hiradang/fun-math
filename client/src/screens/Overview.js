@@ -105,7 +105,7 @@ export default function Overview() {
           </View>
         </View>
       )}
-      <UserRanking dataExp={dataExp} userName={crUserName} />
+      <UserRanking dataExp={dataExp} userName={crUserName} topExp={3}/>
     </View>
   );
 }
