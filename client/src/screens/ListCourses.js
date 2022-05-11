@@ -1,86 +1,65 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-// division: Phép chia
-// x: phép nhân
-// plus: phép cộng
-// dash: phép trừ
+import Config from 'react-native-config';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
+
+import axios from 'axios';
 
 export default function ListCourses({ navigation, route }) {
-  const { currentCourse } = route.params;
+  const { currentCourseId, currentCourseName } = useSelector((state) => state.taskReducer);
+  const dispatch = useDispatch();
 
-  // gọi API về thông tin tất cả khóa học của người dùng
-  const listCourse = [
-    {
-      name: 'Phép cộng',
-      currentExp: 10,
-      currentChapter: 10,
-      currentLesson: 20,
-      totalLesson: 50,
-      isDone: false,
-    },
-    {
-      name: 'Phép trừ',
-      currentExp: 0,
-      currentChapter: 0,
-      currentLesson: 0,
-      totalLesson: 0,
-      isDone: false,
-    },
-    {
-      name: 'Phép nhân',
-      currentExp: 10,
-      currentChapter: 10,
-      currentLesson: 20,
-      totalLesson: 50,
-      isDone: true,
-    },
-    {
-      name: 'Phép chia',
-      currentExp: 10,
-      currentChapter: 10,
-      currentLesson: 20,
-      totalLesson: 50,
-      isDone: false,
-    },
-  ];
+  const [selCourse, setSelCourse] = useState({});
+  const [notAllowSelCourses, setNotAllowSelCourses] = useState([]);
 
-  const selCourse = listCourse.find((obj) => obj.name === currentCourse);
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/courses`).then((res) => {
+      // Set selCourse
+      let tempSelCourse = res.data.find((obj) => obj.course_name === currentCourseName);
+      setSelCourse(tempSelCourse);
 
-  const notAllowSelCourse = listCourse.filter((obj) => obj.name !== currentCourse);
+      // Set notAllowSelCourses
+      let tempNotAllowSelCourses = res.data.filter((obj) => obj.course_name !== currentCourseName);
+      setNotAllowSelCourses(tempNotAllowSelCourses);
+    });
+  }, []);
 
   const renderCourse = (course) => {
     return (
       <TouchableOpacity
         style={styles.course}
-        key={course.name}
-        onPress={() => navigation.navigate('Home', { newCourse: course.name })}
+        key={course.course_id}
+        onPress={() => navigation.navigate('Home', { newCourse: course.course_name })}
       >
         <View style={styles.courseIconWrapper}>
           {/* <Image style={styles.avatarImg} source={{ uri: data.url }} /> */}
-          {course.name === 'Phép cộng' && <Octicons name="plus" size={35} color="black" />}
-          {course.name === 'Phép nhân' && <Octicons name="x" size={35} color="black" />}
-          {course.name === 'Phép trừ' && <Octicons name="dash" size={35} color="black" />}
-          {course.name === 'Phép chia' && (
+          {course.course_name === 'Phép cộng' && <Octicons name="plus" size={35} color="black" />}
+          {course.course_name === 'Phép nhân' && <Octicons name="x" size={35} color="black" />}
+          {course.course_name === 'Phép trừ' && <Octicons name="dash" size={35} color="black" />}
+          {course.course_name === 'Phép chia' && (
             <MaterialCommunityIcons name="division" size={35} color="black" />
           )}
         </View>
         <View style={styles.nameAndProgress}>
           <Text style={styles.nameCourse} numberOfLines={1}>
-            {course.name}
+            {course.course_name}
           </Text>
-          {course.isDone && (
+          {course.is_done && (
             <Text style={styles.progressCourse} numberOfLines={1}>
               Đã hoàn thành
             </Text>
           )}
-          {!course.isDone && course.currentExp > 0 && (
+          {!course.is_done && course.total_exp > 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
-              Chương {course.currentChapter}: {course.currentLesson}/{course.totalLesson}
+              Chương {course.current_chapter}: {course.question_learnt_count}/
+              {course.question_all_count}
             </Text>
           )}
-          {!course.isDone && course.currentExp === 0 && (
+          {!course.is_done && course.total_exp === 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
               Chưa bắt đầu
             </Text>
@@ -95,7 +74,7 @@ export default function ListCourses({ navigation, route }) {
       <Text style={styles.selectedCourseTitle}>KHÓA HỌC ĐÃ CHỌN</Text>
       {renderCourse(selCourse)}
       <Text style={styles.selectedCourseTitle}>NHỮNG KHÓA HỌC KHÁC</Text>
-      {notAllowSelCourse.map((obj) => renderCourse(obj))}
+      {notAllowSelCourses.map((obj) => renderCourse(obj))}
     </View>
   );
 }

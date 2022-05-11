@@ -39,7 +39,13 @@ function LogIn({ navigation }) {
           });
           AsyncStorage.setItem(
             'user',
-            JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
+            JSON.stringify({
+              username: username,
+              name: res.data.name,
+              role: res.data.role_id,
+              currentCourseName: 'Phép cộng',
+              currentCourseId: 1,
+            })
           ).then(() => {
             navigation.navigate('Home');
           });

@@ -3,27 +3,42 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
 import Overview from './Overview';
 import Study from './Study';
 import HeaderStyles from '../utils/HeaderStyles';
+import { useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
 
 export default function Home({ navigation, route }) {
+  const { currentCourseName } = useSelector((state) => state.taskReducer);
+  const { currentCourseId } = useSelector((state) => state.taskReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((res) => {
+      const data = JSON.parse(res);
+      dispatch(setCurrentCourseName(data.currentCourseName));
+      dispatch(setCurrentCourseId(data.currentCourseId));
+    });
+  }, []);
+
   // sau chỗ này các bạn lấy data thì thay tên khóa học vào đây
-  let currentCourse = 'Phép cộng';
-  if (typeof route.params?.newCourse !== 'undefined') currentCourse = route.params.newCourse;
   const userIconHandler = () => {
     navigation.navigate('Tài khoản');
   };
 
   const barsIconHandler = () => {
-    navigation.navigate('ListCourses', { currentCourse: currentCourse });
+    navigation.navigate('ListCourses');
   };
 
   const header = {
-    title: currentCourse,
+    title: currentCourseName,
     headerRight: () => {
       return (
         <TouchableOpacity onPress={userIconHandler}>
