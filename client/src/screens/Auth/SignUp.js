@@ -23,14 +23,14 @@ function SignUp({ navigation }) {
         .then((res) => {
           if (res.data.error) {
             Toast.show({
-              type: 'error',
+              type: 'errorToast',
               text1: res.data.error,
               visibilityTime: 2000,
             });
             setErrorText(true);
           } else {
             Toast.show({
-              type: 'success',
+              type: 'successToast',
               text1: 'Đăng ký thành công',
               visibilityTime: 2000,
             });
@@ -39,13 +39,13 @@ function SignUp({ navigation }) {
         });
     } else if (!username || !name || !password || !checkPass) {
       Toast.show({
-        type: 'error',
+        type: 'errorToast',
         text1: 'Bạn chưa điền đầy đủ thông tin',
         visibilityTime: 2000,
       });
     } else {
       Toast.show({
-        type: 'error',
+        type: 'errorToast',
         text1: 'Mật khẩu xác nhận không trùng khớp',
         visibilityTime: 2000,
       });

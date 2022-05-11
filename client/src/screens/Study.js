@@ -1,7 +1,8 @@
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { ToastAndroid, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Toast from 'react-native-toast-message';
 
 export default function Study({ navigation }) {
   const listChapter = [
@@ -16,31 +17,45 @@ export default function Study({ navigation }) {
 
   const lengthOfList = listChapter.length;
 
-  const onPressChapter = () => navigation.navigate('');
+  const onPressChapter = (index) => {
+    if (index == 0) navigation.navigate('');
+    else {
+      if (listChapter[index - 1].isDone) navigation.navigate('');
+      else {
+        Toast.show({
+          type: 'disableToast',
+          text1: `Hãy hoàn thành ${listChapter[index - 1].name}`,
+          visibilityTime: 2000,
+        });
+      }
+    }
+  };
+
+  const checkDisabled = (chapter, index) =>
+    chapter.isDone || index == 0 || listChapter[index - 1].isDone;
 
   return (
     <ScrollView style={styles.container}>
-      {listChapter.map((item) => {
+      {listChapter.map((item, index) => {
         return (
           <View style={styles.chapterContainer} key={item.name}>
-            {listChapter.indexOf(item) == 0 && <View style={{ height: 25 }}></View>}
-            <TouchableOpacity onPress={onPressChapter}>
-              <View style={styles.chapter}>
-                {item.isDone && (
-                  <FontAwesome5 name="book" size={50} color="#54135A" style={styles.iconDone} />
-                )}
-                {!item.isDone && (
-                  <FontAwesome5
-                    name="book-open"
-                    size={50}
-                    color="#54135A"
-                    style={styles.iconNotDone}
-                  />
-                )}
+            {index == 0 && <View style={{ height: 25 }}></View>}
+            <TouchableOpacity onPress={() => onPressChapter(index)}>
+              <View style={checkDisabled(item, index) ? styles.chapter : styles.chapterDisabled}>
+                <FontAwesome5
+                  name={item.isDone ? 'book' : 'book-open'}
+                  size={50}
+                  color={checkDisabled(item, index) ? '#54135A' : '#EBEBE4'}
+                  style={item.isDone ? styles.iconDone : styles.iconNotDone}
+                />
               </View>
             </TouchableOpacity>
-            <Text style={styles.chapterName}>{item.name}</Text>
-            {listChapter.indexOf(item) < lengthOfList - 1 && (
+            <Text
+              style={checkDisabled(item, index) ? styles.chapterName : styles.chapterNameDisabled}
+            >
+              {item.name}
+            </Text>
+            {index < lengthOfList - 1 && (
               <Entypo
                 name="dots-three-vertical"
                 size={36}
@@ -48,7 +63,7 @@ export default function Study({ navigation }) {
                 style={styles.iconSeparate}
               />
             )}
-            {listChapter.indexOf(item) == lengthOfList - 1 && <View style={{ height: 25 }}></View>}
+            {index == lengthOfList - 1 && <View style={{ height: 25 }}></View>}
           </View>
         );
       })}
@@ -74,10 +89,25 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: '#C4C4C4',
   },
+  chapterDisabled: {
+    height: 96,
+    width: 96,
+    borderRadius: 48,
+    backgroundColor: '#C4C4C4',
+
+    borderWidth: 5,
+    borderColor: '#EBEBE4',
+  },
   chapterName: {
     fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
+    marginTop: 5,
+  },
+  chapterNameDisabled: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#C4C4C4',
     marginTop: 5,
   },
   iconNotDone: {
@@ -91,6 +121,6 @@ const styles = StyleSheet.create({
     left: 20,
   },
   iconSeparate: {
-    marginVertical: 15,
+    marginVertical: 20,
   },
 });

@@ -58,7 +58,6 @@ export default function ListCourses({ navigation, route }) {
         onPress={() => navigation.navigate('Home', { newCourse: course.name })}
       >
         <View style={styles.courseIconWrapper}>
-          {/* <Image style={styles.avatarImg} source={{ uri: data.url }} /> */}
           {course.name === 'Phép cộng' && <Octicons name="plus" size={35} color="black" />}
           {course.name === 'Phép nhân' && <Octicons name="x" size={35} color="black" />}
           {course.name === 'Phép trừ' && <Octicons name="dash" size={35} color="black" />}

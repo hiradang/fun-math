@@ -26,14 +26,14 @@ function LogIn({ navigation }) {
       axios.post(`${Config.API_URL}/users/login`, { username, password }).then((res) => {
         if (res.data.error) {
           Toast.show({
-            type: 'error',
+            type: 'errorToast',
             text1: res.data.error,
             visibilityTime: 2000,
           });
           //   setErrorText(true);
         } else {
           Toast.show({
-            type: 'success',
+            type: 'successToast',
             text1: 'Đăng nhập thành công',
             visibilityTime: 2000,
           });
@@ -47,7 +47,7 @@ function LogIn({ navigation }) {
       });
     } else {
       Toast.show({
-        type: 'error',
+        type: 'errorToast',
         text1: 'Bạn chưa điền đầy đủ thông tin',
         visibilityTime: 2000,
       });
