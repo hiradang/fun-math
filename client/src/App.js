@@ -28,7 +28,6 @@ const App = () => {
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
       axios.interceptors.request.use((config) => {
-        console.log(typeof user);
         config.headers.authorization = JSON.parse(user);
         return config;
       });

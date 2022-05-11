@@ -1,16 +1,17 @@
-import { SET_CURRENT_COURSE_NAME, SET_CURRENT_COURSE_ID } from './actions';
+import { SET_CURRENT_COURSE_NAME } from './actions';
+import { SET_USERNAME } from './actions';
 
 const initialState = {
+  username: '',
   currentCourseName: 'Phép cộng',
-  currentCourseId: 1,
 };
 
 function taskReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_COURSE_NAME:
       return { ...state, currentCourseName: action.payload };
-    case SET_CURRENT_COURSE_ID:
-      return { ...state, currentCourseId: action.payload };
+    case SET_USERNAME:
+      return { ...state, username: action.payload };
     default:
       return state;
   }

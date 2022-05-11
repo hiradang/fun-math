@@ -3,21 +3,22 @@ import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Config from 'react-native-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
+import { setCurrentCourseName } from '../redux/actions';
 
 import axios from 'axios';
 
 export default function ListCourses({ navigation, route }) {
-  const { currentCourseId, currentCourseName } = useSelector((state) => state.taskReducer);
+  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
   const dispatch = useDispatch();
 
   const [selCourse, setSelCourse] = useState({});
   const [notAllowSelCourses, setNotAllowSelCourses] = useState([]);
 
   useEffect(() => {
-    axios.get(`${Config.API_URL}/courses`).then((res) => {
+    axios.get(`${Config.API_URL}/course_user/${username}`).then((res) => {
       // Set selCourse
       let tempSelCourse = res.data.find((obj) => obj.course_name === currentCourseName);
       setSelCourse(tempSelCourse);
@@ -33,10 +34,20 @@ export default function ListCourses({ navigation, route }) {
       <TouchableOpacity
         style={styles.course}
         key={course.course_id}
-        onPress={() => navigation.navigate('Home', { newCourse: course.course_name })}
+        onPress={() => {
+          dispatch(setCurrentCourseName(course.course_name));
+          AsyncStorage.mergeItem(
+            'user',
+            JSON.stringify({
+              currentCourseName: course.course_name,
+            }),
+            () => {
+              navigation.navigate('Home');
+            }
+          );
+        }}
       >
         <View style={styles.courseIconWrapper}>
-          {/* <Image style={styles.avatarImg} source={{ uri: data.url }} /> */}
           {course.course_name === 'Phép cộng' && <Octicons name="plus" size={35} color="black" />}
           {course.course_name === 'Phép nhân' && <Octicons name="x" size={35} color="black" />}
           {course.course_name === 'Phép trừ' && <Octicons name="dash" size={35} color="black" />}

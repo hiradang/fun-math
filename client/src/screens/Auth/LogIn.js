@@ -6,6 +6,10 @@ import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import { Dimensions } from 'react-native';
+
+import { setCurrentCourseName, setUsername } from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Input from '../../utils/Input';
 import CustomButton from '../../utils/CustomButton';
 
@@ -14,11 +18,8 @@ function LogIn({ navigation }) {
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
   const [errorText, setErrorText] = useState(false);
-  // useEffect(() => {
-  //   axios.get(`${Config.API_URL}/courses`).then((res) => {
-  //     setCourses(res.data);
-  //   });
-  // }, []);
+
+  const dispatch = useDispatch();
 
   const submit = () => {
     setOnSubmit(true);
@@ -37,14 +38,19 @@ function LogIn({ navigation }) {
             text1: 'Đăng nhập thành công',
             visibilityTime: 2000,
           });
+
+          // Save to redux
+          // dispatch(setCurrentCourseName(res.data.current_course_name));
+          // dispatch(setUsername(username));
+
+          // Save to Async Storage
           AsyncStorage.setItem(
             'user',
             JSON.stringify({
               username: username,
               name: res.data.name,
               role: res.data.role_id,
-              currentCourseName: 'Phép cộng',
-              currentCourseId: 1,
+              currentCourseName: res.data.current_course_name,
             })
           ).then(() => {
             navigation.navigate('Home');

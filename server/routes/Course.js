@@ -7,10 +7,4 @@ router.get('/', async (req, res) => {
   res.json(courses);
 });
 
-router.get('/:courseId', async (req, res) => {
-  const courseId = req.params.courseId;
-  const course = await Course.findByPk(courseId);
-  res.json(course);
-});
-
 module.exports = router;

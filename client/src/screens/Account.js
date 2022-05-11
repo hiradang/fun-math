@@ -37,7 +37,6 @@ function Account() {
     },
   ];
 
-
   const crUserName = 'MinhHoa01'; // user name của thằng người dùng hiện tại ném vào đây
 
   useEffect(() => {}, []);

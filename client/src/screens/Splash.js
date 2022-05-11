@@ -2,8 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentCourseName, setUsername } from '../redux/actions';
+
 function Splash({ navigation }) {
+  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    // Set dữ liệu username và Current Course ban đầu khi mở ứng dụng
+    AsyncStorage.getItem('user').then((res) => {
+      const data = JSON.parse(res);
+      dispatch(setCurrentCourseName(data.currentCourseName));
+      dispatch(setUsername(data.username));
+    });
+
     setTimeout(() => {
       AsyncStorage.getItem('user').then((user) => {
         if (!JSON.parse(user)) navigation.replace('Start');

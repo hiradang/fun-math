@@ -3,8 +3,15 @@ import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import Config from 'react-native-config';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 function Setting({ navigation }) {
+  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
+  const dispatch = useDispatch();
+
   const [isRemind, setRemind] = useState(false);
   const [isNotiNewCourse, setNotiNewCourse] = useState(false);
   const [isNotiUpdate, setNotiUpdate] = useState(false);
@@ -18,8 +25,15 @@ function Setting({ navigation }) {
    */
 
   const logOut = () => {
-    AsyncStorage.removeItem('user');
-    navigation.navigate('Start');
+    axios
+      .post(`${Config.API_URL}/users/currentCourseName`, {
+        username: username,
+        currentCourseName: currentCourseName,
+      })
+      .then(() => {
+        AsyncStorage.removeItem('user');
+        navigation.navigate('Start');
+      });
   };
 
   return (
