@@ -67,9 +67,6 @@ export default function Home({ navigation, route }) {
         },
         tabBarStyle: { height: '10%', borderTopColor: '#DDDDDD', borderTopWidth: 3 },
       })}
-      // tabBarOptions={{
-      //   showLabel: false,
-      // }}
     >
       <Tab.Screen name="Overview" component={Overview} options={header} />
       <Tab.Screen name="Study" component={Study} options={header} />

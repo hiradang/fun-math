@@ -52,8 +52,6 @@ export default function UserRanking({ dataExp, userName, topExp }) {
         addRanking(0, 2);
         if (userRank > 3) editedData[3] = { ...dataExp[userRank - 1], rank: userRank };
       }
-
-      console.log(editedData);
     }
 
     if (topExp == 4) {

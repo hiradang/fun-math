@@ -1,4 +1,4 @@
-import { ToastAndroid, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -17,11 +17,12 @@ export default function Study({ navigation }) {
 
   const lengthOfList = listChapter.length;
 
-  const onPressChapter = (index) => {
-    if (index == 0) navigation.navigate('');
+  const onPressChapter = (item, index) => {
+    if (index == 0) navigation.navigate('ListLesson', { currentChapter: item.name, isDone: item.isDone });
     else {
-      if (listChapter[index - 1].isDone) navigation.navigate('');
-      else {
+      if (listChapter[index - 1].isDone) {
+        navigation.navigate('ListLesson', { currentChapter: item.name, isDone: item.isDone });
+      } else {
         Toast.show({
           type: 'disableToast',
           text1: `Hãy hoàn thành ${listChapter[index - 1].name}`,
@@ -40,7 +41,7 @@ export default function Study({ navigation }) {
         return (
           <View style={styles.chapterContainer} key={item.name}>
             {index == 0 && <View style={{ height: 25 }}></View>}
-            <TouchableOpacity onPress={() => onPressChapter(index)}>
+            <TouchableOpacity onPress={() => onPressChapter(item, index)}>
               <View style={checkDisabled(item, index) ? styles.chapter : styles.chapterDisabled}>
                 <FontAwesome5
                   name={item.isDone ? 'book' : 'book-open'}

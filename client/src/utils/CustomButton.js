@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     fontWeight: '600',
-    marginHorizontal: 15,
+    marginHorizontal: 20,
   },
 });
