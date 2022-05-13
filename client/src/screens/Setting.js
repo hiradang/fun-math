@@ -7,6 +7,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentCourseName, setUsername } from '../redux/actions';
 
 function Setting({ navigation }) {
   const { currentCourseName, username } = useSelector((state) => state.taskReducer);
@@ -31,7 +32,9 @@ function Setting({ navigation }) {
         currentCourseName: currentCourseName,
       })
       .then(() => {
-        AsyncStorage.removeItem('user');
+        // dispatch(setCurrentCourseName(''));
+        // dispatch(setUsername(''));
+        AsyncStorage.clear();
         navigation.navigate('Start');
       });
   };

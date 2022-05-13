@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, ScrollView } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import { useSelector } from 'react-redux';
+
 /* 
 Note: 
 1. Chỉnh sửa lại được link ảnh
@@ -9,7 +11,7 @@ Note:
 */
 
 function EditProfile() {
-  useEffect(() => {}, []);
+  const { username } = useSelector((state) => state.taskReducer);
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,7 @@ function EditProfile() {
         <View style={styles.row}>
           <Text style={styles.title}>Tên đăng nhập</Text>
           <View style={styles.inputContainer}>
-            <TextInput style={styles.input} placeholder="UtLoanPhoBo" />
+            <TextInput style={styles.input} value={username} editable={false} />
             <FontAwesome5 style={styles.icon} size={24} color="#14D39A" name="user-alt" />
           </View>
         </View>

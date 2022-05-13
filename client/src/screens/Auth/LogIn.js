@@ -14,7 +14,7 @@ import Input from '../../utils/Input';
 import CustomButton from '../../utils/CustomButton';
 
 function LogIn({ navigation }) {
-  const [username, setUsername] = useState('');
+  const [username, setInputUsername] = useState('');
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
   const [errorText, setErrorText] = useState(false);
@@ -39,9 +39,8 @@ function LogIn({ navigation }) {
             visibilityTime: 2000,
           });
 
-          // Save to redux
-          // dispatch(setCurrentCourseName(res.data.current_course_name));
-          // dispatch(setUsername(username));
+          dispatch(setCurrentCourseName(res.data.current_course_name));
+          dispatch(setUsername(username));
 
           // Save to Async Storage
           AsyncStorage.setItem(
@@ -85,7 +84,7 @@ function LogIn({ navigation }) {
             error={(onSubmit && username === '') || errorText}
             icon="user"
             onChangeText={(value) => {
-              setUsername(value);
+              setInputUsername(value);
               setErrorText(false);
             }}
           />

@@ -6,21 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setUsername } from '../redux/actions';
 
 function Splash({ navigation }) {
-  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Set dữ liệu username và Current Course ban đầu khi mở ứng dụng
-    AsyncStorage.getItem('user').then((res) => {
-      const data = JSON.parse(res);
-      dispatch(setCurrentCourseName(data.currentCourseName));
-      dispatch(setUsername(data.username));
-    });
-
     setTimeout(() => {
       AsyncStorage.getItem('user').then((user) => {
         if (!JSON.parse(user)) navigation.replace('Start');
-        else navigation.replace('Home');
+        else {
+          const data = JSON.parse(user);
+          dispatch(setCurrentCourseName(data.currentCourseName));
+          dispatch(setUsername(data.username));
+          navigation.replace('Home');
+        }
       });
     }, 2000);
   }, []);

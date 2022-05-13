@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import UserRanking from '../utils/UserRanking';
 
+import { useSelector } from 'react-redux';
+
 function Account() {
+  const { username } = useSelector((state) => state.taskReducer);
+
   // Vứt data theo form array này nhá
   const dataExp = [
     {
@@ -37,8 +41,6 @@ function Account() {
     },
   ];
 
-  const crUserName = 'MinhHoa01'; // user name của thằng người dùng hiện tại ném vào đây
-
   useEffect(() => {}, []);
 
   return (
@@ -49,7 +51,7 @@ function Account() {
             style={styles.profileImage}
             source={require('../../assets/images/defaultProfile-girl.png')}
           />
-          <Text style={styles.userName}>binhdang</Text>
+          <Text style={styles.userName}>{username}</Text>
         </View>
         <View style={styles.infoRight}>
           <View style={styles.item}>
@@ -73,7 +75,7 @@ function Account() {
           </View>
         </View>
       </View>
-      <UserRanking dataExp={dataExp} userName={crUserName} topExp={4} />
+      <UserRanking dataExp={dataExp} userName={username} topExp={4} />
     </View>
   );
 }
