@@ -76,12 +76,12 @@ export default function ListCourses({ navigation, route }) {
           )}
           {!course.isDone && course.currentExp > 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
-              Chương {course.currentChapter}: {course.currentLesson}/{course.totalLesson}
+              Đã học {course.currentLesson}/{course.totalLesson} phép tính
             </Text>
           )}
           {!course.isDone && course.currentExp === 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
-              Chưa bắt đầu
+              Chưa tham gia
             </Text>
           )}
         </View>

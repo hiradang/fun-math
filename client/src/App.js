@@ -158,6 +158,7 @@ const App = () => {
           name="ListLesson"
           component={ListLesson}
           options={{
+            title: '',
             ...HeaderStyles,
           }}
         />

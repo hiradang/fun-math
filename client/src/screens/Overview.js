@@ -4,15 +4,14 @@ import CustomButton from '../utils/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import UserRanking from '../utils/UserRanking';
 
-export default function Overview() {
-
+export default function Overview({ navigation }) {
   // lấy data gắn vào đây
   const currentProgress = {
     currentExp: 10,
-    currentChapter: 10,
-    currentLesson: 20,
-    totalLesson: 50,
-    isDone: false, 
+    currentChapter: 10, // có nghĩa là đã xong được 10 chương
+    currentLesson: 20, // tính trong cả khóa học
+    totalLesson: 50, // tính trong cả khóa học
+    isDone: false,
     // isDone này để check xem đã hoàn thành khóa học này hay chưa
     // Nếu đã hoàn thành khóa học rồi thì giao diện hơi khác 1 tí
   };
@@ -52,10 +51,12 @@ export default function Overview() {
       {!currentProgress.isDone && currentProgress.currentExp > 0 && (
         <View style={styles.isNotDone}>
           <View>
-            <Text style={styles.progress}>Tiến độ</Text>
+            <Text style={styles.progress}>
+              Bài học tiếp theo: Chương {currentProgress.currentChapter + 1}
+            </Text>
             <Text style={styles.crLesson}>
-              Chương {currentProgress.currentChapter}: {currentProgress.currentLesson}/
-              {currentProgress.totalLesson} phép tính
+              Đã học {currentProgress.currentLesson}/{currentProgress.totalLesson} phép tính trong
+              khóa học
             </Text>
           </View>
           <View style={styles.button}>
@@ -69,6 +70,12 @@ export default function Overview() {
               textStyles={{
                 color: 'white',
               }}
+              onPressFunc={() =>
+                navigation.navigate('ListLesson', {
+                  currentChapter: `Chương ${currentProgress.currentChapter + 1}`,
+                  isDone: false,
+                })
+              }
             />
           </View>
         </View>
@@ -76,8 +83,9 @@ export default function Overview() {
       {!currentProgress.isDone && currentProgress.currentExp == 0 && (
         <View style={styles.isNotDone}>
           <View>
-            <Text style={styles.progress}>Tiến độ</Text>
-            <Text style={styles.crLesson}>Bạn chưa hoàn thành bài học nào</Text>
+            <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
+              Bạn chưa tham gia khóa học này
+            </Text>
           </View>
           <View style={styles.button}>
             <CustomButton
@@ -90,6 +98,12 @@ export default function Overview() {
               textStyles={{
                 color: 'white',
               }}
+              onPressFunc={() =>
+                navigation.navigate('ListCourse', {
+                  currentChapter: currentProgress.currentChapter + 1,
+                  isDone: false,
+                })
+              }
             />
           </View>
         </View>
@@ -105,7 +119,7 @@ export default function Overview() {
           </View>
         </View>
       )}
-      <UserRanking dataExp={dataExp} userName={crUserName} topExp={3}/>
+      <UserRanking dataExp={dataExp} userName={crUserName} topExp={3} />
     </View>
   );
 }
@@ -118,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3D67FF',
   },
   isNotDone: {
-    flex: 0.2,
+    flex: 0.18,
     justifyContent: 'space-between',
 
     backgroundColor: 'white',
