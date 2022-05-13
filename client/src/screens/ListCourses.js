@@ -6,7 +6,7 @@ import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentCourseName } from '../redux/actions';
+import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
 import axios from 'axios';
 
@@ -36,10 +36,12 @@ export default function ListCourses({ navigation, route }) {
         key={course.course_id}
         onPress={() => {
           dispatch(setCurrentCourseName(course.course_name));
+          dispatch(setCurrentCourseId(course.course_id));
           AsyncStorage.mergeItem(
             'user',
             JSON.stringify({
               currentCourseName: course.course_name,
+              currentCourseId: course.course_id,
             }),
             () => {
               navigation.navigate('Home');

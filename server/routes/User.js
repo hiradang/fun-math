@@ -21,6 +21,7 @@ router.post('/login', async (req, res) => {
           name: user.name,
           role_id: user.role_id,
           current_course_name: user.current_course_name,
+          current_course_id: user.current_course_id,
         });
       }
     });
@@ -41,6 +42,8 @@ router.post('/', async (req, res) => {
         role_id: role_id,
         name: name,
         current_course_name: 'Phép cộng',
+        current_course_id: 1,
+        total_exp: 0,
       });
     });
     res.json('SUCCESS');
@@ -49,14 +52,22 @@ router.post('/', async (req, res) => {
 
 // Change the current course that person is learning
 router.post('/currentCourseName', async (req, res) => {
-  const { username, currentCourseName } = req.body;
+  const { username, currentCourseName, currentCourseId } = req.body;
   User.update(
     {
       current_course_name: currentCourseName,
+      current_course_id: currentCourseId,
     },
     { where: { username: username } }
   );
   res.json('OK');
 });
 
+// Get exp of all user
+router.get('/getExp', async (req, res) => {
+  const allUserExp = await User.findAll({
+    attributes: ['username', 'name', 'profile_photo_path', 'total_exp'],
+  });
+  res.json(allUserExp);
+});
 module.exports = router;

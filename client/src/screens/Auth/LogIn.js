@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import { Dimensions } from 'react-native';
 
-import { setCurrentCourseName, setUsername } from '../../redux/actions';
+import { setCurrentCourseName, setCurrentCourseId, setUsername } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Input from '../../utils/Input';
@@ -40,6 +40,7 @@ function LogIn({ navigation }) {
           });
 
           dispatch(setCurrentCourseName(res.data.current_course_name));
+          dispatch(setCurrentCourseId(res.data.current_course_id));
           dispatch(setUsername(username));
 
           // Save to Async Storage
@@ -50,6 +51,7 @@ function LogIn({ navigation }) {
               name: res.data.name,
               role: res.data.role_id,
               currentCourseName: res.data.current_course_name,
+              currentCourseId: res.data.current_course_id,
             })
           ).then(() => {
             navigation.navigate('Home');

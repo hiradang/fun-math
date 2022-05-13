@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentCourseName, setUsername } from '../redux/actions';
+import { setCurrentCourseName, setCurrentCourseId, setUsername } from '../redux/actions';
 
 function Splash({ navigation }) {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ function Splash({ navigation }) {
         else {
           const data = JSON.parse(user);
           dispatch(setCurrentCourseName(data.currentCourseName));
+          dispatch(setCurrentCourseId(data.currentCourseId));
           dispatch(setUsername(data.username));
           navigation.replace('Home');
         }

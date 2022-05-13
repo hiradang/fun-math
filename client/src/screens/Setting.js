@@ -10,7 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setUsername } from '../redux/actions';
 
 function Setting({ navigation }) {
-  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
+  const { currentCourseName, currentCourseId, username } = useSelector(
+    (state) => state.taskReducer
+  );
   const dispatch = useDispatch();
 
   const [isRemind, setRemind] = useState(false);
@@ -30,6 +32,7 @@ function Setting({ navigation }) {
       .post(`${Config.API_URL}/users/currentCourseName`, {
         username: username,
         currentCourseName: currentCourseName,
+        currentCourseId: currentCourseId,
       })
       .then(() => {
         // dispatch(setCurrentCourseName(''));

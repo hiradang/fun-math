@@ -16,15 +16,19 @@ import Study from './Study';
 const Tab = createBottomTabNavigator();
 
 export default function Home({ navigation, route }) {
-  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
+  const { currentCourseName, currentCourseId, username } = useSelector(
+    (state) => state.taskReducer
+  );
 
   const [currentProgress, setCurrentProgress] = useState({});
+  const [dataExp, setDataExp] = useState([]);
 
   useEffect(() => {
+    // Lấy thông tin về khóa học hiện tại mà người dùng theo học
     axios
       .post(`${Config.API_URL}/course_user`, {
         username: username,
-        courseName: currentCourseName,
+        courseId: currentCourseId,
       })
       .then((res) => {
         const course = res.data;
@@ -38,6 +42,19 @@ export default function Home({ navigation, route }) {
 
         setCurrentProgress(temp);
       });
+
+    // Lấy thông tin về exp của tất cả mọi người tham gia khóa học
+    axios.get(`${Config.API_URL}/course_user/courseId/${currentCourseId}`).then((res) => {
+      let temp = res.data.map((user) => {
+        return {
+          url: user.User.profile_photo_path,
+          exp: user.total_exp,
+          userName: user.username,
+          name: user.User.name,
+        };
+      });
+      setDataExp(temp);
+    });
   }, [currentCourseName, username]);
 
   // sau chỗ này các bạn lấy data thì thay tên khóa học vào đây
@@ -94,12 +111,9 @@ export default function Home({ navigation, route }) {
         },
         tabBarStyle: { height: '10%', borderTopColor: '#DDDDDD', borderTopWidth: 3 },
       })}
-      // tabBarOptions={{
-      //   showLabel: false,
-      // }}
     >
       <Tab.Screen name="Overview" options={header}>
-        {(props) => <Overview {...props} currentProgress={currentProgress} />}
+        {(props) => <Overview {...props} currentProgress={currentProgress} dataExp={dataExp} />}
       </Tab.Screen>
       <Tab.Screen name="Study" component={Study} options={header} />
     </Tab.Navigator>

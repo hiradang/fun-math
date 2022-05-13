@@ -29,6 +29,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    current_course_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    total_exp: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   return User;
