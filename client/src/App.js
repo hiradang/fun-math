@@ -217,8 +217,15 @@ const App = () => {
             })}
             component={EditProfile}
           />
+          <Stack.Screen
+            name="ListLesson"
+            component={ListLesson}
+            options={{
+              ...HeaderStyles,
+            }}
+          />
         </Stack.Navigator>
-        <Toast />
+        <Toast config={toastConfig} />
       </NavigationContainer>
     </Provider>
   );

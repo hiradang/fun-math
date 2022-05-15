@@ -14,9 +14,9 @@ export default function Study({ navigation }) {
 
   useEffect(() => {
     axios
-      .get(`${Config.API_URL}/chapter_user`, {
+      .post(`${Config.API_URL}/chapter_user/getAllChapter`, {
         username: username,
-        course_id: currentCourseId,
+        courseId: currentCourseId,
       })
       .then((res) => {
         setChapters(res.data);
@@ -39,7 +39,7 @@ export default function Study({ navigation }) {
         });
       } else {
         Toast.show({
-          type: 'disable',
+          type: 'disableToast',
           text1: `Hãy hoàn thành ${chapters[index - 1].chapter_name}`,
           visibilityTime: 2000,
         });

@@ -8,11 +8,14 @@ app.use(cors());
 const db = require('./models');
 
 // Routers
+const userRouter = require('./routes/User');
+app.use('/users', userRouter);
+
 const courseRouter = require('./routes/Course');
 app.use('/courses', courseRouter);
 
-const userRouter = require('./routes/User');
-app.use('/users', userRouter);
+const chapterUser = require('./routes/Chapter');
+app.use('/chapters', chapterUser);
 
 const courseUserRouter = require('./routes/Course_User');
 app.use('/course_user', courseUserRouter);

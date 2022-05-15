@@ -19,12 +19,25 @@ export default function ListCourses({ navigation, route }) {
 
   useEffect(() => {
     axios.get(`${Config.API_URL}/course_user/${username}`).then((res) => {
+      const courses = res.data.map((course) => {
+        return {
+          course_id: course.course_id,
+          username: course.username,
+          current_chapter: course.current_chapter,
+          question_all_count: course.question_all_count,
+          question_learnt_count: course.question_learnt_count,
+          is_done: course.is_done,
+          total_exp: course.total_exp,
+          course_name: course.Course.course_name,
+        };
+      });
+
       // Set selCourse
-      let tempSelCourse = res.data.find((obj) => obj.course_name === currentCourseName);
+      let tempSelCourse = courses.find((obj) => obj.course_name === currentCourseName);
       setSelCourse(tempSelCourse);
 
       // Set notAllowSelCourses
-      let tempNotAllowSelCourses = res.data.filter((obj) => obj.course_name !== currentCourseName);
+      let tempNotAllowSelCourses = courses.filter((obj) => obj.course_name !== currentCourseName);
       setNotAllowSelCourses(tempNotAllowSelCourses);
     });
   }, []);

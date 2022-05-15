@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
+  // User.associate = (models) => {
+  //   User.hasMany(models.Course_User, {
+  //     onDelete: 'cascade',
+  //     foreignKey: 'course_id',
+  //   });
+  // };
   return User;
 };

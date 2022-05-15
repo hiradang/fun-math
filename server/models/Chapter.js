@@ -1,23 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
-  const Chapter_User = sequelize.define('Chapter_User', {
+  const Chapter = sequelize.define('Chapter', {
     chapter_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    is_done: {
-      type: DataTypes.BOOLEAN,
+    chapter_name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    username: {
+    course_id: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   });
-  Chapter_User.associate = (models) => {
-    Chapter_User.belongsTo(models.Chapter, {
+  Chapter.associate = (models) => {
+    Chapter.belongsTo(models.Course, {
       onDelete: 'cascade',
-      foreignKey: 'chapter_id',
+      foreignKey: 'course_id',
     });
   };
-  return Chapter_User;
+  return Chapter;
 };
