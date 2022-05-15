@@ -2,14 +2,15 @@ module.exports = (sequelize, DataTypes) => {
   const Chapter = sequelize.define('Chapter', {
     chapter_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
     },
     chapter_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     course_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   });
@@ -17,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     Chapter.belongsTo(models.Course, {
       onDelete: 'cascade',
       foreignKey: 'course_id',
+    });
+    Chapter.hasMany(models.Question, {
+      onDelete: 'cascade',
+      foreignKey: 'chapter_id',
     });
   };
   return Chapter;

@@ -23,6 +23,7 @@ import Splash from './screens/Splash';
 import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
+import Lesson from './screens/Lesson';
 
 const Stack = createStackNavigator();
 
@@ -155,6 +156,13 @@ const App = () => {
             options={{
               title: 'Khóa học',
               ...HeaderStyles,
+            }}
+          />
+          <Stack.Screen
+            name="Lesson"
+            component={Lesson}
+            options={{
+              headerShown: false,
             }}
           />
           <Stack.Screen

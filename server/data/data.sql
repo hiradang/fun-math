@@ -113,3 +113,28 @@ VALUES ("minhhuong", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAK
 "https://allimages.sgp1.digitaloceanspaces.com/tipeduvn/2022/02/50-Anh-Meo-Cute-Ngau-Hinh-Avatar-Meo-De-Thuong.jpg", 
 "Phép cộng", 1, 500);
 
+
+-- Questions 
+
+insert into questions (question_name, chapter_id) values ("1 + 1", 1);
+insert into questions (question_name, chapter_id) values ("1 + 2", 1);
+insert into questions (question_name, chapter_id) values ("2 + 2", 1);
+insert into questions (question_name, chapter_id) values ("2 + 3", 1);
+
+-- Mutliple choice
+
+insert into multichoice_questions (question, correct_answer, answers, format_question, question_id)
+values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 1, "1,2,3,4", "2+?=3", 1);
+
+insert into multichoice_questions (question, correct_answer, answers, format_question, question_id)
+values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 2, "1,2,3,4", "2+?=4", 2);
+
+
+insert into multichoice_questions (question, correct_answer, answers, format_question, question_id)
+values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 1, "1,2,3,4", "3+?=4", 3);
+
+
+insert into multichoice_questions (question, correct_answer, answers, format_question, question_id)
+values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 0, "1,2,3,4", "2+?=2", 4);
+
+

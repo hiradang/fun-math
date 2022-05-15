@@ -40,6 +40,9 @@ export default function ListLesson({ navigation, route }) {
           iconName="hand-rock-o"
           iconSize={28}
           iconColor="white"
+          onPressFunc={() => {
+            navigation.navigate('Lesson', { chapter_id: 1 });
+          }}
         />
       );
     } else {
@@ -61,6 +64,9 @@ export default function ListLesson({ navigation, route }) {
           iconName="hand-peace-o"
           iconSize={28}
           iconColor="white"
+          onPressFunc={() => {
+            navigation.navigate('Lesson', { chapter_id: 1 });
+          }}
         />
       );
     }

@@ -23,6 +23,12 @@ app.use('/course_user', courseUserRouter);
 const chapterUserRouter = require('./routes/Chapter_User');
 app.use('/chapter_user', chapterUserRouter);
 
+const questionRouter = require('./routes/Question');
+app.use('/questions', questionRouter);
+
+const multiChoiceQuestionRouter = require('./routes/MultiChoice_Question');
+app.use('/multiQuestions', multiChoiceQuestionRouter);
+
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {
     console.log('Server running on port 3001');
