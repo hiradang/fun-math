@@ -17,6 +17,7 @@ import LogIn from './screens/Auth/LogIn';
 import Splash from './screens/Splash';
 import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
+import Lession from './screens/Lession';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +26,6 @@ const App = () => {
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
       axios.interceptors.request.use((config) => {
-        console.log(typeof user);
         config.headers.authorization = JSON.parse(user);
         return config;
       });
@@ -76,6 +76,13 @@ const App = () => {
           options={{
             title: 'Khóa học',
             ...HeaderStyles,
+          }}
+        />
+        <Stack.Screen
+          name="Lession"
+          component={Lession}
+          options={{
+            headerShown: false,
           }}
         />
         <Stack.Screen

@@ -16,7 +16,7 @@ export default function Study({ navigation }) {
 
   const lengthOfList = listChapter.length;
 
-  const onPressChapter = () => navigation.navigate('');
+  const onPressChapter = () => navigation.navigate('Lession', {chapter_id: 1});
 
   return (
     <ScrollView style={styles.container}>
