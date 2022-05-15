@@ -63,6 +63,25 @@ router.post('/currentCourseName', async (req, res) => {
   res.json('OK');
 });
 
+// Update user info
+router.post('/update', async (req, res) => {
+  const { username, password, name, profilePhotoPath } = req.body;
+  const updateQuery = {};
+  if (password) {
+    await bcrypt.hash(password, 10).then((hash) => {
+      updateQuery['password'] = hash;
+    });
+  }
+  if (name) {
+    updateQuery['name'] = name;
+  }
+  if (profilePhotoPath) {
+    updateQuery['profile_photo_path'] = profilePhotoPath;
+  }
+  User.update(updateQuery, { where: { username: username } });
+  res.json(updateQuery);
+});
+
 // Get exp of all user
 router.get('/getExp', async (req, res) => {
   const allUserExp = await User.findAll({

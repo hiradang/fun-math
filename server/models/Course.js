@@ -10,11 +10,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  // Course.associate = (models) => {
-  //   Course.hasMany(models.Course_User, {
-  //     onDelete: 'cascade',
-  //     foreignKey: 'course_id',
-  //   });
-  // };
   return Course;
 };
