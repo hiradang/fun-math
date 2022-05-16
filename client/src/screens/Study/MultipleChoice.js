@@ -15,14 +15,49 @@ function MultipleChoice(props) {
   const [checkAnswer, setCheckAnswer] = useState(false);
   const [correct, setCorrect] = useState(false);
 
+<<<<<<< Updated upstream
+=======
+  const convertDataHandle = (format_question) => {
+    const notNumber = ['+', '-', 'x', ':', '=', '?'];
+    const myArray = format_question.split('');
+    const length = myArray.length;
+    const target = [];
+
+    for (let i = 0; i <= length - 1; i++) {
+      if (notNumber.includes(myArray[i])) {
+        target.push(myArray[i]);
+      } else {
+        let number = myArray[i];
+        const start = i + 1;
+        for (let x = start; x <= length - 1; x++) {
+          if (!notNumber.includes(myArray[x])) number += myArray[x];
+          else {
+            i = x - 1;
+            break;
+          }
+        }
+        target.push(number);
+      }
+    }
+
+    return target;
+  };
+
+>>>>>>> Stashed changes
   useEffect(() => {
     axios.get(`${Config.API_URL}/multiQuestions/${props.question_id}`).then((res) => {
       setData({
         correct_answer: res.data[0].correct_answer,
         answers: JSON.parse('[' + res.data[0].answers + ']'),
         question: res.data[0].question,
+<<<<<<< Updated upstream
         format_question: res.data[0].format_question,
       });
+=======
+        format_question: convertDataHandle(res.data[0].format_question),
+      });
+      console.log(convertDataHandle(res.data[0].format_question))
+>>>>>>> Stashed changes
     });
   }, []);
 
@@ -41,11 +76,18 @@ function MultipleChoice(props) {
         <Image source={require('../../../assets/images/image_1.png')} resizeMode="cover"></Image>
       </View>
       <View style={styles.question}>
+<<<<<<< Updated upstream
         <NumberBox text={2} />
         <SignBox text={'+'} />
         <NumberBox />
         <SignBox text={'='} />
         <NumberBox text={3} />
+=======
+        {data && data.format_question.map((value, i)=> {
+          if (i % 2 === 0) return (<NumberBox key = {i} text={value !== '?' && value}/>)
+          else return (<SignBox key = {i} text={value}/>)
+        })}
+>>>>>>> Stashed changes
       </View>
       <View style={styles.container}>
         {data &&

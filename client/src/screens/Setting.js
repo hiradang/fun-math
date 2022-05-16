@@ -57,9 +57,25 @@ function Setting({ navigation }) {
               onPress={() => navigation.navigate('Chỉnh sửa tài khoản')}
             />
           </View>
+<<<<<<< Updated upstream
         </View>
       </View>
 
+=======
+          <View style={styles.row}>
+            <Text style={styles.text}>Chỉnh sửa mật khẩu</Text>
+            <FontAwesome5
+              size={24}
+              color="#14D39A"
+              name="pencil-alt"
+              onPress={() => navigation.navigate('Chỉnh sửa mật khẩu')}
+            />
+          </View>
+        </View>
+      </View>
+
+
+>>>>>>> Stashed changes
       {/* Nhắc nhở */}
       <View style={styles.item}>
         <Text style={styles.title}>Nhắc nhở</Text>

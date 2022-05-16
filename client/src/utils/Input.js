@@ -10,7 +10,7 @@ const Input = (props) => {
       <Text style={styles.text}>{props.title}</Text>
       <View style={styles.row}>
         <View style={[styles.icon, props.error && styles.iconError]}>
-          <FontAwesome5 name={props.icon} size={20} color={'#000000'} />
+          <FontAwesome5 name={props.icon} size={24} color={'#14D39A'} />
         </View>
         <TextInput
           value={props.value}
