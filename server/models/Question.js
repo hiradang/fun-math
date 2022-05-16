@@ -9,13 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-<<<<<<< Updated upstream
-=======
     question_image: {
       type: DataTypes.STRING,
       allowNull: true,
     },
->>>>>>> Stashed changes
     chapter_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

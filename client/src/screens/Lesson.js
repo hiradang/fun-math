@@ -7,7 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Tutorial from './Study/Tutorial';
 import MultipleChoice from './Study/MultipleChoice';
 
-function Lession({ navigation, route }) {
+function Lesson({ navigation, route }) {
   const [listQuestion, setListQuestion] = useState([]);
   const [score, setScore] = useState(0);
   const [typeQuestion, setTypeQuestion] = useState(null);
@@ -47,7 +47,6 @@ function Lession({ navigation, route }) {
       {typeQuestion === 0 && (
         <Tutorial
           question_id={listQuestion[indexQuestion].question_id}
-          indexQuestion={indexQuestion}
           changeTypeQuestion={() => setTypeQuestion(1)}
         />
       )}
@@ -100,4 +99,4 @@ const styles = StyleSheet.create({
     // fontWeight: 40
   },
 });
-export default Lession;
+export default Lesson;
