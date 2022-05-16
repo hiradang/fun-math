@@ -202,6 +202,7 @@ const App = () => {
                   onPress={() => navigation.goBack()}
                 />
               ),
+              ...HeaderStyles,
             })}
             component={Setting}
           />
@@ -219,9 +220,10 @@ const App = () => {
                   }}
                 />
               ),
-              headerRight: () => (
-                <Feather name="check" size={30} style={{ marginRight: 20 }} color="black" />
-              ),
+              // headerRight: () => (
+              //   <Feather name="check" size={30} style={{ marginRight: 20 }} color="black" />
+              // ),
+              // ...HeaderStyles,
             })}
             component={EditProfile}
           />

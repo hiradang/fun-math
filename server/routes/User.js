@@ -4,6 +4,9 @@ const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+const defaultProfilePath =
+  'https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/defaultProfileImage.png?alt=media&token=790800d6-aac7-4359-a541-e73b3348e3cb';
+
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username: username } });
@@ -22,6 +25,7 @@ router.post('/login', async (req, res) => {
           role_id: user.role_id,
           current_course_name: user.current_course_name,
           current_course_id: user.current_course_id,
+          profile_photo_path: user.profile_photo_path,
         });
       }
     });
@@ -44,6 +48,7 @@ router.post('/', async (req, res) => {
         current_course_name: 'Phép cộng',
         current_course_id: 1,
         total_exp: 0,
+        profile_photo_path: defaultProfilePath,
       });
     });
     res.json('SUCCESS');
@@ -79,7 +84,6 @@ router.post('/update', async (req, res) => {
     updateQuery['profile_photo_path'] = profilePhotoPath;
   }
   User.update(updateQuery, { where: { username: username } });
-  res.json(updateQuery);
 });
 
 // Get exp of all user

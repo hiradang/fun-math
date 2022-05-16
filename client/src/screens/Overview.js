@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import CustomButton from '../utils/CustomButton';
@@ -8,7 +8,6 @@ import UserRanking from '../utils/UserRanking';
 
 export default function Overview(props) {
   const { username } = useSelector((state) => state.taskReducer);
-
   const currentProgress = props.currentProgress;
   const dataExp = props.dataExp;
 
@@ -70,7 +69,7 @@ export default function Overview(props) {
           </View>
         </View>
       )}
-      <UserRanking dataExp={dataExp} userName={username} topExp={3} />
+      {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
     </View>
   );
 }

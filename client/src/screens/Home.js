@@ -24,6 +24,7 @@ export default function Home({ navigation, route }) {
   const [dataExp, setDataExp] = useState([]);
 
   useEffect(() => {
+    // navigation.addListener('focus', () => {
     // Lấy thông tin về khóa học hiện tại mà người dùng theo học
     axios
       .post(`${Config.API_URL}/course_user`, {

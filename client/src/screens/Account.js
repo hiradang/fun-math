@@ -6,36 +6,35 @@ import UserRanking from '../utils/UserRanking';
 
 import { useSelector } from 'react-redux';
 
-function Account() {
-  const { username } = useSelector((state) => state.taskReducer);
-  const [dataExp, setDataExp] = useState([]);
+function Account({ navigation }) {
+  const { username, profilePhotoPath } = useSelector((state) => state.taskReducer);
+  const [dataExp, setDataExp] = useState(null);
 
   useEffect(() => {
-    axios.get(`${Config.API_URL}/users/getExp`).then((res) => {
-      if (res.data) {
-        let tempData = res.data.map((user) => {
-          return {
-            url: user.profile_photo_path,
-            exp: user.total_exp,
-            userName: user.username,
-            name: user.name,
-          };
-        });
-        setDataExp(tempData);
-      }
+    navigation.addListener('focus', () => {
+      axios.get(`${Config.API_URL}/users/getExp`).then((res) => {
+        if (res.data) {
+          let tempData = res.data.map((user) => {
+            return {
+              url: user.profile_photo_path,
+              exp: user.total_exp,
+              userName: user.username,
+              name: user.name,
+            };
+          });
+          setDataExp(tempData);
+        }
+      });
     });
-  }, []);
+  }, [navigation]);
 
-  useEffect(() => {}, []);
+  // console.log('Account profile photo: ' + profilePhotoPath);
 
   return (
     <View style={styles.container}>
       <View style={styles.info}>
         <View style={styles.infoLeft}>
-          <Image
-            style={styles.profileImage}
-            source={require('../../assets/images/defaultProfile-girl.png')}
-          />
+          <Image style={styles.profileImage} source={{ uri: profilePhotoPath }} />
           <Text style={styles.userName}>{username}</Text>
         </View>
         <View style={styles.infoRight}>
@@ -60,7 +59,7 @@ function Account() {
           </View>
         </View>
       </View>
-      <UserRanking dataExp={dataExp} userName={username} topExp={4} />
+      {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={4} /> : null}
     </View>
   );
 }
@@ -89,6 +88,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 80,
     height: 80,
+    borderRadius: 40,
     marginBottom: 20,
   },
   userName: {
