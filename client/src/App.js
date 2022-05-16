@@ -162,6 +162,7 @@ const App = () => {
             ...HeaderStyles,
           }}
         />
+        
         <Stack.Screen
           name="Tài khoản"
           options={({ navigation }) => ({
