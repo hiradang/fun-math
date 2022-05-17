@@ -11,6 +11,7 @@ function Tutorial(props) {
   useEffect(() => {
     axios.get(`${Config.API_URL}/questions/image/${props.question_id}`).then((res) => {
       setUrlImage(res.data.question_image);
+      console.log(res.data)
     });
   }, []);
   return (
@@ -19,7 +20,7 @@ function Tutorial(props) {
         <Text style={styles.text}>0/10 phép tính đã học</Text>
       </View>
       <View style={styles.container}>
-        <Image uri={urlImage} resizeMode="cover" style={styles.image}></Image>
+        <Image source = {{uri : urlImage}} resizeMode="cover" style={styles.image}></Image>
       </View>
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <CustomButton

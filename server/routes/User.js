@@ -63,6 +63,30 @@ router.post('/currentCourseName', async (req, res) => {
   res.json('OK');
 });
 
+router.put('updatePass', async (req, res) => {
+  const { username, password, newPassword } = req.body;
+  const user = await User.findByPk(username);
+  if (user) {
+    bcrypt.compare(password, user.password).then((match) => {
+      if (!match) res.json({ error: 'Mật khẩu không chính xác' });
+      else {
+        bcrypt.hash(newPassword, 10).then((hash) => {
+          User.update(
+            {
+              password: hash,
+            },
+            {
+              where: { username: username },
+            }
+          );
+        });
+      }
+    });
+    res.json('SUCCESS');
+  } else {
+    res.json({ error: 'Tài khoản chưa tồn tại' });
+  }
+});
 // Update user info
 router.post('/update', async (req, res) => {
   const { username, password, name, profilePhotoPath } = req.body;

@@ -7,7 +7,7 @@ import Config from 'react-native-config';
 import CustomButton from '../../utils/CustomButton';
 import Card from './Card';
 import NumberBox from './NumberBox';
-import SignBox from './SignInBox';
+import SignBox from './SignBox'
 
 function MultipleChoice(props) {
   const [idSelect, setIdSelect] = useState(null);
@@ -16,6 +16,31 @@ function MultipleChoice(props) {
   const [correct, setCorrect] = useState(false);
   const [urlImage, setUrlImage] = useState(null);
 
+  const convertDataHandle = (format_question) => {
+    const notNumber = ['+', '-', 'x', ':', '=', '?'];
+    const myArray = format_question.split('');
+    const length = myArray.length;
+    const target = [];
+
+    for (let i = 0; i <= length - 1; i++) {
+      if (notNumber.includes(myArray[i])) {
+        target.push(myArray[i]);
+      } else {
+        let number = myArray[i];
+        const start = i + 1;
+        for (let x = start; x <= length - 1; x++) {
+          if (!notNumber.includes(myArray[x])) number += myArray[x];
+          else {
+            i = x - 1;
+            break;
+          }
+        }
+        target.push(number);
+      }
+    }
+
+    return target;
+  };
   useEffect(() => {
     axios.get(`${Config.API_URL}/multiQuestions/${props.question_id}`).then((res) => {
       setData({
@@ -43,13 +68,13 @@ function MultipleChoice(props) {
         <Text style={styles.text}>{data && data.question}</Text>
       </View>
       <View style={styles.image}>
-        <Image uri={urlImage} resizeMode="cover"></Image>
+        <Image source = {{uri : urlImage}} resizeMode="cover"></Image>
       </View>
       <View style={styles.question}>
         {data &&
           data.format_question.map((value, i) => {
             if (i % 2 === 0) return <NumberBox key={i} text={value !== '?' && value} />;
-            else return <SignBox key={i} text={value} />;
+            else return <SignBox key={i} item={value} />;
           })}
       </View>
       <View style={styles.container}>

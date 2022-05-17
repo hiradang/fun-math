@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
     marginLeft: 20,
+    fontWeight: 'bold',
   },
   row: {
     height: 50,
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   },
   input: {
     // width: '280',
-    width: '80%',
+    width: '75%',
     height: 50,
     backgroundColor: '#ffffff',
     borderTopRightRadius: 20,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'red',
   },
   icon: {
-    width: 40,
+    width: 60,
     height: 50,
     backgroundColor: '#ffffff',
     marginTop: 10,

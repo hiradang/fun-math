@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet, Text, View, TextInput, ScrollView, Animated } from 'react-native';
 import React, { useState, useRef } from 'react';
 import Toast from 'react-native-toast-message';
-import CustomButton from './CustomButton';
-import NumberInput from './NumberInput';
+import CustomButton from '../../utils/CustomButton';
+import NumberInput from '../../utils/NumberInput';
 
 const { width, height } = Dimensions.get('window');
 

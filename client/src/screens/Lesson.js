@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Tutorial from './Study/Tutorial';
 import MultipleChoice from './Study/MultipleChoice';
+import TypeFormat from './Study/TypeFormat';
 
 function Lesson({ navigation, route }) {
   const [listQuestion, setListQuestion] = useState([]);
@@ -55,6 +56,14 @@ function Lesson({ navigation, route }) {
           question_id={listQuestion[indexQuestion].question_id}
           changeScore={() => setScore(score + 10)}
           changeType2Question={() => {
+            setTypeQuestion(2);
+          }}
+        />
+      )}
+      {typeQuestion === 2 && (
+        <TypeFormat
+          question_id={listQuestion[indexQuestion].question_id}
+          changeType3Question={() => {
             setTypeQuestion(0);
             if (indexQuestion + 1 === listQuestion.length) navigation.navigate('Study');
             else setIndexQuestion(indexQuestion + 1);

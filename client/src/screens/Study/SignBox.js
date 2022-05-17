@@ -5,10 +5,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../utils/CustomButton';
 
 function SignBox(props) {
+  var item = '+';
+  if (props.item === '-') item = '–';
+  if (props.item === 'x') item = '✕';
+  if (props.item === ':') item = '÷';
   return (
     <Pressable style={[styles.body]}>
       <View>
-        <Text style={styles.text}>{props.text}</Text>
+        <Text style={styles.text}>{item}</Text>
       </View>
     </Pressable>
   );

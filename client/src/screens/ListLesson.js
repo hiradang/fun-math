@@ -60,7 +60,7 @@ export default function ListLesson({ navigation, route }) {
           textStyles={{
             color: 'white',
           }}
-          onPressFunc={() => navigation.navigate('TypeFormat')}
+          // onPressFunc={() => navigation.navigate('TypeFormat')}
           pos="left"
           iconName="hand-peace-o"
           iconSize={28}
