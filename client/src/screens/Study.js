@@ -29,12 +29,14 @@ export default function Study({ navigation }) {
     if (index == 0)
       navigation.navigate('ListLesson', {
         currentChapter: item.chapter_name,
+        currentChapterId: item.chapter_id,
         isDone: item.is_done,
       });
     else {
       if (chapters[index - 1].is_done) {
         navigation.navigate('ListLesson', {
           currentChapter: item.chapter_name,
+          currentChapterId: item.chapter_id,
           isDone: item.is_done,
         });
       } else {

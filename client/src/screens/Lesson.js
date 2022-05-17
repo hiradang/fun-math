@@ -3,16 +3,19 @@ import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
 
 import Tutorial from './Study/Tutorial';
 import MultipleChoice from './Study/MultipleChoice';
+import TypeFormat from './Study/TypeFormat';
 
-function Lession({ navigation, route }) {
+function Lesson({ navigation, route }) {
   const [listQuestion, setListQuestion] = useState([]);
   const [score, setScore] = useState(0);
   const [typeQuestion, setTypeQuestion] = useState(null);
   const chapter_id = route.params.chapter_id;
   const [indexQuestion, setIndexQuestion] = useState(0);
+  const { username, currentCourseId } = useSelector((state) => state.taskReducer);
   useEffect(() => {
     axios
       .get(`${Config.API_URL}/questions/${chapter_id}`)
@@ -30,6 +33,10 @@ function Lession({ navigation, route }) {
     );
   };
 
+  const finish = () => {
+    navigation.navigate('Study');
+    axios.post(`${Config.API_URL}/course_user/exp`, {username, courseId: currentCourseId, exp: score}).then((res) => {});
+  };
   return (
     <View style={styles.body}>
       <View style={styles.header}>
@@ -47,7 +54,6 @@ function Lession({ navigation, route }) {
       {typeQuestion === 0 && (
         <Tutorial
           question_id={listQuestion[indexQuestion].question_id}
-          indexQuestion={indexQuestion}
           changeTypeQuestion={() => setTypeQuestion(1)}
         />
       )}
@@ -56,9 +62,19 @@ function Lession({ navigation, route }) {
           question_id={listQuestion[indexQuestion].question_id}
           changeScore={() => setScore(score + 10)}
           changeType2Question={() => {
+            setTypeQuestion(2);
+          }}
+        />
+      )}
+      {typeQuestion === 2 && (
+        <TypeFormat
+          question_id={listQuestion[indexQuestion].question_id}
+          changeScore={() => setScore(score + 10)}
+          changeType3Question={() => {
             setTypeQuestion(0);
-            if (indexQuestion + 1 === listQuestion.length) navigation.navigate('Study');
-            else setIndexQuestion(indexQuestion + 1);
+            if (indexQuestion + 1 === listQuestion.length) {
+              finish()
+            } else setIndexQuestion(indexQuestion + 1);
           }}
         />
       )}
@@ -100,4 +116,4 @@ const styles = StyleSheet.create({
     // fontWeight: 40
   },
 });
-export default Lession;
+export default Lesson;

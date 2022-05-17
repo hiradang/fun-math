@@ -35,4 +35,25 @@ router.post('/', async (req, res) => {
   res.json(course);
 });
 
+router.post('/exp', async (req, res) => {
+  const { username, courseId, exp } = req.body;
+  const course = await Course_User.findOne({
+    where: {
+      username: username,
+      course_id: courseId,
+    },
+  });
+   await Course_User.update(
+    {
+      total_exp: course.total_exp + exp
+    },
+    {
+      where: {
+        username: username,
+        course_id: courseId,
+      },
+    }
+  );
+  res.json(course);
+});
 module.exports = router;

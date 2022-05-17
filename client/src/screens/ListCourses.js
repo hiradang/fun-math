@@ -89,7 +89,7 @@ export default function ListCourses({ navigation, route }) {
           )}
           {!course.is_done && course.total_exp === 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
-              Chưa bắt đầu
+              Chưa tham gia
             </Text>
           )}
         </View>

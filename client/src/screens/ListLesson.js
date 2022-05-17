@@ -1,23 +1,30 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import Config from 'react-native-config';
+
 import CustomButton from '../utils/CustomButton';
 import Fontisto from 'react-native-vector-icons/Fontisto'; //clock
 import AntDesign from 'react-native-vector-icons/AntDesign'; //Trophy
 
 export default function ListLesson({ navigation, route }) {
-  const { currentChapter, isDone } = route.params;
+  const { currentChapter, isDone, currentChapterId } = route.params;
 
   const currentCourse = 'Phép cộng';
+  const [listLesson, setListLesson] = useState([]);
 
   React.useEffect(() => {
     navigation.setOptions({
       title: currentChapter,
     });
+    axios.get(`${Config.API_URL}/questions/${currentChapterId}`).then((res) => {
+      setListLesson(res.data);
+    });
   }, []);
 
   // Bình lấy danh sách phép tính tương ứng với khóa học và chương có ở trên kia
   // rồi ném vào listLesson này (chỉ cần lấy tên vì như t đã bàn với Bình hôm trước rồi)
-  const listLesson = ['1 + 1', '1 + 2', '1 + 3', '1 + 4', '2 + 1', '3 + 2', '4 + 1'];
+  // const listLesson = ['1 + 1', '1 + 2', '1 + 3', '1 + 4', '2 + 1', '3 + 2', '4 + 1'];
   const length = listLesson.length;
 
   const renderButton = () => {
@@ -60,6 +67,7 @@ export default function ListLesson({ navigation, route }) {
           textStyles={{
             color: 'white',
           }}
+          // onPressFunc={() => navigation.navigate('TypeFormat')}
           pos="left"
           iconName="hand-peace-o"
           iconSize={28}
@@ -83,14 +91,14 @@ export default function ListLesson({ navigation, route }) {
         <Text style={styles.titleText}>Các phép tính cần học</Text>
       </View>
       <ScrollView style={styles.lessonContainer}>
-        {listLesson.map((item) => {
+        {listLesson && listLesson.map((item) => {
           return (
-            <View style={styles.lesson} key={item}>
+            <View style={styles.lesson} key={item.question_id}>
               <View style={styles.statusIcon}>
                 {!isDone && <Fontisto name="clock" size={32} color="#333333" />}
                 {isDone && <AntDesign name="Trophy" size={32} color="#333333" />}
               </View>
-              <Text style={styles.lessonName}>{item}</Text>
+              <Text style={styles.lessonName}>{item.question_name}</Text>
             </View>
           );
         })}

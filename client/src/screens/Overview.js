@@ -18,7 +18,9 @@ export default function Overview(props) {
       {!currentProgress.isDone && currentProgress.currentExp > 0 && (
         <View style={styles.isNotDone}>
           <View>
-            <Text style={styles.progress}>Tiến độ</Text>
+            <Text style={styles.progress}>
+              Bài học tiếp theo: Chương {currentProgress.currentChapter + 1}
+            </Text>
             <Text style={styles.crLesson}>
               Chương {currentProgress.currentChapter}: {currentProgress.questionLearntCount}/
               {currentProgress.questionAllCount} phép tính
@@ -35,6 +37,12 @@ export default function Overview(props) {
               textStyles={{
                 color: 'white',
               }}
+              onPressFunc={() =>
+                navigation.navigate('ListLesson', {
+                  currentChapter: `Chương ${currentProgress.currentChapter + 1}`,
+                  isDone: false,
+                })
+              }
             />
           </View>
         </View>
@@ -42,8 +50,9 @@ export default function Overview(props) {
       {!currentProgress.isDone && currentProgress.currentExp == 0 && (
         <View style={styles.isNotDone}>
           <View>
-            <Text style={styles.progress}>Tiến độ</Text>
-            <Text style={styles.crLesson}>Bạn chưa hoàn thành bài học nào</Text>
+            <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
+              Bạn chưa tham gia khóa học này
+            </Text>
           </View>
           <View style={styles.button}>
             <CustomButton
@@ -56,6 +65,12 @@ export default function Overview(props) {
               textStyles={{
                 color: 'white',
               }}
+              onPressFunc={() =>
+                navigation.navigate('ListCourse', {
+                  currentChapter: currentProgress.currentChapter + 1,
+                  isDone: false,
+                })
+              }
             />
           </View>
         </View>
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3D67FF',
   },
   isNotDone: {
-    flex: 0.2,
+    flex: 0.18,
     justifyContent: 'space-between',
 
     backgroundColor: 'white',

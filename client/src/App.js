@@ -24,6 +24,7 @@ import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
 import Lesson from './screens/Lesson';
+import EditPass from './screens/EditPass';
 
 const Stack = createStackNavigator();
 
@@ -205,6 +206,21 @@ const App = () => {
               ...HeaderStyles,
             })}
             component={Setting}
+          />
+           <Stack.Screen
+            name="Chỉnh sửa mật khẩu"
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <AntDesign
+                  name="arrowleft"
+                  size={30}
+                  style={{ marginLeft: 20 }}
+                  color="black"
+                  onPress={() => navigation.goBack()}
+                />
+              ),
+            })}
+            component={EditPass}
           />
           <Stack.Screen
             name="Chỉnh sửa tài khoản"

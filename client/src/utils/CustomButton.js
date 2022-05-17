@@ -6,7 +6,7 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 
 export default function CustomButton(props) {
   return (
-    <TouchableOpacity disabled = {props.disabled} style={[styles.button, props.buttonStyles]} onPress={props.onPressFunc}>
+    <TouchableOpacity style={[styles.button, props.buttonStyles]} onPress={props.onPressFunc}>
       {props.pos === 'left' && (
         <FontAwesome name={props.iconName} size={props.iconSize} color={props.iconColor} />
       )}

@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import axios from 'axios';
+import Config from 'react-native-config';
 
 import CustomButton from '../../utils/CustomButton';
 
 function Tutorial(props) {
-  
+  const [urlImage, setUrlImage] = useState(null);
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/questions/image/${props.question_id}`).then((res) => {
+      setUrlImage(res.data.question_image);
+    });
+  }, []);
   return (
     <View style={styles.body}>
       <View style={styles.title}>
         <Text style={styles.text}>0/10 phép tính đã học</Text>
       </View>
       <View style={styles.container}>
-          <Image source={require('../../../assets/images/image_1.png')} resizeMode = 'cover' style = {styles.image}></Image>
+        <Image source={{ uri: urlImage }} style={{width: 400, height: 400}} resizeMode="contain"></Image>
       </View>
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <CustomButton
@@ -22,7 +28,7 @@ function Tutorial(props) {
           // pos="right"
           // iconName="next"
           text={'Tiếp tục'}
-            onPressFunc={() => props.changeTypeQuestion()}
+          onPressFunc={() => props.changeTypeQuestion()}
         />
       </View>
     </View>
@@ -60,8 +66,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 60,
   },
-  image: {
-   
-  }
+  image: {},
 });
 export default Tutorial;
