@@ -1,6 +1,9 @@
 import { Dimensions, StyleSheet, Text, View, TextInput, ScrollView, Animated } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import Config from 'react-native-config';
+
 import CustomButton from '../../utils/CustomButton';
 import NumberInput from '../../utils/NumberInput';
 
@@ -76,18 +79,24 @@ export default function TypeFormat(props) {
   const [answers, setAnswers] = useState([]);
   const [buttonDisable, setButtonDisable] = useState(false);
   const [result, setResult] = useState('');
+  const [question_name, setQuestion_name] = useState();
+  const [dataQuestion, setDataQuestion] = useState({
+    question: '',
+    correct_answer: '',
+    format_question: '',
+  });
 
-  
-
-  // Lấy từ bảng Questions
-  const question_name = 'Đọc và hoàn thành phép toán';
-
-  // Láy từ bảng Type_Question
-  const dataQuestion = {
-    question: 'Loan có 2 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo ?',
-    correct_answer: '1,3',
-    format_question: '2+?=?',
-  };
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/typeQuestions/${props.question_id}`).then((res) => {
+      console.log(res.data);
+      setQuestion_name(res.data.question_name);
+      setDataQuestion({
+        question: res.data.question,
+        correct_answer: res.data.correct_answer,
+        format_question: res.data.format_question,
+      });
+    });
+  }, []);
 
   const correctAnswer = dataQuestion.correct_answer.split(',');
   const lengthCorrectAnswer = correctAnswer.length;
@@ -141,15 +150,21 @@ export default function TypeFormat(props) {
         visibilityTime: 2000,
       });
     } else {
-      if (checkAnswer(userAnswer)) {
-        setResult('correct');
-        start();
-        // gọi hàm cộng điểm
-        // gọi hàm chuyển sang câu khác
+      if (result) {
+        props.changeType3Question();
       } else {
-        setResult('incorrect');
-        start();
-        // gọi hàm chuyển sang câu khác
+        if (checkAnswer(userAnswer)) {
+          setResult('correct');
+          start();
+          props.changeScore();
+          // gọi hàm cộng điểm
+          // gọi hàm chuyển sang câu khác
+        } else {
+          setResult('incorrect');
+          start();
+
+          // gọi hàm chuyển sang câu khác
+        }
       }
     }
   };

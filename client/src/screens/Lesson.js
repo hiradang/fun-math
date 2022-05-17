@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
 
 import Tutorial from './Study/Tutorial';
 import MultipleChoice from './Study/MultipleChoice';
@@ -14,6 +15,7 @@ function Lesson({ navigation, route }) {
   const [typeQuestion, setTypeQuestion] = useState(null);
   const chapter_id = route.params.chapter_id;
   const [indexQuestion, setIndexQuestion] = useState(0);
+  const { username, currentCourseId } = useSelector((state) => state.taskReducer);
   useEffect(() => {
     axios
       .get(`${Config.API_URL}/questions/${chapter_id}`)
@@ -31,6 +33,10 @@ function Lesson({ navigation, route }) {
     );
   };
 
+  const finish = () => {
+    navigation.navigate('Study');
+    axios.post(`${Config.API_URL}/course_user/exp`, {username, courseId: currentCourseId, exp: score}).then((res) => {});
+  };
   return (
     <View style={styles.body}>
       <View style={styles.header}>
@@ -63,10 +69,12 @@ function Lesson({ navigation, route }) {
       {typeQuestion === 2 && (
         <TypeFormat
           question_id={listQuestion[indexQuestion].question_id}
+          changeScore={() => setScore(score + 10)}
           changeType3Question={() => {
             setTypeQuestion(0);
-            if (indexQuestion + 1 === listQuestion.length) navigation.navigate('Study');
-            else setIndexQuestion(indexQuestion + 1);
+            if (indexQuestion + 1 === listQuestion.length) {
+              finish()
+            } else setIndexQuestion(indexQuestion + 1);
           }}
         />
       )}

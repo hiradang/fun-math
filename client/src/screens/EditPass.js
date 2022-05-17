@@ -15,14 +15,12 @@ function EditPass({ navigation }) {
   const [newPassword, setNewPassword] = useState('');
   const [checkPass, setCheckPass] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
-  const [errorText, setErrorText] = useState(false);
 
   const submit = () => {
     setOnSubmit(true);
-    console.log(Config.API_URL);
     if (password && newPassword && newPassword === checkPass) {
       axios
-        .put(`${Config.API_URL}/users/updatePass`, { username, password, newPassword })
+        .post(`${Config.API_URL}/users/changePass`, { username, password, newPassword })
         .then((res) => {
           if (res.data.error) {
             Toast.show({
@@ -30,14 +28,13 @@ function EditPass({ navigation }) {
               text1: res.data.error,
               visibilityTime: 2000,
             });
-            setErrorText(true);
           } else {
             Toast.show({
               type: 'successToast',
-              text1: 'Đăng ký thành công',
+              text1: 'Chỉnh sửa mật khẩu thành công',
               visibilityTime: 2000,
             });
-            navigation.navigate('Login');
+            navigation.navigate('Cài đặt');
           }
         });
     } else if (!newPassword || !password || !checkPass) {

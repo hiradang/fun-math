@@ -3,11 +3,14 @@ import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Config from 'react-native-config';
+import Toast from 'react-native-toast-message';
 
 import CustomButton from '../../utils/CustomButton';
 import Card from './Card';
 import NumberBox from './NumberBox';
-import SignBox from './SignBox'
+import SignBox from './SignBox';
+
+const { width, height } = Dimensions.get('window');
 
 function MultipleChoice(props) {
   const [idSelect, setIdSelect] = useState(null);
@@ -57,7 +60,13 @@ function MultipleChoice(props) {
   }, []);
 
   const nextQuestion = () => {
-    if (!checkAnswer) {
+    if (idSelect === null) {
+      Toast.show({
+        type: 'disableToast',
+        text1: 'Bạn chưa chọn đáp án',
+        visibilityTime: 2000,
+      });
+    } else if (!checkAnswer) {
       setCheckAnswer(true);
       if (correct) props.changeScore();
     } else props.changeType2Question();
@@ -68,7 +77,11 @@ function MultipleChoice(props) {
         <Text style={styles.text}>{data && data.question}</Text>
       </View>
       <View style={styles.image}>
-        <Image source = {{uri : urlImage}} resizeMode="cover"></Image>
+        <Image
+          source={{ uri: urlImage }}
+          style={{ width: 400, height: 250 }}
+          resizeMode="contain"
+        ></Image>
       </View>
       <View style={styles.question}>
         {data &&
@@ -94,17 +107,19 @@ function MultipleChoice(props) {
             );
           })}
       </View>
-      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-        <CustomButton
-          buttonStyles={styles.button}
-          textStyles={{ color: 'white' }}
-          // pos="right"
-          // iconName="next"
-          disabled={idSelect === null}
-          text={checkAnswer ? 'Tiếp tục' : 'Trả lời'}
-          onPressFunc={nextQuestion}
-        />
-      </View>
+      {data && (
+        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+          <CustomButton
+            // buttonStyles={styles.button}
+            textStyles={{ color: 'white' }}
+            // pos="right"
+            // iconName="next"
+            buttonStyles={idSelect !== null ? styles.buttonStyles : styles.buttonStylesDisabled}
+            text={checkAnswer ? 'Tiếp tục' : 'Trả lời'}
+            onPressFunc={nextQuestion}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -136,6 +151,16 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#000000',
+    width: 200,
+    height: 60,
+  },
+  buttonStyles: {
+    backgroundColor: '#000000',
+    width: 200,
+    height: 60,
+  },
+  buttonStylesDisabled: {
+    backgroundColor: '#C4C4C4',
     width: 200,
     height: 60,
   },

@@ -63,7 +63,7 @@ router.post('/currentCourseName', async (req, res) => {
   res.json('OK');
 });
 
-router.put('updatePass', async (req, res) => {
+router.post('/changePass', async (req, res) => {
   const { username, password, newPassword } = req.body;
   const user = await User.findByPk(username);
   if (user) {
@@ -80,9 +80,9 @@ router.put('updatePass', async (req, res) => {
             }
           );
         });
+        res.json('SUCCESS');
       }
     });
-    res.json('SUCCESS');
   } else {
     res.json({ error: 'Tài khoản chưa tồn tại' });
   }

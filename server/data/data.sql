@@ -142,10 +142,10 @@ values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 0, "1,2,3,4", 
 
 --type question
 
-INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1', '2+?=3', 1);
+INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1', '2+?=3', 'Đọc và hoàn thành phép toán', 1);
 
-INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 2 cái nữa. Hỏi Loan có mấy cái kẹo?', '2,4', '2+?=?', 2);
+INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 2 cái nữa. Hỏi Loan có mấy cái kẹo?', '2,4', '2+?=?', 'Đọc và hoàn thành phép toán', 2);
 
-INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_id`) VALUES ('Loan có 3 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1,4', '?+1=?', 3);
+INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 3 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1,4', '?+1=?', 'Đọc và hoàn thành phép toán', 3);
 
-INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 0 cái nữa. Hỏi Loan có mấy cái kẹo?', '0,2', '2+?=?', 4)
+INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 0 cái nữa. Hỏi Loan có mấy cái kẹo?', '0,2', '2+?=?', 'Đọc và hoàn thành phép toán', 4)
