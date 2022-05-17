@@ -167,6 +167,14 @@ const App = () => {
             }}
           />
           <Stack.Screen
+            name="ListLesson"
+            component={ListLesson}
+            options={{
+              title: '',
+              ...HeaderStyles,
+            }}
+          />
+          <Stack.Screen
             name="Tài khoản"
             options={({ navigation }) => ({
               headerLeft: () => (
@@ -207,7 +215,7 @@ const App = () => {
             })}
             component={Setting}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="Chỉnh sửa mật khẩu"
             options={({ navigation }) => ({
               headerLeft: () => (
@@ -242,13 +250,6 @@ const App = () => {
               // ...HeaderStyles,
             })}
             component={EditProfile}
-          />
-          <Stack.Screen
-            name="ListLesson"
-            component={ListLesson}
-            options={{
-              ...HeaderStyles,
-            }}
           />
         </Stack.Navigator>
         <Toast config={toastConfig} />
