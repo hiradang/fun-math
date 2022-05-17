@@ -21,6 +21,7 @@ import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
 
+
 const Stack = createStackNavigator();
 
 const toastConfig = {
@@ -162,7 +163,7 @@ const App = () => {
             ...HeaderStyles,
           }}
         />
-        
+
         <Stack.Screen
           name="Tài khoản"
           options={({ navigation }) => ({
