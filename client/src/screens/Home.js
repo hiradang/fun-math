@@ -15,7 +15,7 @@ import Study from './Study';
 
 const Tab = createBottomTabNavigator();
 
-export default function Home({ navigation, route }) {
+export default function Home({ navigation }) {
   const { currentCourseName, currentCourseId, username } = useSelector(
     (state) => state.taskReducer
   );
@@ -56,7 +56,8 @@ export default function Home({ navigation, route }) {
       });
       setDataExp(temp);
     });
-  }, [currentCourseName, username]);
+    // });
+  }, [username, currentCourseName]);
 
   // sau chỗ này các bạn lấy data thì thay tên khóa học vào đây
   const userIconHandler = () => {

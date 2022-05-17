@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import Config from 'react-native-config';
 
 import CustomButton from '../utils/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

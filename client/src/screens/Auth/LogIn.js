@@ -13,6 +13,7 @@ import {
   setUsername,
   setName,
   setProfilePhotoPath,
+  setTotalExp,
 } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -50,6 +51,7 @@ function LogIn({ navigation }) {
           dispatch(setUsername(username));
           dispatch(setName(res.data.name));
           dispatch(setProfilePhotoPath(res.data.profile_photo_path));
+          dispatch(setTotalExp(res.data.total_exp));
 
           // Save to Async Storage
           AsyncStorage.setItem(
@@ -61,6 +63,7 @@ function LogIn({ navigation }) {
               currentCourseName: res.data.current_course_name,
               currentCourseId: res.data.current_course_id,
               profilePhotoPath: res.data.profile_photo_path,
+              totalExp: res.data.tota_exp,
             })
           ).then(() => {
             navigation.navigate('Home');

@@ -4,6 +4,7 @@ import {
   SET_USERNAME,
   SET_NAME,
   SET_PROFILE_PHOTO_PATH,
+  SET_TOTAL_EXP,
 } from './actions';
 
 const initialState = {
@@ -23,6 +24,8 @@ function taskReducer(state = initialState, action) {
       return { ...state, name: action.payload };
     case SET_PROFILE_PHOTO_PATH:
       return { ...state, profilePhotoPath: action.payload };
+    case SET_TOTAL_EXP:
+      return { ...state, totalExp: action.payload };
     default:
       return state;
   }

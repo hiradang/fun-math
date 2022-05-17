@@ -11,7 +11,9 @@ import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 import axios from 'axios';
 
 export default function ListCourses({ navigation, route }) {
-  const { currentCourseName, username } = useSelector((state) => state.taskReducer);
+  const { currentCourseName, currentCourseId, username } = useSelector(
+    (state) => state.taskReducer
+  );
   const dispatch = useDispatch();
 
   const [selCourse, setSelCourse] = useState({});

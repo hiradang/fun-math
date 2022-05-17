@@ -11,18 +11,20 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
+import CustomButton from '../utils/CustomButton';
 
 /*
   1. Khi thay ảnh mới, cần update được ảnh ở hai bảng xếp hạng -> Done
   2. Làm cái đổi tên  -> done
-  2.1. Xóa trong android/emulator -> RNFS
-  2.2. Xử lý khi người dùng hủy việc chọn ảnh
-  2.2. Xử lý lại việc fetch data ở màn ListCourses, Home, Overview
-  3. Chỉnh lại giao diện của trang EditProfile
-  4. Làm popup khi người dùng logout
+  2.1. Xóa trong android/emulator -> RNFS -> done
+  2.2. Xử lý khi người dùng hủy việc chọn ảnh -> done
+  **2.2. Xử lý lại việc fetch data ở màn ListCourses, Home, Overview8
+  3. Chỉnh lại giao diện của trang EditProfile -> done
+  4. Làm popup khi người dùng logout __ doing
   5. Chỉnh lại Model user, bỏ trường current_course_name
   6. Thêm các course_user khi người dùng tham gia vào khóa học (optional - Cần bàn lại)
-  7. Làm trang tài khoản, số ngày học, khóa học, tích lũy, phép tính,........
+  7. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
+  8. Làm thông báo
 */
 
 function EditProfile() {
@@ -38,11 +40,22 @@ function EditProfile() {
       width: 600,
       height: 600,
       cropping: true,
-    }).then((image) => {
-      // if (newImage) RNFS.unlink(newImage);
-      setNewImage(image.path);
-      setIsNewImage(true);
-    });
+    })
+      .then((newImage) => {
+        // Delete image in Android/emulator
+        RNFS.exists(image).then((exists) => {
+          if (exists) {
+            RNFS.unlink(image);
+          }
+        });
+        setNewImage(newImage.path);
+        setIsNewImage(true);
+      })
+      .catch((error) => {
+        if (error.code === 'E_PICKER_CANCELLED') {
+          return false;
+        }
+      });
   };
 
   const uploadImageFirebase = async () => {
@@ -73,8 +86,17 @@ function EditProfile() {
                 profilePhotoPath: url,
               })
             );
+
+            // POST data to server
             userInfo['profilePhotoPath'] = url;
             axios.post(`${Config.API_URL}/users/update`, userInfo).then(() => {});
+
+            // Delete image in Android/emulator
+            RNFS.exists(image).then((exists) => {
+              if (exists) {
+                RNFS.unlink(image);
+              }
+            });
           });
       });
     } else {
@@ -90,9 +112,6 @@ function EditProfile() {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.saveButton}>
-          <Feather name="check" size={40} color="#14D39A" onPress={submit} />
-        </View>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: image }} />
 
@@ -131,6 +150,20 @@ function EditProfile() {
             />
           </View>
         </View>
+
+        <View style={styles.saveButton}>
+          <CustomButton
+            buttonStyles={{
+              backgroundColor: '#000000',
+              width: 350,
+              height: 60,
+              marginTop: 20,
+            }}
+            textStyles={{ color: 'white' }}
+            text={'Lưu thay đổi'}
+            onPressFunc={submit}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -142,18 +175,6 @@ const styles = StyleSheet.create({
     height: '100%',
     textAlign: 'center',
   },
-  saveButton: {
-    position: 'absolute',
-    right: 20,
-    top: 10,
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    backgroundColor: 'white',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   imageContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -161,9 +182,9 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   image: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
   },
   editIconContainer: {
     backgroundColor: 'white',
@@ -201,6 +222,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     paddingHorizontal: 60,
+  },
+  saveButton: {
+    // backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default EditProfile;

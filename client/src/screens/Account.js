@@ -7,7 +7,7 @@ import UserRanking from '../utils/UserRanking';
 import { useSelector } from 'react-redux';
 
 function Account({ navigation }) {
-  const { username, profilePhotoPath } = useSelector((state) => state.taskReducer);
+  const { username, profilePhotoPath, totalExp } = useSelector((state) => state.taskReducer);
   const [dataExp, setDataExp] = useState(null);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function Account({ navigation }) {
 
           <View style={styles.item}>
             <Text style={styles.title}>Điểm tích lũy</Text>
-            <Text style={styles.number}>20000 XP</Text>
+            <Text style={styles.number}>{totalExp} XP</Text>
           </View>
         </View>
       </View>

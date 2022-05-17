@@ -9,6 +9,7 @@ import {
   setUsername,
   setName,
   setProfilePhotoPath,
+  setTotalExp,
 } from '../redux/actions';
 
 function Splash({ navigation }) {
@@ -25,6 +26,7 @@ function Splash({ navigation }) {
           dispatch(setUsername(data.username));
           dispatch(setName(data.name));
           dispatch(setProfilePhotoPath(data.profilePhotoPath));
+          dispatch(setTotalExp(data.totalExp));
           navigation.replace('Home');
         }
       });

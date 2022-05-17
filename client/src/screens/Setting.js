@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +27,28 @@ function Setting({ navigation }) {
    * 3. xử lý khi nhấn vào nút đăng xuất.
    */
 
+  const [showBox, setShowBox] = useState(false);
+
+  const showConfirmDialog = () => {
+    setShowBox(true);
+    return Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này', [
+      {
+        text: 'Chắc chắn',
+        style: 'cancel',
+        onPress: () => {
+          logOut();
+          setShowBox(false);
+        },
+      },
+      {
+        text: 'Mình vẫn ở lại',
+        onPress: () => {
+          setShowBox(false);
+        },
+      },
+    ]);
+  };
+
   const logOut = () => {
     axios
       .post(`${Config.API_URL}/users/currentCourseName`, {
@@ -44,6 +66,9 @@ function Setting({ navigation }) {
 
   return (
     <ScrollView style={styles.container}>
+      {/* Modal */}
+      {showBox}
+
       {/* Tài khoản */}
       <View style={styles.item}>
         <Text style={styles.title}>TÀI KHOẢN</Text>
@@ -173,7 +198,12 @@ function Setting({ navigation }) {
         <View style={styles.content}>
           <View style={styles.row}>
             <Text style={styles.text}>Đăng xuất</Text>
-            <MaterialIcons size={24} color="#E46B6B" name="logout" onPress={logOut} />
+            <MaterialIcons
+              size={24}
+              color="#E46B6B"
+              name="logout"
+              onPress={() => showConfirmDialog()}
+            />
           </View>
         </View>
       </View>
@@ -186,6 +216,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#3D67FF',
     height: '100%',
     textAlign: 'center',
+  },
+  box: {
+    width: 300,
+    height: 300,
+    backgroundColor: 'red',
+    marginBottom: 30,
   },
   item: {
     marginTop: 20,

@@ -26,6 +26,7 @@ router.post('/login', async (req, res) => {
           current_course_name: user.current_course_name,
           current_course_id: user.current_course_id,
           profile_photo_path: user.profile_photo_path,
+          total_exp: user.total_exp,
         });
       }
     });
