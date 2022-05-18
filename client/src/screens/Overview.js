@@ -9,7 +9,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import UserRanking from '../utils/UserRanking';
 
 export default function Overview({ navigation }) {
-  const { username, currentCourseId } = useSelector((state) => state.taskReducer);
+  const { username, currentCourseId, currentCourseName } = useSelector(
+    (state) => state.taskReducer
+  );
 
   const [currentProgress, setCurrentProgress] = useState({});
   const [dataExp, setDataExp] = useState([]);
@@ -87,7 +89,7 @@ export default function Overview({ navigation }) {
         <View style={styles.isNotDone}>
           <View>
             <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
-              Bạn chưa tham gia khóa học này
+              Khám phá thế giới của {currentCourseName} ngay thôi nào!
             </Text>
           </View>
           <View style={styles.button}>

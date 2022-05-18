@@ -44,6 +44,7 @@ function Setting({ navigation }) {
         <ConfirmModal
           showModal={showModal}
           negativeFunc={logOut}
+          cancelFunc={cancelLogOut}
           positiveFunc={cancelLogOut}
           header="Đăng xuất"
           message="Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này?"

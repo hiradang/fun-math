@@ -28,12 +28,17 @@ export default function ListCourses({ navigation, route }) {
   const [selCourse, setSelCourse] = useState({});
   const [notAllowSelCourses, setNotAllowSelCourses] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
+  const [chosenCourseId, setChosenCourseId] = useState();
 
   // Modal
   const [showModal, setShowModal] = useState(false);
   const [showModalWarning, setModalWarning] = useState(false);
 
   useEffect(() => {
+    fetchAPI();
+  }, []);
+
+  const fetchAPI = () => {
     axios
       .all([
         axios.get(`${Config.API_URL}/course_user/${username}`),
@@ -73,13 +78,14 @@ export default function ListCourses({ navigation, route }) {
           const tempAllCourses = res2.data.map((course) => {
             return {
               course_name: course.course_name,
+              course_id: course.course_id,
               hasJoined: joinedCourseId.includes(course.course_id),
             };
           });
           setAllCourses(tempAllCourses);
         })
       );
-  }, []);
+  };
 
   const renderCourse = (course, index) => {
     return (
@@ -162,6 +168,7 @@ export default function ListCourses({ navigation, route }) {
                 textStyles={{ color: 'white', fontSize: 16 }}
                 text="Tham gia"
                 onPressFunc={() => {
+                  setChosenCourseId(course.course_id);
                   setModalWarning(true);
                 }}
               />
@@ -173,7 +180,15 @@ export default function ListCourses({ navigation, route }) {
   };
 
   const joinCourse = () => {
-    console.log('Join course');
+    axios
+      .post(`${Config.API_URL}/course_user/create`, {
+        username: username,
+        courseId: chosenCourseId,
+      })
+      .then(() => {
+        setModalWarning(false);
+        fetchAPI();
+      });
   };
 
   return (
@@ -211,6 +226,7 @@ export default function ListCourses({ navigation, route }) {
           negativeFunc={() => {
             setModalWarning(false);
           }}
+          cancelFunc={() => setModalWarning(false)}
           header="Tham gia học"
           message="Bạn có chắc chắn muốn tham gia khóa học này?"
           negativeMessage="Hủy"

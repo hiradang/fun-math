@@ -14,9 +14,11 @@ import RNFS from 'react-native-fs';
 import CustomButton from '../utils/CustomButton';
 
 /*
-  1. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
-  2. Làm thông báo ?? Firebase ???
-  3. Lưu các biến boolean ở trên vào Async Storage. (thông báo, nhắc nhở,...)
+  0.1. Viết API để người dùng join khóa học --> done
+   -> Q: Số lượng câu hỏi trong mỗi khóa học
+  1. Làm thông báo ?? Firebase ???
+  2. Lưu các biến boolean ở trên vào Async Storage. (thông báo, nhắc nhở,...)
+  3. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
   4. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
 */
 

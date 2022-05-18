@@ -24,15 +24,16 @@ router.get('/courseId/:courseId', async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
-  // Course_User.create({
-  //   course_id: 1,
-  //   username: 'test',
-  //   current_chapter: 1,
-  //   question_all_count: 100,
-  //   question_learnt_count: 0,
-  //   is_done: false,
-  //   total_exp: 0,
-  // });
+  const { courseId, username } = req.body;
+  Course_User.create({
+    course_id: courseId,
+    username: username,
+    current_chapter: 1,
+    question_all_count: 100,
+    question_learnt_count: 0,
+    is_done: false,
+    total_exp: 0,
+  });
   res.json('OK');
 });
 
