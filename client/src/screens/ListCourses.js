@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Config from 'react-native-config';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
-import axios from 'axios';
+
 
 export default function ListCourses({ navigation, route }) {
   const { currentCourseName, currentCourseId, username } = useSelector(

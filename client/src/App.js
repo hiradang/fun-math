@@ -25,6 +25,8 @@ import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
 import Lesson from './screens/Lesson';
 import EditPass from './screens/EditPass';
+import ListCourseAdmin from './screens/Admin/ListCourseAdmin';
+import ListChapterAdmin from './screens/Admin/ListChapterAdmin';
 
 const Stack = createStackNavigator();
 
@@ -172,6 +174,20 @@ const App = () => {
             options={{
               title: '',
               ...HeaderStyles,
+            }}
+          />
+          <Stack.Screen
+            name="ChapterAdmin"
+            component={ListChapterAdmin}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="CourseAdmin"
+            component={ListCourseAdmin}
+            options={{
+              headerShown: false,
             }}
           />
           <Stack.Screen

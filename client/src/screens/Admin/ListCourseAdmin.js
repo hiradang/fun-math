@@ -7,12 +7,15 @@ import {
   Dimensions,
   Modal,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Config from 'react-native-config';
+import axios from 'axios';
+
 import EditModal from './Add/EditModal';
 
 const { width, height } = Dimensions.get('window');
@@ -22,12 +25,21 @@ export default function ListCourseAdmin({ navigation }) {
   const [showEditNameModal, setShowEditNameModal] = useState(false);
   const [idEdit, setIdEdit] = useState();
 
-  const listCourse = [
-    { id: 0, name: 'Phép cộng', totalChapter: 15 },
-    { id: 1, name: 'Phép trừ', totalChapter: 20 },
-    { id: 2, name: 'Phép nhân', totalChapter: 10 },
-    { id: 3, name: 'Phép chia', totalChapter: 25 },
-  ];
+  const [listCourse, setListCourse] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/courses`).then((res) => {
+      console.log(res.data)
+      setListCourse(res.data)
+    });
+  }, []);
+
+  // const listCourse = [
+  //   { id: 0, name: 'Phép cộng', totalChapter: 15 },
+  //   { id: 1, name: 'Phép trừ', totalChapter: 20 },
+  //   { id: 2, name: 'Phép nhân', totalChapter: 10 },
+  //   { id: 3, name: 'Phép chia', totalChapter: 25 },
+  // ];
 
   const deleteCourse = (id) => {};
 
@@ -44,7 +56,7 @@ export default function ListCourseAdmin({ navigation }) {
     setShowEditNameModal(false);
   };
 
-  const signCourse = ['Phép cộng', 'Phép trừ', 'Phép nhân', 'Phép chia']
+  const signCourse = ['Phép cộng', 'Phép trừ', 'Phép nhân', 'Phép chia'];
 
   return (
     <View style={styles.container}>
@@ -86,25 +98,25 @@ export default function ListCourseAdmin({ navigation }) {
             style={styles.course}
             onPress={() =>
               navigation.navigate('ListChapterAdmin', {
-                courseName: item.name,
-                courseId: item.id,
+                courseName: item.course_name,
+                courseId: item.course_id,
               })
             }
           >
             <View style={styles.courseIconWrapper}>
-              {item.name === 'Phép cộng' && <Octicons name="plus" size={35} color="#333333" />}
-              {item.name === 'Phép nhân' && <Octicons name="x" size={35} color="#333333" />}
-              {item.name === 'Phép trừ' && <Octicons name="dash" size={35} color="#333333" />}
-              {item.name === 'Phép chia' && (
+              {item.course_name === 'Phép cộng' && <Octicons course_name="plus" size={35} color="#333333" />}
+              {item.course_name === 'Phép nhân' && <Octicons course_name="x" size={35} color="#333333" />}
+              {item.course_name === 'Phép trừ' && <Octicons course_name="dash" size={35} color="#333333" />}
+              {item.course_name === 'Phép chia' && (
                 <MaterialCommunityIcons name="division" size={35} color="#333333" />
               )}
-              {!signCourse.includes(item.name) && (
+              {!signCourse.includes(item.course_name) && (
                 <AntDesign name="book" size={35} color="#333333" />
               )}
             </View>
             <View style={styles.nameAndChapter}>
               <Text style={styles.nameCourse} numberOfLines={1}>
-                {item.name}
+                {item.course_name}
               </Text>
               <Text style={styles.chapterCourse} numberOfLines={1}>
                 Tổng số chương: {item.totalChapter ? item.totalChapter : 0}
@@ -113,7 +125,7 @@ export default function ListCourseAdmin({ navigation }) {
             <TouchableOpacity
               style={styles.icon}
               onPress={() => {
-                setIdEdit(item.id);
+                setIdEdit(item.course_id);
                 setShowEditNameModal(true);
               }}
             >
@@ -122,7 +134,7 @@ export default function ListCourseAdmin({ navigation }) {
             <TouchableOpacity
               style={styles.icon}
               onPress={() => {
-                deleteCourse(item.id);
+                deleteCourse(item.course_id);
               }}
             >
               <FontAwesome5 name={'trash'} size={16} color={'#ff3636'} />

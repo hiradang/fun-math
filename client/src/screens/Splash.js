@@ -27,7 +27,9 @@ function Splash({ navigation }) {
           dispatch(setName(data.name));
           dispatch(setProfilePhotoPath(data.profilePhotoPath));
           dispatch(setTotalExp(data.totalExp));
-          navigation.replace('Home');
+          console.log(user)
+          if (user.role === 0) navigation.replace('Home')
+          else navigation.replace('CourseAdmin')
         }
       });
     }, 2000);
