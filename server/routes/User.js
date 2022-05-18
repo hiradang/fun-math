@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
+const { Course } = require('../models');
+const { Course_User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -9,7 +11,10 @@ const defaultProfilePath =
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ where: { username: username } });
+  const user = await User.findOne({
+    where: { username: username },
+    include: [{ model: Course, atrributes: ['course_name'] }],
+  });
   if (user) {
     bcrypt.compare(password, user.password).then((match) => {
       if (!match) res.json({ error: 'Mật khẩu không chính xác' });
@@ -23,8 +28,8 @@ router.post('/login', async (req, res) => {
           username: user.username,
           name: user.name,
           role_id: user.role_id,
-          current_course_name: user.current_course_name,
           current_course_id: user.current_course_id,
+          current_course_name: user.Course.course_name,
           profile_photo_path: user.profile_photo_path,
           total_exp: user.total_exp,
         });
@@ -46,10 +51,18 @@ router.post('/', async (req, res) => {
         password: hash,
         role_id: role_id,
         name: name,
-        current_course_name: 'Phép cộng',
         current_course_id: 1,
         total_exp: 0,
         profile_photo_path: defaultProfilePath,
+      });
+      Course_User.create({
+        course_id: 1,
+        username: username,
+        current_chapter: 0,
+        question_all_count: 100,
+        question_learnt_count: 0,
+        is_done: false,
+        total_exp: 0,
       });
     });
     res.json('SUCCESS');
@@ -61,7 +74,6 @@ router.post('/currentCourseName', async (req, res) => {
   const { username, currentCourseName, currentCourseId } = req.body;
   User.update(
     {
-      current_course_name: currentCourseName,
       current_course_id: currentCourseId,
     },
     { where: { username: username } }
@@ -93,6 +105,7 @@ router.post('/changePass', async (req, res) => {
     res.json({ error: 'Tài khoản chưa tồn tại' });
   }
 });
+
 // Update user info
 router.post('/update', async (req, res) => {
   const { username, password, name, profilePhotoPath } = req.body;
@@ -118,4 +131,5 @@ router.get('/getExp', async (req, res) => {
   });
   res.json(allUserExp);
 });
+
 module.exports = router;
