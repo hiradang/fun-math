@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { Course } = require('../models');
+const db = require('../models');
 
 router.get('/', async (req, res) => {
   const result = await db.sequelize.query(
     `SELECT c.*, COUNT(ch.course_id) as totalChapter FROM courses c 
-    INNER JOIN chapters ch 
+    LEFT JOIN chapters ch 
     on c.course_id = ch.course_id 
     GROUP BY c.course_id`,
     { type: db.sequelize.QueryTypes.SELECT }
@@ -15,22 +16,33 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { course_name } = req.body;
-  const course = Course.create({
-    course_name: course_name,
-  });
-  res.json(course);
+  const course = await Course.findOne({ where: { course_name: course_name } });
+  if (course) {
+    res.json({ error: 'Khóa học đã tồn tại' });
+  } else {
+    await Course.create({
+      course_name: course_name,
+    });
+    const newCourse = await Course.findOne({ where: { course_name: course_name } });
+    res.json(newCourse);
+  }
 });
 
 router.post('/:course_id', async (req, res) => {
   const { course_name } = req.body;
   const course_id = req.params.course_id;
-  Course.update(
-    {
-      course_name: course_name,
-    },
-    { where: { course_id: course_id } }
-  );
-  res.json('SUCCESS');
+  const course = await Course.findOne({ where: { course_name: course_name } });
+  if (course) {
+    res.json({ error: 'Khóa học đã tồn tại' });
+  } else {
+    Course.update(
+      {
+        course_name: course_name,
+      },
+      { where: { course_id: course_id } }
+    );
+    res.json('SUCCESS');
+  }
 });
 
 router.delete('/:course_id', async (req, res) => {

@@ -27,6 +27,9 @@ import Lesson from './screens/Lesson';
 import EditPass from './screens/EditPass';
 import ListCourseAdmin from './screens/Admin/ListCourseAdmin';
 import ListChapterAdmin from './screens/Admin/ListChapterAdmin';
+import ListLessonAdmin from './screens/Admin/ListLessonAdmin';
+import AddLesson from './screens/Admin/Add/AddLesson';
+import EditLesson from './screens/Admin/Add/EditLesson';
 
 const Stack = createStackNavigator();
 
@@ -186,6 +189,27 @@ const App = () => {
           <Stack.Screen
             name="CourseAdmin"
             component={ListCourseAdmin}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="LessonAdmin"
+            component={ListLessonAdmin}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddLesson"
+            component={AddLesson}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="EditLesson"
+            component={EditLesson}
             options={{
               headerShown: false,
             }}

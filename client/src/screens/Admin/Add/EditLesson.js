@@ -1,18 +1,28 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import Config from 'react-native-config';
+import axios from 'axios';
+
 import LessonForm from './LessonForm';
 
 const { width, height } = Dimensions.get('window');
 
 export default function EditLesson({ navigation, route }) {
-  const { courseName, courseId, chapterName, chapterId, lessonId } = route.params;
-  const idInfo = { courseId: courseId, chapterId: chapterId, lessonId: lessonId };
-
+  const { courseName, chapterName, question_id } = route.params;
+  const [data, setData] = useState()
   // ở kia n submit cái gì thì ở đây lấy cái đó. Nma vẫn thiếu ảnh nha :v
   const editNewLesson = (questionName, multiChoice, fillBox) => {
     // Thêm thành công r bắn ra 1 cái thông báo
     // Xong cho n goBack()
   };
+
+  useEffect(() => {
+    if (question_id) {
+      axios.get(`${Config.API_URL}/questions/all/${question_id}`).then((res) => {
+        setData(res.data)
+      });
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -20,7 +30,7 @@ export default function EditLesson({ navigation, route }) {
         {courseName} - {chapterName}
       </Text>
       <Text style={styles.subTitle}>Chỉnh sửa bài học</Text>
-      <LessonForm submitCourseFunction={editNewLesson} objId={idInfo} />
+      {data && <LessonForm submitCourseFunction={editNewLesson} data={data} />}
     </View>
   );
 }

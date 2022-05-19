@@ -1,16 +1,30 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import React from 'react';
+import Config from 'react-native-config';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
+
 import LessonForm from './LessonForm';
 
 const { width, height } = Dimensions.get('window');
 
 export default function AddLesson({ navigation, route }) {
-  const { courseName, courseId, chapterName, chapterId } = route.params;
+  const { courseName, chapterName, chapterId } = route.params;
 
   // ở kia n submit cái gì thì ở đây lấy cái đó. Nma vẫn thiếu ảnh nha :v
   const addNewLesson = (questionName, multiChoice, fillBox) => {
     // Thêm thành công r bắn ra 1 cái thông báo
     // Xong cho n goBack()
+    axios.post(`${Config.API_URL}/questions`, {questionName, multiChoice, fillBox, chapter_id : chapterId}).then((res) => {
+     // setListCourse(res.data);
+     Toast.show({
+      type: 'successToast',
+      text1: 'Thêm bài học thành công',
+      visibilityTime: 2000,
+    });
+     navigation.goBack()
+    });
+    console.log(questionName, multiChoice, fillBox)
   };
 
   return (
