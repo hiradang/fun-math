@@ -149,3 +149,7 @@ INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 3 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1,4', '?+1=?', 'Đọc và hoàn thành phép toán', 3);
 
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 0 cái nữa. Hỏi Loan có mấy cái kẹo?', '0,2', '2+?=?', 'Đọc và hoàn thành phép toán', 4)
+
+--trigger update_exp
+CREATE TRIGGER `update_exp` AFTER UPDATE ON `course_users`
+ FOR EACH ROW UPDATE users SET total_exp = total_exp + new.total_exp - old.total_exp WHERE username = new.username

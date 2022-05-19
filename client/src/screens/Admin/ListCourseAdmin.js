@@ -29,8 +29,7 @@ export default function ListCourseAdmin({ navigation }) {
 
   useEffect(() => {
     axios.get(`${Config.API_URL}/courses`).then((res) => {
-      console.log(res.data)
-      setListCourse(res.data)
+      setListCourse(res.data);
     });
   }, []);
 
@@ -41,16 +40,32 @@ export default function ListCourseAdmin({ navigation }) {
   //   { id: 3, name: 'Phép chia', totalChapter: 25 },
   // ];
 
-  const deleteCourse = (id) => {};
+  const deleteCourse = (id) => {
+    axios.delete(`${Config.API_URL}/courses/${id}`).then((res) => {})
+  };
 
   const addNewCourse = (newCourseName) => {
     // Xử lý thêm khóa học
+    axios.post(`${Config.API_URL}/courses`, { course_name: newCourseName }).then((res) => {
+      setListCourse(...listCourse, {
+        course_id: res.data.course_id,
+        course_name: res.data.course_name,
+        totalChapter: 0,
+      });
+    });
     // Bắn alert
     setShowAddCourseModal(false);
   };
 
   const editCourseName = (newName) => {
     // Xử lý thay tên khóa học
+    axios.post(`${Config.API_URL}/courses/${idEdit}`, { course_name: newName }).then((res) => {
+      setListCourse(...listCourse, {
+        course_id: res.data.course_id,
+        course_name: res.data.course_name,
+        totalChapter: 0,
+      });
+    });
     // Bắn alert
     // id của khóa học cần thay tên lưu trong state idEdit
     setShowEditNameModal(false);
@@ -104,9 +119,15 @@ export default function ListCourseAdmin({ navigation }) {
             }
           >
             <View style={styles.courseIconWrapper}>
-              {item.course_name === 'Phép cộng' && <Octicons course_name="plus" size={35} color="#333333" />}
-              {item.course_name === 'Phép nhân' && <Octicons course_name="x" size={35} color="#333333" />}
-              {item.course_name === 'Phép trừ' && <Octicons course_name="dash" size={35} color="#333333" />}
+              {item.course_name === 'Phép cộng' && (
+                <Octicons course_name="plus" size={35} color="#333333" />
+              )}
+              {item.course_name === 'Phép nhân' && (
+                <Octicons course_name="x" size={35} color="#333333" />
+              )}
+              {item.course_name === 'Phép trừ' && (
+                <Octicons course_name="dash" size={35} color="#333333" />
+              )}
               {item.course_name === 'Phép chia' && (
                 <MaterialCommunityIcons name="division" size={35} color="#333333" />
               )}
