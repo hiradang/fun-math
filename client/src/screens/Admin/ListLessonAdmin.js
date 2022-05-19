@@ -11,14 +11,11 @@ import React, { useState } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EditModal from './Add/EditModal';
 
 const { width, height } = Dimensions.get('window');
 
 export default function ListLessonAdmin({ navigation, route }) {
   const { courseName, courseId, chapterName, chapterId } = route.params;
-  const [showEditNameModal, setShowEditNameModal] = useState(false);
-  const [idEdit, setIdEdit] = useState();
 
   const listLesson = [
     { id: 0, name: '1 + 1' },
@@ -32,28 +29,9 @@ export default function ListLessonAdmin({ navigation, route }) {
 
   const deleteLesson = (id) => {};
 
-  const editLessonName = (newName) => {
-    // Xử lý thay tên phép tính
-    // Bắn alert
-    // id của phép tính cần thay tên lưu trong state idEdit
-    setShowEditNameModal(false);
-  };
 
   return (
     <View style={styles.container}>
-      <Modal
-        visible={showEditNameModal}
-        transparent
-        onRequestClose={() => setShowEditNameModal(false)}
-        animationType="fade"
-        hardwareAccelerated
-      >
-        <EditModal
-          editOrAdd="edit lesson"
-          setVisible={() => setShowEditNameModal(false)}
-          onPressHandle={editLessonName}
-        />
-      </Modal>
 
       <Text style={styles.title}>{courseName} </Text>
       <Text style={styles.subTitle}>{chapterName} - DANH SÁCH PHÉP TÍNH</Text>
@@ -76,8 +54,13 @@ export default function ListLessonAdmin({ navigation, route }) {
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    setIdEdit(item.id);
-                    setShowEditNameModal(true);
+                    navigation.navigate('EditLesson', {
+                      courseName: courseName,
+                      courseId: courseId,
+                      chapterName: chapterName,
+                      chapterId: chapterId,
+                      lessonId: item.id,
+                    });
                   }}
                 >
                   <MaterialIcons name={'mode-edit'} size={20} color={'#1eb900'} />
@@ -95,7 +78,17 @@ export default function ListLessonAdmin({ navigation, route }) {
           }
         }}
       />
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          navigation.navigate('AddLesson', {
+            courseName: courseName,
+            courseId: courseId,
+            chapterName: chapterName,
+            chapterId: chapterId,
+          })
+        }
+      >
         <FontAwesome5 name={'plus'} size={28} color={'white'} />
       </TouchableOpacity>
     </View>
