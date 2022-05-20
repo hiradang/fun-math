@@ -3,22 +3,28 @@ import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import { subscribeToTopic, unsubscribeFromTopic } from '../utils/RNFireBaseNotification';
 import Config from 'react-native-config';
 import ConfirmModal from '../utils/ConfirmModal';
 
-import { useDispatch, useSelector } from 'react-redux';
-
 function Setting({ navigation }) {
-  const { currentCourseName, currentCourseId, username } = useSelector(
-    (state) => state.taskReducer
-  );
-  const dispatch = useDispatch();
+  const { currentCourseId, username } = useSelector((state) => state.taskReducer);
 
   const [isRemind, setRemind] = useState(false);
-  const [isNotiNewCourse, setNotiNewCourse] = useState(false);
-  const [isNotiUpdate, setNotiUpdate] = useState(false);
+  const [isNewCourseNoti, setNotiNewCourse] = useState();
+  const [isNewChapterNoti, setNotiNewChapter] = useState();
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((user) => {
+      const data = JSON.parse(user);
+      setNotiNewCourse(data.isNewCourseNoti);
+      setNotiNewChapter(data.isNewChapterNoti);
+    });
+  }, []);
 
   const logOut = () => {
     setShowModal(false);
@@ -35,6 +41,79 @@ function Setting({ navigation }) {
 
   const cancelLogOut = () => {
     setShowModal(false);
+  };
+
+  const newCourseNoti = () => {
+    // Đang subscribe -> Hủy subcribe
+    if (isNewCourseNoti) {
+      unsubscribeFromTopic('new-course');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Hủy nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    } else {
+      subscribeToTopic('new-course');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Đăng ký nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    }
+
+    const newState = !isNewCourseNoti;
+    setNotiNewCourse(newState);
+
+    console.log('New State: ' + newState);
+
+    axios
+      .post(`${Config.API_URL}/users/update`, {
+        isNewCourseNoti: newState,
+        username: username,
+      })
+      .then(() => {
+        AsyncStorage.mergeItem(
+          'user',
+          JSON.stringify({
+            isNewCourseNoti: newState,
+          })
+        );
+      });
+  };
+
+  const newChapterNoti = () => {
+    if (isNewChapterNoti) {
+      unsubscribeFromTopic('new-chapter');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Hủy nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    } else {
+      subscribeToTopic('new-chapter');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Đăng ký nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    }
+
+    const newState = !isNewChapterNoti;
+
+    axios
+      .post(`${Config.API_URL}/users/update`, {
+        isNewChapterNoti: newState,
+        username: username,
+      })
+      .then(() => {
+        AsyncStorage.mergeItem(
+          'user',
+          JSON.stringify({
+            isNewChapterNoti: newState,
+          })
+        );
+        setNotiNewChapter(newState);
+      });
   };
 
   return (
@@ -122,20 +201,10 @@ function Setting({ navigation }) {
               <Text style={styles.text}>Nhận thông báo khi có khóa học mới</Text>
             </View>
 
-            {isNotiNewCourse ? (
-              <FontAwesome5
-                size={24}
-                color="#14D39A"
-                name="toggle-on"
-                onPress={() => setNotiNewCourse(!isNotiNewCourse)}
-              />
+            {isNewCourseNoti ? (
+              <FontAwesome5 size={24} color="#14D39A" name="toggle-on" onPress={newCourseNoti} />
             ) : (
-              <FontAwesome5
-                size={24}
-                color="#ccc"
-                name="toggle-off"
-                onPress={() => setNotiNewCourse(!isNotiNewCourse)}
-              />
+              <FontAwesome5 size={24} color="#ccc" name="toggle-off" onPress={newCourseNoti} />
             )}
           </View>
 
@@ -144,20 +213,10 @@ function Setting({ navigation }) {
               <Text style={styles.text}>Nhận thông báo khi có chương mới</Text>
             </View>
 
-            {isNotiUpdate ? (
-              <FontAwesome5
-                size={24}
-                color="#14D39A"
-                name="toggle-on"
-                onPress={() => setNotiUpdate(!isNotiUpdate)}
-              />
+            {isNewChapterNoti ? (
+              <FontAwesome5 size={24} color="#14D39A" name="toggle-on" onPress={newChapterNoti} />
             ) : (
-              <FontAwesome5
-                size={24}
-                color="#ccc"
-                name="toggle-off"
-                onPress={() => setNotiUpdate(!isNotiUpdate)}
-              />
+              <FontAwesome5 size={24} color="#ccc" name="toggle-off" onPress={newChapterNoti} />
             )}
           </View>
         </View>

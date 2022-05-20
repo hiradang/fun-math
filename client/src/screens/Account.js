@@ -9,26 +9,43 @@ import { useSelector } from 'react-redux';
 function Account({ navigation }) {
   const { username, profilePhotoPath, totalExp } = useSelector((state) => state.taskReducer);
   const [dataExp, setDataExp] = useState(null);
+  const [learningCourses, setCourses] = useState([]);
 
   useEffect(() => {
     navigation.addListener('focus', () => {
-      axios.get(`${Config.API_URL}/users/getExp`).then((res) => {
-        if (res.data) {
-          let tempData = res.data.map((user) => {
-            return {
-              url: user.profile_photo_path,
-              exp: user.total_exp,
-              userName: user.username,
-              name: user.name,
-            };
-          });
-          setDataExp(tempData);
-        }
-      });
+      axios
+        .all([
+          axios.get(`${Config.API_URL}/users/getExp`),
+          axios.get(`${Config.API_URL}/course_user/${username}`),
+        ])
+        .then(
+          axios.spread((res1, res2) => {
+            if (res1.data) {
+              let tempData = res1.data.map((user) => {
+                return {
+                  url: user.profile_photo_path,
+                  exp: user.total_exp,
+                  userName: user.username,
+                  name: user.name,
+                };
+              });
+              setDataExp(tempData);
+            }
+
+            if (res2.data) {
+              let temp = res2.data.map((course) => {
+                return {
+                  course_id: course.course_id,
+                  question_learnt_count: course.question_learnt_count,
+                  total_exp: course.total_exp,
+                };
+              });
+              setCourses(temp);
+            }
+          })
+        );
     });
   }, [navigation]);
-
-  // console.log('Account profile photo: ' + profilePhotoPath);
 
   return (
     <View style={styles.container}>
@@ -39,23 +56,27 @@ function Account({ navigation }) {
         </View>
         <View style={styles.infoRight}>
           <View style={styles.item}>
-            <Text style={styles.title}>Số ngày học liên tục</Text>
-            <Text style={styles.number}>30</Text>
-          </View>
-
-          <View style={styles.item}>
             <Text style={styles.title}>Số phép tính</Text>
-            <Text style={styles.number}>100</Text>
+            <Text style={styles.number}>
+              {learningCourses.length > 0
+                ? learningCourses.reduce((sum, course) => sum + course.question_learnt_count, 0)
+                : 0}
+            </Text>
           </View>
 
           <View style={styles.item}>
             <Text style={styles.title}>Số khóa học</Text>
-            <Text style={styles.number}>2</Text>
+            <Text style={styles.number}>{learningCourses.length}</Text>
           </View>
 
           <View style={styles.item}>
             <Text style={styles.title}>Điểm tích lũy</Text>
-            <Text style={styles.number}>{totalExp} XP</Text>
+            <Text style={styles.number}>
+              {learningCourses.length > 0
+                ? learningCourses.reduce((sum, course) => sum + course.total_exp, 0)
+                : 0}{' '}
+              XP
+            </Text>
           </View>
         </View>
       </View>

@@ -3,15 +3,23 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  var notification = {
-    title: 'Database',
-    text: 'Sample content',
-  };
-  var fcm_token = [];
+  const { topic } = req.body;
+  let notification;
+
+  if (topic === 'new-course') {
+    notification = {
+      title: 'Khóa học mới',
+      body: 'Chinh phục ngay khóa mới của FunMath nào!',
+    };
+  } else if (topic === 'new-chapter') {
+    notification = {
+      title: 'Chương học mới',
+      body: 'Bắt đầu học ngay chương học mới cùng FunMath nào!',
+    };
+  }
 
   const notification_body = {
-    to: '/topics/topic',
-    // registration_ids: fcm_token,
+    to: `/topics/${topic}`,
     notification: notification,
   };
 

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Config from 'react-native-config';
-import messaging from '@react-native-firebase/messaging';
 
 import CustomButton from '../utils/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -125,41 +124,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {/* {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null} */}
-
-      <CustomButton
-        text="Đăng ký"
-        buttonStyles={{
-          backgroundColor: 'black',
-          width: '90%',
-          height: 50,
-        }}
-        textStyles={{
-          color: 'white',
-        }}
-        onPressFunc={() => {
-          messaging()
-            .subscribeToTopic('topic')
-            .then(() => console.log('Subscribed to topic!'));
-        }}
-      />
-
-      <CustomButton
-        text="Huy thong bao"
-        buttonStyles={{
-          backgroundColor: 'black',
-          width: '90%',
-          height: 50,
-        }}
-        textStyles={{
-          color: 'white',
-        }}
-        onPressFunc={() => {
-          messaging()
-            .unsubscribeFromTopic('topic')
-            .then(() => console.log('Unsubscribed fom the topic!'));
-        }}
-      />
+      {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
     </View>
   );
 }

@@ -64,6 +64,8 @@ function LogIn({ navigation }) {
               currentCourseId: res.data.current_course_id,
               profilePhotoPath: res.data.profile_photo_path,
               totalExp: res.data.tota_exp,
+              isNewCourseNoti: res.data.is_new_course_noti,
+              isNewChapterNoti: res.data.is_new_chapter_noti,
             })
           ).then(() => {
             navigation.navigate('Home');
