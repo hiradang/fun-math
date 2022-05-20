@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, Alert } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Config from 'react-native-config';
+import ConfirmModal from '../utils/ConfirmModal';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentCourseName, setUsername } from '../redux/actions';
 
 function Setting({ navigation }) {
   const { currentCourseName, currentCourseId, username } = useSelector(
@@ -18,56 +18,40 @@ function Setting({ navigation }) {
   const [isRemind, setRemind] = useState(false);
   const [isNotiNewCourse, setNotiNewCourse] = useState(false);
   const [isNotiUpdate, setNotiUpdate] = useState(false);
-  useEffect(() => {}, []);
-
-  /// To-do
-  /**
-   * 1. Lưu các biến boolean ở trên vào Async Storage.
-   * 2. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
-   * 3. xử lý khi nhấn vào nút đăng xuất.
-   */
-
-  const [showBox, setShowBox] = useState(false);
-
-  const showConfirmDialog = () => {
-    setShowBox(true);
-    return Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này', [
-      {
-        text: 'Chắc chắn',
-        style: 'cancel',
-        onPress: () => {
-          logOut();
-          setShowBox(false);
-        },
-      },
-      {
-        text: 'Mình vẫn ở lại',
-        onPress: () => {
-          setShowBox(false);
-        },
-      },
-    ]);
-  };
+  const [showModal, setShowModal] = useState(false);
 
   const logOut = () => {
+    setShowModal(false);
     axios
       .post(`${Config.API_URL}/users/currentCourseName`, {
         username: username,
-        currentCourseName: currentCourseName,
         currentCourseId: currentCourseId,
       })
       .then(() => {
-        // dispatch(setCurrentCourseName(''));
-        // dispatch(setUsername(''));
         AsyncStorage.clear();
         navigation.navigate('Start');
       });
   };
 
+  const cancelLogOut = () => {
+    setShowModal(false);
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Modal */}
-      {showBox}
+      {showModal ? (
+        <ConfirmModal
+          showModal={showModal}
+          negativeFunc={logOut}
+          cancelFunc={cancelLogOut}
+          positiveFunc={cancelLogOut}
+          header="Đăng xuất"
+          message="Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này?"
+          negativeMessage="Đồng ý"
+          positiveMessage="Ở lại"
+        />
+      ) : null}
 
       {/* Tài khoản */}
       <View style={styles.item}>
@@ -93,7 +77,6 @@ function Setting({ navigation }) {
           </View>
         </View>
       </View>
-
 
       {/* Nhắc nhở */}
       <View style={styles.item}>
@@ -158,9 +141,7 @@ function Setting({ navigation }) {
 
           <View style={styles.row}>
             <View style={styles.textLeft}>
-              <Text style={styles.text}>
-                Nhận thông báo khi có bản cập nhật mới từ Google Play Store
-              </Text>
+              <Text style={styles.text}>Nhận thông báo khi có chương mới</Text>
             </View>
 
             {isNotiUpdate ? (
@@ -212,7 +193,8 @@ function Setting({ navigation }) {
               size={24}
               color="#E46B6B"
               name="logout"
-              onPress={() => showConfirmDialog()}
+              onPress={() => setShowModal(true)}
+              // onPress={() => console.log('Pressed!')}
             />
           </View>
         </View>

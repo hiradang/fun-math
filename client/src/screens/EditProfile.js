@@ -14,17 +14,12 @@ import RNFS from 'react-native-fs';
 import CustomButton from '../utils/CustomButton';
 
 /*
-  1. Khi thay ảnh mới, cần update được ảnh ở hai bảng xếp hạng -> Done
-  2. Làm cái đổi tên  -> done
-  2.1. Xóa trong android/emulator -> RNFS -> done
-  2.2. Xử lý khi người dùng hủy việc chọn ảnh -> done
-  **2.2. Xử lý lại việc fetch data ở màn ListCourses, Home, Overview8
-  3. Chỉnh lại giao diện của trang EditProfile -> done
-  4. Làm popup khi người dùng logout __ doing
-  5. Chỉnh lại Model user, bỏ trường current_course_name
-  6. Thêm các course_user khi người dùng tham gia vào khóa học (optional - Cần bàn lại)
-  7. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
-  8. Làm thông báo
+  0.1. Viết API để người dùng join khóa học --> done
+   -> Q: Số lượng câu hỏi trong mỗi khóa học
+  1. Làm thông báo ?? Firebase ???
+  2. Lưu các biến boolean ở trên vào Async Storage. (thông báo, nhắc nhở,...)
+  3. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
+  4. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
 */
 
 function EditProfile() {

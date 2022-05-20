@@ -23,6 +23,20 @@ router.get('/courseId/:courseId', async (req, res) => {
   res.json(userInfo);
 });
 
+router.post('/create', async (req, res) => {
+  const { courseId, username } = req.body;
+  Course_User.create({
+    course_id: courseId,
+    username: username,
+    current_chapter: 1,
+    question_all_count: 100,
+    question_learnt_count: 0,
+    is_done: false,
+    total_exp: 0,
+  });
+  res.json('OK');
+});
+
 // Lấy một khóa học có username và courseId
 router.post('/', async (req, res) => {
   const { username, courseId } = req.body;
@@ -35,6 +49,7 @@ router.post('/', async (req, res) => {
   res.json(course);
 });
 
+// Update exp
 router.post('/exp', async (req, res) => {
   const { username, courseId, exp } = req.body;
   const course = await Course_User.findOne({
@@ -43,9 +58,9 @@ router.post('/exp', async (req, res) => {
       course_id: courseId,
     },
   });
-   await Course_User.update(
+  await Course_User.update(
     {
-      total_exp: course.total_exp + exp
+      total_exp: course.total_exp + exp,
     },
     {
       where: {

@@ -8,10 +8,48 @@ import CustomButton from '../utils/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import UserRanking from '../utils/UserRanking';
 
-export default function Overview(props) {
-  const { username } = useSelector((state) => state.taskReducer);
-  const currentProgress = props.currentProgress;
-  const dataExp = props.dataExp;
+export default function Overview({ navigation }) {
+  const { username, currentCourseId, currentCourseName } = useSelector(
+    (state) => state.taskReducer
+  );
+
+  const [currentProgress, setCurrentProgress] = useState({});
+  const [dataExp, setDataExp] = useState([]);
+  useEffect(() => {
+    axios
+      .all([
+        axios.post(`${Config.API_URL}/course_user`, {
+          username: username,
+          courseId: currentCourseId,
+        }),
+        axios.get(`${Config.API_URL}/course_user/courseId/${currentCourseId}`),
+      ])
+      .then(
+        axios.spread((res1, res2) => {
+          const course = res1.data;
+          const temp = {
+            currentExp: course.total_exp,
+            currentChapter: course.current_chapter,
+            questionAllCount: course.question_all_count,
+            questionLearntCount: course.question_learnt_count,
+            isDone: course.isDone,
+          };
+
+          setCurrentProgress(temp);
+
+          // Res2
+          let temp2 = res2.data.map((user) => {
+            return {
+              url: user.User.profile_photo_path,
+              exp: user.total_exp,
+              userName: user.username,
+              name: user.User.name,
+            };
+          });
+          setDataExp(temp2);
+        })
+      );
+  }, [currentCourseId]);
 
   return (
     <View style={styles.container}>
@@ -51,7 +89,7 @@ export default function Overview(props) {
         <View style={styles.isNotDone}>
           <View>
             <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
-              Bạn chưa tham gia khóa học này
+              Khám phá thế giới của {currentCourseName} ngay thôi nào!
             </Text>
           </View>
           <View style={styles.button}>

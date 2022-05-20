@@ -25,10 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    current_course_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     current_course_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -38,5 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
+  User.associate = (models) => {
+    User.belongsTo(models.Course, {
+      onDelete: 'cascade',
+      foreignKey: 'current_course_id',
+    });
+  };
   return User;
 };
