@@ -43,7 +43,7 @@ export default function ListLessonAdmin({ navigation, route }) {
     axios.delete(`${Config.API_URL}/questions/${id}`).then((res) => {
       Toast.show({
         type: 'successToast',
-        text1: 'Xóa chương học thành công',
+        text1: 'Xóa bài học thành công',
         visibilityTime: 2000,
       });
       const filteredQuestion = listLesson.filter((question) => question.question_id !== id);
@@ -86,7 +86,7 @@ export default function ListLessonAdmin({ navigation, route }) {
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    Alert.alert('Xóa', 'Bạn có chắc chắn muốn xóa khóa học này', [
+                    Alert.alert('Xóa', 'Bạn có chắc chắn muốn xóa bài học này', [
                       {
                         text: 'Chắc chắn',
                         style: 'cancel',

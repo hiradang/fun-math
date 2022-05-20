@@ -1,5 +1,9 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Dimensions, Image } from 'react-native';
 import React, { useState } from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
+
+import RNFS from 'react-native-fs';
+
 import CustomButton from '../../../utils/CustomButton';
 import Toast from 'react-native-toast-message';
 
@@ -45,18 +49,15 @@ export default function LessonForm({ submitCourseFunction, data }) {
   // Hơi phắc tạp 1 tí nma t đã cố gắng làm có thể để 1 cái dùng cho 2 nơi :<
   // お願いします
 
-  console.log(data)
   // state cho question name
   const [question, setQuestion] = useState({
     question_name: data ? data.question.question_name : '',
-    question_image:
-      'https://br.atsit.in/vi/wp-content/uploads/2022/01/attack-on-titan-season-4-part-2-ngay-phat-hanh-va-so-tap.jpg',
+    question_image: data ? data.question.question_image : '',
   });
 
   // state cho img
   // cái này t mới cho giao diện 1 chỗ để render và 1 button để load ảnh lên
   // Loan làm thì xem lưu state cái ảnh như nào nhé
-
 
   // state cho trắc nghiệm
   const [multiChoice, setMultichoice] = useState({
@@ -64,8 +65,7 @@ export default function LessonForm({ submitCourseFunction, data }) {
     format_question: data ? data.multiChoice.format_question : '',
     answers: data ? data.multiChoice.answers : '',
     correct_answer: data ? data.multiChoice.correct_answer.toString() : '',
-    question_image:
-      'https://br.atsit.in/vi/wp-content/uploads/2022/01/attack-on-titan-season-4-part-2-ngay-phat-hanh-va-so-tap.jpg',
+    question_image: data ? data.multiChoice.question_image : '',
   });
 
   // state cho tự luận
@@ -75,6 +75,42 @@ export default function LessonForm({ submitCourseFunction, data }) {
     format_question: data ? data.fillBox.format_question : '',
     correct_answer: data ? data.fillBox.correct_answer : '',
   });
+  const [isNewImage, setIsNewImage] = useState(false);
+  const [isNewImageMulti, setIsNewImageMulti] = useState(false);
+
+  const editLessonPicture = (newImageQuestion) => {
+    ImagePicker.openPicker({
+      width: 600,
+      height: 600,
+      cropping: true,
+    })
+      .then((newImage) => {
+        // Delete image in Android/emulator
+        if (newImageQuestion) {
+          RNFS.exists(question.question_image).then((exists) => {
+            if (exists) {
+              RNFS.unlink(question.question_image);
+            }
+          });
+          setQuestion({ ...question, question_image: newImage.path });
+          setIsNewImage(true);
+        } else {
+          RNFS.exists(multiChoice.question_image).then((exists) => {
+            if (exists) {
+              RNFS.unlink(multiChoice.question_image);
+            }
+          });
+          setMultichoice({ ...multiChoice, question_image: newImage.path });
+          setIsNewImageMulti(true);
+        }
+      })
+      .catch((error) => {
+        if (error.code === 'E_PICKER_CANCELLED') {
+          return false;
+        }
+      });
+  };
+
   const checkFullFilled = () => {
     for (let i in multiChoice) {
       if (multiChoice[i].length === 0) return false;
@@ -94,7 +130,6 @@ export default function LessonForm({ submitCourseFunction, data }) {
   const formatData = () => {
     for (let i in multiChoice) multiChoice[i] = multiChoice[i].trim();
     for (let i in fillBox) fillBox[i] = fillBox[i].trim();
-    setQuestion({ ...question, question_name: question.question_name.trim()});
   };
 
   const [isSubmit, setIsSubmit] = useState(false);
@@ -112,7 +147,7 @@ export default function LessonForm({ submitCourseFunction, data }) {
 
   const submitHandler = () => {
     setIsSubmit(true);
-    if (checkFullFilled() === false) {
+    if (checkFullFilled() === false && !question.question_image && !multiChoice.question_image) {
       Toast.show({
         type: 'disableToast',
         text1: 'Bạn chưa nhập đầy đủ các trường',
@@ -122,11 +157,10 @@ export default function LessonForm({ submitCourseFunction, data }) {
       formatData();
       // Chỗ này truyền hết data vừa nhận, ảnh thì t ko xử lý nên ko biết truyền gì
       // Loan làm nếu truyền cái khác thì thêm vào nhá
-      submitCourseFunction(question, multiChoice, fillBox);
+      submitCourseFunction(question, multiChoice, fillBox, isNewImage, isNewImageMulti);
     }
   };
 
-  
   return (
     <ScrollView style={styles.formContainer}>
       <View style={styles.wrapper}>
@@ -140,12 +174,14 @@ export default function LessonForm({ submitCourseFunction, data }) {
       </View>
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Ảnh bài học</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://br.atsit.in/vi/wp-content/uploads/2022/01/attack-on-titan-season-4-part-2-ngay-phat-hanh-va-so-tap.jpg',
-          }}
-        />
+        {question.question_image !== '' && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: question.question_image,
+            }}
+          />
+        )}
         <CustomButton
           text="Upload"
           textStyles={{ color: 'black', marginRight: 10, marginLeft: 0, fontSize: 16 }}
@@ -161,7 +197,7 @@ export default function LessonForm({ submitCourseFunction, data }) {
           iconName="arrow-circle-o-up"
           iconSize={24}
           iconColor="black"
-          //   onPressFunc={}
+          onPressFunc={() => editLessonPicture(true)}
         />
       </View>
       <Text style={styles.typeText}>Dạng trắc nghiệm</Text>
@@ -224,12 +260,15 @@ export default function LessonForm({ submitCourseFunction, data }) {
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Ảnh câu hỏi</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://br.atsit.in/vi/wp-content/uploads/2022/01/attack-on-titan-season-4-part-2-ngay-phat-hanh-va-so-tap.jpg',
-          }}
-        />
+        {multiChoice.question_image !== '' && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: multiChoice.question_image,
+            }}
+          />
+        )}
+
         <CustomButton
           text="Upload"
           textStyles={{ color: 'black', marginRight: 10, marginLeft: 0, fontSize: 16 }}
@@ -245,7 +284,7 @@ export default function LessonForm({ submitCourseFunction, data }) {
           iconName="arrow-circle-o-up"
           iconSize={24}
           iconColor="black"
-          //   onPressFunc={}
+          onPressFunc={() => editLessonPicture()}
         />
       </View>
 
