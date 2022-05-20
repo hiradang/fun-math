@@ -31,30 +31,30 @@ VALUES (5, "Chương 5", 1);
 
 -- User
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("binhdang", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Đặng Thị Bình", 
-"https://png.pngtree.com/png-clipart/20201223/ourlarge/pngtree-cat-technology-sense-cat-avatar-png-image_2591263.jpg", 
-"Phép cộng", 1, 1000);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/binhdang?alt=media&token=5f798c1f-4e0c-478d-bb35-1e7af7e9b416", 
+ 1,60, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("loanbui", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Bùi Thị Út Loan", 
-"https://thumbs.dreamstime.com/b/rottweiler-198912637.jpg", 
-"Phép cộng", 1, 100);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/loanbui?alt=media&token=d9f39c37-dc5a-4c54-96e0-7112c207fb80", 
+ 1, 50, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("maihoa", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Đặng Thị Thanh Hoa", 
-"https://thumbs.dreamstime.com/b/giraffe-avatar-wearing-suit-illustration-cartoon-45383618.jpg", 
-"Phép cộng", 1, 200);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/maihoa?alt=media&token=4f162103-a54d-4142-ae02-c10ba03c6b8b", 
+ 1, 40, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("maihuy", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Trịnh Mai Huy", 
-"https://png.pngtree.com/png-vector/20191027/ourlarge/pngtree-cute-tiger-avatar-with-a-yellow-background-png-image_1873462.jpg", 
-"Phép cộng", 1, 400);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/defaultProfileImage.png?alt=media&token=790800d6-aac7-4359-a541-e73b3348e3cb", 
+ 1, 30, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("minhhuong", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Lê Minh Hương", 
-"https://allimages.sgp1.digitaloceanspaces.com/tipeduvn/2022/02/50-Anh-Meo-Cute-Ngau-Hinh-Avatar-Meo-De-Thuong.jpg", 
-"Phép cộng", 1, 500);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/minhhuong?alt=media&token=8093454e-5977-4271-b43d-9d89ccabb4e7", 
+ 1, 20, false, false);
 
 
 -- Chapter_User

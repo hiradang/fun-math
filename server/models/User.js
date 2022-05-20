@@ -33,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    is_new_course_noti: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    is_new_chapter_noti: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   });
   User.associate = (models) => {
     User.belongsTo(models.Course, {

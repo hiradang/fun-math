@@ -13,6 +13,7 @@ router.get('/:username', async (req, res) => {
   res.json(courses);
 });
 
+// Bảng xếp hạng trong một khóa học
 router.get('/courseId/:courseId', async (req, res) => {
   const courseId = req.params.courseId;
   const userInfo = await Course_User.findAll({
