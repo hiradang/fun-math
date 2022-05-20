@@ -6,7 +6,6 @@ import { setProfilePhotoPath } from '../redux/actions';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import Config from 'react-native-config';
-import Feather from 'react-native-vector-icons/Feather';
 import ImagePicker from 'react-native-image-crop-picker';
 import Storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';

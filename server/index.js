@@ -32,6 +32,9 @@ app.use('/multiQuestions', multiChoiceQuestionRouter);
 const typeQuestionRouter = require('./routes/Type_Question');
 app.use('/typeQuestions', typeQuestionRouter);
 
+const notificationRouter = require('./routes/Notification');
+app.use('/notification', notificationRouter);
+
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {
     console.log('Server running on port 3001');
