@@ -153,3 +153,8 @@ INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `
 --trigger update_exp
 CREATE TRIGGER `update_exp` AFTER UPDATE ON `course_users`
  FOR EACH ROW UPDATE users SET total_exp = total_exp + new.total_exp - old.total_exp WHERE username = new.username
+
+ // SELECT countLesson.course_id, sum(totalLesson) from (SELECT c.*, COUNT(q.chapter_id) as totalLesson FROM chapters c 
+//     LEFT JOIN questions q
+//     on c.chapter_id = q.chapter_id where c.course_id = 1
+//     GROUP BY c.chapter_id) countLesson GROUP by countLesson.course_id
