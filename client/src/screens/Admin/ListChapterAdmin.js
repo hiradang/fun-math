@@ -15,7 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Config from 'react-native-config';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
-import { triggerNotification } from '../../utils/RNFireBaseNotification';
+import { triggerNotification } from '../../utils/notification/RNFireBaseNotification';
 
 import EditModal from './Add/EditModal';
 

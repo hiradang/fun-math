@@ -20,7 +20,11 @@ import ConfirmModal from '../utils/ConfirmModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
+/* ----------------
+  1. Khi login, có khóa mặc định là Phép cộng thì phải thêm các chương của khóa đó
+  2. Tương tự với trang joinCourse, khi join một khóa học phải tạo chapter_user tương ứng với khóa học đó
 
+*/
 
 export default function ListCourses({ navigation, route }) {
   const { currentCourseName, username } = useSelector((state) => state.taskReducer);

@@ -1,21 +1,14 @@
 import messaging from '@react-native-firebase/messaging';
-import { Alert } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
+import PushNotification from 'react-native-push-notification';
 
 export const setBackgroundMessageHandler = () => {
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-    // console.log('Message handled in the background!', remoteMessage);
+    console.log('Background notification');
   });
 };
 
-export const foregroundMessage = () => {
-  messaging().onMessage(async (remoteMessage) => {
-    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  });
-};
-
-// foreground notification
 export const onNotificationOpenedApp = ({ navigation }) => {
   messaging().onNotificationOpenedApp((remoteMessage) => {
     navigation.navigate('ListCourses');

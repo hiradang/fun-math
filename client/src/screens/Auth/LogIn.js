@@ -66,6 +66,7 @@ function LogIn({ navigation }) {
               totalExp: res.data.tota_exp,
               isNewCourseNoti: res.data.is_new_course_noti,
               isNewChapterNoti: res.data.is_new_chapter_noti,
+              reminderTime: res.data.reminder_time,
             })
           ).then(() => {
             navigation.navigate('Home');

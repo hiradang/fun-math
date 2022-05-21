@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,27 +9,38 @@ import axios from 'axios';
 import {
   subscribeToTopic,
   unsubscribeFromTopic,
-  setBackgroundMessageHandler,
-} from '../utils/RNFireBaseNotification';
+} from '../utils/notification/RNFireBaseNotification';
 import Config from 'react-native-config';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import ConfirmModal from '../utils/ConfirmModal';
 
 function Setting({ navigation }) {
   const { currentCourseId, username } = useSelector((state) => state.taskReducer);
 
-  const [isRemind, setRemind] = useState(false);
   const [isNewCourseNoti, setNotiNewCourse] = useState();
   const [isNewChapterNoti, setNotiNewChapter] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [isRemind, setRemind] = useState(false);
+  const [myDate, setMyDate] = useState(new Date());
+  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [reminderHour, setReminderHour] = useState('');
+  const [reminderMinute, setReminderMinute] = useState('');
 
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
       const data = JSON.parse(user);
       setNotiNewCourse(data.isNewCourseNoti);
       setNotiNewChapter(data.isNewChapterNoti);
-    });
 
-    setBackgroundMessageHandler();
+      if (data.reminderTime) {
+        setReminderHour(Math.floor(data.reminderTime / 60));
+        setReminderMinute(data.reminderTime % 60);
+        setRemind(true);
+      } else {
+        setReminderHour(0);
+        setReminderMinute(0);
+      }
+    });
   }, []);
 
   const logOut = () => {
@@ -49,7 +60,7 @@ function Setting({ navigation }) {
     setShowModal(false);
   };
 
-  const newCourseNoti = () => {
+  const newCourseNotiHandler = () => {
     // Đang subscribe -> Hủy subcribe
     if (isNewCourseNoti) {
       unsubscribeFromTopic('new-course');
@@ -85,7 +96,7 @@ function Setting({ navigation }) {
       });
   };
 
-  const newChapterNoti = () => {
+  const newChapterNotiHandler = () => {
     if (isNewChapterNoti) {
       unsubscribeFromTopic('new-chapter');
       Toast.show({
@@ -120,6 +131,36 @@ function Setting({ navigation }) {
       });
   };
 
+  const onChangeTimePicker = (event, selectedDate) => {
+    const currentDate = selectedDate || myDate;
+    setMyDate(currentDate);
+    setShowDateTimePicker(Platform.OS === 'ios');
+    const tempDate = new Date(selectedDate);
+    const tempHour = tempDate.getHours();
+    const tempMinute = tempDate.getMinutes();
+
+    setReminderHour(tempHour);
+    setReminderMinute(tempMinute);
+
+    // Call actions from server
+    axios.post(`${Config.API_URL}/notification/reminder`, {
+      topic: 'reminder',
+      minute: reminderMinute,
+      hour: reminderHour,
+    });
+    axios.post(`${Config.API_URL}/users/update`, {
+      username: username,
+      reminderTime: tempMinute + tempHour * 60,
+    });
+
+    AsyncStorage.mergeItem('user', JSON.stringify({ reminderTime: tempMinute + tempHour * 60 }));
+    Toast.show({
+      type: 'successToast',
+      text1: 'Cài đặt nhắc nhở thành công!',
+      visibilityTime: 2000,
+    });
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Modal */}
@@ -135,7 +176,6 @@ function Setting({ navigation }) {
           positiveMessage="Ở lại"
         />
       ) : null}
-
       {/* Tài khoản */}
       <View style={styles.item}>
         <Text style={styles.title}>TÀI KHOẢN</Text>
@@ -160,7 +200,6 @@ function Setting({ navigation }) {
           </View>
         </View>
       </View>
-
       {/* Nhắc nhở */}
       <View style={styles.item}>
         <Text style={styles.title}>Nhắc nhở</Text>
@@ -172,30 +211,49 @@ function Setting({ navigation }) {
                 size={24}
                 color="#14D39A"
                 name="toggle-on"
-                onPress={() => setRemind(!isRemind)}
+                onPress={() => {
+                  setRemind(!isRemind);
+                  unsubscribeFromTopic('reminder');
+                  axios.post(`${Config.API_URL}/users/update`, {
+                    username: username,
+                    reminderTime: null,
+                  });
+                  AsyncStorage.mergeItem('user', JSON.stringify({ reminderTime: null }));
+                  setReminderHour(0);
+                  setReminderMinute(0);
+                  Toast.show({
+                    type: 'successToast',
+                    text1: 'Hủy nhận thông báo thành công!',
+                    visibilityTime: 2000,
+                  });
+                }}
               />
             ) : (
               <FontAwesome5
                 size={24}
                 color="#ccc"
                 name="toggle-off"
-                onPress={() => setRemind(!isRemind)}
+                onPress={() => {
+                  setRemind(!isRemind);
+                  subscribeToTopic('reminder');
+                }}
               />
             )}
           </View>
 
-          <View style={styles.row}>
-            <Text style={styles.text}>Thời gian</Text>
-            <Text style={styles.text}>20:00</Text>
-          </View>
-
-          <View style={styles.row}>
-            <Text style={styles.text}>Ngày</Text>
-            <Text style={styles.text}>T2 - T6</Text>
-          </View>
+          <TouchableOpacity onPress={() => setShowDateTimePicker(true)} disabled={!isRemind}>
+            <View style={styles.row}>
+              <Text style={[styles.text, isRemind ? { color: 'white' } : { color: '#999' }]}>
+                Thời gian
+              </Text>
+              <Text style={[styles.text, isRemind ? { color: 'white' } : { color: '#999' }]}>
+                {reminderHour.toString().length === 2 ? reminderHour : '0' + reminderHour}:
+                {reminderMinute.toString().length === 2 ? reminderMinute : '0' + reminderMinute}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-
       {/* Thông báo */}
       <View style={styles.item}>
         <Text style={styles.title}>Thông báo</Text>
@@ -206,9 +264,19 @@ function Setting({ navigation }) {
             </View>
 
             {isNewCourseNoti ? (
-              <FontAwesome5 size={24} color="#14D39A" name="toggle-on" onPress={newCourseNoti} />
+              <FontAwesome5
+                size={24}
+                color="#14D39A"
+                name="toggle-on"
+                onPress={newCourseNotiHandler}
+              />
             ) : (
-              <FontAwesome5 size={24} color="#ccc" name="toggle-off" onPress={newCourseNoti} />
+              <FontAwesome5
+                size={24}
+                color="#ccc"
+                name="toggle-off"
+                onPress={newCourseNotiHandler}
+              />
             )}
           </View>
 
@@ -218,14 +286,23 @@ function Setting({ navigation }) {
             </View>
 
             {isNewChapterNoti ? (
-              <FontAwesome5 size={24} color="#14D39A" name="toggle-on" onPress={newChapterNoti} />
+              <FontAwesome5
+                size={24}
+                color="#14D39A"
+                name="toggle-on"
+                onPress={newChapterNotiHandler}
+              />
             ) : (
-              <FontAwesome5 size={24} color="#ccc" name="toggle-off" onPress={newChapterNoti} />
+              <FontAwesome5
+                size={24}
+                color="#ccc"
+                name="toggle-off"
+                onPress={newChapterNotiHandler}
+              />
             )}
           </View>
         </View>
       </View>
-
       {/* Thông tin*/}
       <View style={styles.item}>
         <Text style={styles.title}>Thông tin</Text>
@@ -245,7 +322,6 @@ function Setting({ navigation }) {
           </View>
         </View>
       </View>
-
       {/* Đăng xuất*/}
       <View style={styles.item}>
         <Text style={styles.title}>Đăng xuất</Text>
@@ -257,11 +333,21 @@ function Setting({ navigation }) {
               color="#E46B6B"
               name="logout"
               onPress={() => setShowModal(true)}
-              // onPress={() => console.log('Pressed!')}
             />
           </View>
         </View>
       </View>
+      {/* Reminder time Picker */}
+      {showDateTimePicker && (
+        <DateTimePicker
+          mode="time"
+          testID="dateTimePicker"
+          value={myDate}
+          is24Hour={true}
+          display="default"
+          onChange={onChangeTimePicker}
+        />
+      )}
     </ScrollView>
   );
 }

@@ -12,10 +12,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
 import CustomButton from '../utils/CustomButton';
 
-/*
-  1. Xử lý khi thông báo ở foreground
-*/
-
 function EditProfile() {
   const { username, name, profilePhotoPath } = useSelector((state) => state.taskReducer);
   const dispatch = useDispatch();
