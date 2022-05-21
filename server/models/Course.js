@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    question_all_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   Course.associate = (models) => {
     Course.hasMany(models.Chapter, {

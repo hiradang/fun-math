@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    question_all_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   Chapter.associate = (models) => {
     Chapter.belongsTo(models.Course, {
@@ -20,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'course_id',
     });
     Chapter.hasMany(models.Question, {
+      onDelete: 'cascade',
+      foreignKey: 'chapter_id',
+    });
+    Chapter.hasMany(models.Chapter_User, {
       onDelete: 'cascade',
       foreignKey: 'chapter_id',
     });

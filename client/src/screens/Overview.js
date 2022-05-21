@@ -31,9 +31,10 @@ export default function Overview({ navigation }) {
           const temp = {
             currentExp: course.total_exp,
             currentChapter: course.current_chapter,
-            questionAllCount: course.question_all_count,
+            currentChapterName: course.Chapter.chapter_name,
+            questionAllCount: course.Course.question_all_count,
             questionLearntCount: course.question_learnt_count,
-            isDone: course.isDone,
+            isDone: course.is_done,
           };
 
           setCurrentProgress(temp);
@@ -50,19 +51,18 @@ export default function Overview({ navigation }) {
           setDataExp(temp2);
         })
       );
-  }, [currentCourseId]);
-
+  }, [currentCourseId, navigation]);
   return (
     <View style={styles.container}>
-      {!currentProgress.isDone && currentProgress.currentExp > 0 && (
+      {!currentProgress.isDone && currentProgress.questionLearntCount > 0 && (
         <View style={styles.isNotDone}>
           <View>
             <Text style={styles.progress}>
-              Bài học tiếp theo: Chương {currentProgress.currentChapter + 1}
+              Bài học tiếp theo: {currentProgress.currentChapterName}
             </Text>
             <Text style={styles.crLesson}>
-              Chương {currentProgress.currentChapter}: {currentProgress.questionLearntCount}/
-              {currentProgress.questionAllCount} phép tính
+              Đã học {currentProgress.questionLearntCount}/{currentProgress.questionAllCount} phép
+              tính trong khóa học.
             </Text>
           </View>
           <View style={styles.button}>
@@ -78,7 +78,8 @@ export default function Overview({ navigation }) {
               }}
               onPressFunc={() =>
                 navigation.navigate('ListLesson', {
-                  currentChapter: `Chương ${currentProgress.currentChapter + 1}`,
+                  currentChapter: currentProgress.currentChapterName,
+                  currentChapterId: currentProgress.currentChapter,
                   isDone: false,
                 })
               }
@@ -86,7 +87,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {!currentProgress.isDone && currentProgress.currentExp == 0 && (
+      {!currentProgress.isDone && currentProgress.questionLearntCount == 0 && (
         <View style={styles.isNotDone}>
           <View>
             <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
@@ -105,8 +106,9 @@ export default function Overview({ navigation }) {
                 color: 'white',
               }}
               onPressFunc={() =>
-                navigation.navigate('ListCourse', {
-                  currentChapter: currentProgress.currentChapter + 1,
+                navigation.navigate('ListLesson', {
+                  currentChapter: currentProgress.currentChapterName,
+                  currentChapterId: currentProgress.currentChapter,
                   isDone: false,
                 })
               }

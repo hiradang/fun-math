@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    question_all_count: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     question_learnt_count: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -37,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
     Course_User.belongsTo(models.User, {
       onDelete: 'cascade',
       foreignKey: 'username',
+    });
+    Course_User.belongsTo(models.Chapter, {
+      onDelete: 'cascade',
+      foreignKey: 'current_chapter',
     });
   };
   return Course_User;

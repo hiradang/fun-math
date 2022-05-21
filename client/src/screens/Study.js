@@ -21,7 +21,7 @@ export default function Study({ navigation }) {
       .then((res) => {
         setChapters(res.data);
       });
-  }, [currentCourseId]);
+  }, [currentCourseId, navigation]);
 
   const lengthOfList = chapters.length;
 

@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
   } else {
     await Course.create({
       course_name: course_name,
+      question_all_count: 0
     });
     const newCourse = await Course.findOne({ where: { course_name: course_name } });
     res.json(newCourse);

@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import Config from 'react-native-config';
+import Toast from 'react-native-toast-message';
 
 import CustomButton from '../utils/CustomButton';
 import Fontisto from 'react-native-vector-icons/Fontisto'; //clock
@@ -27,6 +28,18 @@ export default function ListLesson({ navigation, route }) {
   // const listLesson = ['1 + 1', '1 + 2', '1 + 3', '1 + 4', '2 + 1', '3 + 2', '4 + 1'];
   const length = listLesson.length;
 
+  const study = () => {
+    if (length > 0) {
+      navigation.navigate('Lesson', { chapter_id: currentChapterId, isDone: isDone });
+    } else {
+      Toast.show({
+        type: 'disableToast',
+        text1: 'Chưa có bài học nào',
+        visibilityTime: 2000,
+      });
+    }
+  }
+
   const renderButton = () => {
     if (isDone) {
       return (
@@ -47,9 +60,7 @@ export default function ListLesson({ navigation, route }) {
           iconName="hand-rock-o"
           iconSize={28}
           iconColor="white"
-          onPressFunc={() => {
-            navigation.navigate('Lesson', { chapter_id: 1 });
-          }}
+          onPressFunc={study}
         />
       );
     } else {
@@ -72,9 +83,7 @@ export default function ListLesson({ navigation, route }) {
           iconName="hand-peace-o"
           iconSize={28}
           iconColor="white"
-          onPressFunc={() => {
-            navigation.navigate('Lesson', { chapter_id: 1 });
-          }}
+          onPressFunc={study}
         />
       );
     }
@@ -95,8 +104,8 @@ export default function ListLesson({ navigation, route }) {
           return (
             <View style={styles.lesson} key={item.question_id}>
               <View style={styles.statusIcon}>
-                {!isDone && <Fontisto name="clock" size={32} color="#333333" />}
-                {isDone && <AntDesign name="Trophy" size={32} color="#333333" />}
+                {isDone === false && <Fontisto name="clock" size={32} color="#333333" />}
+                {isDone === true && <AntDesign name="Trophy" size={32} color="#333333" />}
               </View>
               <Text style={styles.lessonName}>{item.question_name}</Text>
             </View>

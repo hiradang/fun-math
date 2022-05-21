@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { Chapter } = require('../models');
+const { Chapter_User } = require('../models');
 const db = require('../models');
+const { Course_User } = require('../models');
 
 router.get('/:course_id', async (req, res) => {
   const course_id = req.params.course_id;
@@ -24,8 +26,18 @@ router.post('/', async (req, res) => {
     await Chapter.create({
       chapter_name: chapter_name,
       course_id: course_id,
+      question_all_count: 0,
     });
     const newChapter = await Chapter.findOne({ where: { chapter_name: chapter_name } });
+    const listUser = await Course_User.findAll({ where: { course_id: course_id } });
+    for (let i = 0; i < listUser.length; i++) {
+      await Chapter_User.create({
+        chapter_id: newChapter.chapter_id,
+        username: listUser[i].username,
+        is_done: false
+      })
+    }
+    
     res.json(newChapter);
   }
 });

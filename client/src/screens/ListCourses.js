@@ -57,7 +57,8 @@ export default function ListCourses({ navigation, route }) {
               course_name: course.Course.course_name,
               username: course.username,
               current_chapter: course.current_chapter,
-              question_all_count: course.question_all_count,
+              current_chapterName: course.Chapter.chapter_name,
+              question_all_count: course.Course.question_all_count,
               question_learnt_count: course.question_learnt_count,
               is_done: course.is_done,
               total_exp: course.total_exp,
@@ -131,7 +132,7 @@ export default function ListCourses({ navigation, route }) {
           )}
           {!course.is_done && course.total_exp > 0 && (
             <Text style={styles.progressCourse} numberOfLines={1}>
-              Chương {course.current_chapter}: {course.question_learnt_count}/
+              {course.current_chapterName}: {course.question_learnt_count}/
               {course.question_all_count}
             </Text>
           )}
