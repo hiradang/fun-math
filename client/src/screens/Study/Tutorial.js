@@ -16,7 +16,7 @@ function Tutorial(props) {
   return (
     <View style={styles.body}>
       <View style={styles.title}>
-        <Text style={styles.text}>0/10 phép tính đã học</Text>
+        <Text style={styles.text}>{props.indexQuestion}/{props.totalLesson} phép tính đã học</Text>
       </View>
       <View style={styles.container}>
         <Image source={{ uri: urlImage }} style={{width: 400, height: 400}} resizeMode="contain"></Image>

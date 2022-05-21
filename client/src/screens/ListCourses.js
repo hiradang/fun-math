@@ -53,7 +53,7 @@ export default function ListCourses({ navigation, route }) {
               course_name: course.Course.course_name,
               username: course.username,
               current_chapter: course.current_chapter,
-              question_all_count: course.question_all_count,
+              question_all_count: course.Course.question_all_count,
               question_learnt_count: course.question_learnt_count,
               is_done: course.is_done,
               total_exp: course.total_exp,

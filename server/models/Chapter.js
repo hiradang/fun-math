@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    question_all_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   Chapter.associate = (models) => {
     Chapter.belongsTo(models.Course, {

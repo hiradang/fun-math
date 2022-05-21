@@ -13,7 +13,7 @@ function Lesson({ navigation, route }) {
   const [listQuestion, setListQuestion] = useState([]);
   const [score, setScore] = useState(0);
   const [typeQuestion, setTypeQuestion] = useState(null);
-  const chapter_id = route.params.chapter_id;
+  const {chapter_id, isDone} = route.params;
   const [indexQuestion, setIndexQuestion] = useState(0);
   const { username, currentCourseId } = useSelector((state) => state.taskReducer);
   useEffect(() => {
@@ -34,13 +34,13 @@ function Lesson({ navigation, route }) {
   };
 
   const finish = () => {
-    
     axios
       .post(`${Config.API_URL}/course_user/exp`, {
         username,
         chapter_id,
         courseId: currentCourseId,
         exp: score,
+        totalLesson: isDone ? 0 : listQuestion.length,
       })
       .then((res) => {
         navigation.navigate('Study');
@@ -62,6 +62,8 @@ function Lesson({ navigation, route }) {
       </View>
       {typeQuestion === 0 && (
         <Tutorial
+          indexQuestion={indexQuestion}
+          totalLesson={listQuestion.length}
           question_id={listQuestion[indexQuestion].question_id}
           changeTypeQuestion={() => setTypeQuestion(1)}
         />
@@ -80,10 +82,12 @@ function Lesson({ navigation, route }) {
           question_id={listQuestion[indexQuestion].question_id}
           changeScore={() => setScore(score + 10)}
           changeType3Question={() => {
-            setTypeQuestion(0);
             if (indexQuestion + 1 === listQuestion.length) {
               finish();
-            } else setIndexQuestion(indexQuestion + 1);
+            } else {
+              setTypeQuestion(0);
+              setIndexQuestion(indexQuestion + 1);
+            }
           }}
         />
       )}

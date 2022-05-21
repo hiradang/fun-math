@@ -66,7 +66,8 @@ function LogIn({ navigation }) {
               totalExp: res.data.tota_exp,
             })
           ).then(() => {
-            navigation.navigate('Home');
+            if (res.data.role_id === '0') navigation.replace('Home')
+            else navigation.replace('CourseAdmin')
           });
         }
       });

@@ -27,6 +27,7 @@ function Splash({ navigation }) {
           dispatch(setName(data.name));
           dispatch(setProfilePhotoPath(data.profilePhotoPath));
           dispatch(setTotalExp(data.totalExp));
+          console.log(data.role)
           if (data.role === '0') navigation.replace('Home')
           else navigation.replace('CourseAdmin')
         }

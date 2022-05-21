@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     current_course_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     total_exp: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   });
   User.associate = (models) => {

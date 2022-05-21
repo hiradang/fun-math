@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    question_all_count: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     question_learnt_count: {
       type: DataTypes.INTEGER,
       allowNull: false,

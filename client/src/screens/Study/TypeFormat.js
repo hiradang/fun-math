@@ -88,7 +88,6 @@ export default function TypeFormat(props) {
 
   useEffect(() => {
     axios.get(`${Config.API_URL}/typeQuestions/${props.question_id}`).then((res) => {
-      console.log(res.data);
       setQuestion_name(res.data.question_name);
       setDataQuestion({
         question: res.data.question,

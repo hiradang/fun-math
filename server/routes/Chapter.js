@@ -24,6 +24,7 @@ router.post('/', async (req, res) => {
     await Chapter.create({
       chapter_name: chapter_name,
       course_id: course_id,
+      question_all_count: 0
     });
     const newChapter = await Chapter.findOne({ where: { chapter_name: chapter_name } });
     res.json(newChapter);
