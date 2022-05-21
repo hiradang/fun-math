@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'cascade',
       foreignKey: 'username',
     });
+    Course_User.belongsTo(models.Chapter, {
+      onDelete: 'cascade',
+      foreignKey: 'current_chapter',
+    });
   };
   return Course_User;
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const { User } = require('../models');
 const { Course } = require('../models');
 const { Course_User } = require('../models');
+const { Chapter_User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -45,7 +46,7 @@ router.post('/', async (req, res) => {
   const user = await User.findOne({ where: { username: username } });
   if (user) res.json({ error: 'Tên đăng nhập đã tồn tại' });
   else {
-    bcrypt.hash(password, 10).then((hash) => {
+    bcrypt.hash(password, 10).then(async (hash) => {
       User.create({
         username: username,
         password: hash,
@@ -64,6 +65,14 @@ router.post('/', async (req, res) => {
         is_done: false,
         total_exp: 0,
       });
+      const listChapter = await Chapter.findAll({ where: { course_id: 1 } });
+      for (let i = 0; i < listChapter.length; i++) {
+        await Chapter_User.create({
+          chapter_id: listChapter[i].chapter_id,
+          username: username,
+          is_done: false,
+        });
+      }
     });
     res.json('SUCCESS');
   }

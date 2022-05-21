@@ -30,6 +30,7 @@ export default function Overview({ navigation }) {
           const temp = {
             currentExp: course.total_exp,
             currentChapter: course.current_chapter,
+            currentChapterName: course.Chapter.chapter_name,
             questionAllCount: course.Course.question_all_count,
             questionLearntCount: course.question_learnt_count,
             isDone: course.is_done,
@@ -56,11 +57,11 @@ export default function Overview({ navigation }) {
         <View style={styles.isNotDone}>
           <View>
             <Text style={styles.progress}>
-              Bài học tiếp theo: Chương {currentProgress.currentChapter + 1}
+              Bài học tiếp theo: {currentProgress.currentChapterName}
             </Text>
             <Text style={styles.crLesson}>
-              Chương {currentProgress.currentChapter}: {currentProgress.questionLearntCount}/
-              {currentProgress.questionAllCount} phép tính
+              Đã học {currentProgress.questionLearntCount}/{currentProgress.questionAllCount} phép
+              tính trong khóa học.
             </Text>
           </View>
           <View style={styles.button}>
@@ -76,7 +77,7 @@ export default function Overview({ navigation }) {
               }}
               onPressFunc={() =>
                 navigation.navigate('ListLesson', {
-                  currentChapter: `Chương ${currentProgress.currentChapter}`,
+                  currentChapter: currentProgress.currentChapterName,
                   currentChapterId: currentProgress.currentChapter,
                   isDone: false,
                 })
@@ -105,7 +106,7 @@ export default function Overview({ navigation }) {
               }}
               onPressFunc={() =>
                 navigation.navigate('ListLesson', {
-                  currentChapter: `Chương ${currentProgress.currentChapter}`,
+                  currentChapter: currentProgress.currentChapterName,
                   currentChapterId: currentProgress.currentChapter,
                   isDone: false,
                 })
