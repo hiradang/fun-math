@@ -17,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Config from 'react-native-config';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import { triggerNotification } from '../../utils/RNFireBaseNotification';
 
 import EditModal from './Add/EditModal';
 
@@ -76,6 +77,12 @@ export default function ListCourseAdmin({ navigation }) {
           totalChapter: 0,
         };
         setListCourse([...listCourse, newCourse]);
+
+        // push remote notification to user who has subscribed
+        triggerNotification({
+          topic: 'new-course',
+          courseName: res.data.course_name,
+        });
       }
     });
     // Bắn alert

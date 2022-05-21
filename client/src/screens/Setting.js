@@ -6,7 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-import { subscribeToTopic, unsubscribeFromTopic } from '../utils/RNFireBaseNotification';
+import {
+  subscribeToTopic,
+  unsubscribeFromTopic,
+  setBackgroundMessageHandler,
+} from '../utils/RNFireBaseNotification';
 import Config from 'react-native-config';
 import ConfirmModal from '../utils/ConfirmModal';
 
@@ -24,6 +28,8 @@ function Setting({ navigation }) {
       setNotiNewCourse(data.isNewCourseNoti);
       setNotiNewChapter(data.isNewChapterNoti);
     });
+
+    setBackgroundMessageHandler();
   }, []);
 
   const logOut = () => {
@@ -63,8 +69,6 @@ function Setting({ navigation }) {
 
     const newState = !isNewCourseNoti;
     setNotiNewCourse(newState);
-
-    console.log('New State: ' + newState);
 
     axios
       .post(`${Config.API_URL}/users/update`, {

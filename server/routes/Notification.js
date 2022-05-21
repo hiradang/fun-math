@@ -3,18 +3,18 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { topic } = req.body;
+  const { topic, courseName, chapterName } = req.body;
   let notification;
 
   if (topic === 'new-course') {
     notification = {
       title: 'Khóa học mới',
-      body: 'Chinh phục ngay khóa mới của FunMath nào!',
+      body: `FunMath đã có thêm khóa học ${courseName}. Chinh phục ngay thôi nào!`,
     };
   } else if (topic === 'new-chapter') {
     notification = {
       title: 'Chương học mới',
-      body: 'Bắt đầu học ngay chương học mới cùng FunMath nào!',
+      body: `Bắt đầu học ngay ${chapterName} trong khóa ${courseName} cùng FunMath nào!`,
     };
   }
 

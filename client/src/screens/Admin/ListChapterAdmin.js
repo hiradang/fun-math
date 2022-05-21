@@ -15,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Config from 'react-native-config';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import { triggerNotification } from '../../utils/RNFireBaseNotification';
 
 import EditModal from './Add/EditModal';
 
@@ -70,6 +71,13 @@ export default function ListChapterAdmin({ navigation, route }) {
             totalLesson: 0,
           };
           setListChapter([...listChapter, newChapter]);
+
+          // push notification to users who has subscribed to the topic
+          triggerNotification({
+            topic: 'new-chapter',
+            courseName: courseName,
+            chapterName: res.data.chapter_name,
+          });
         }
       });
     setShowAddChapterModal(false);

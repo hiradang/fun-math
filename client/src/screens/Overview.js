@@ -125,7 +125,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {/* {dataExp.length ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null} */}
+      {dataExp.length ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
     </View>
   );
 }
