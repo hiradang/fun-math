@@ -22,8 +22,8 @@ import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
 /* ----------------
   1. Khi login, có khóa mặc định là Phép cộng thì phải thêm các chương của khóa đó
-  2. Tương tự với trang joinCourse, khi join một khóa học phải tạo chapter_user tương ứng với khóa học đó
-
+  2. Tương tự với trang joinCourse, khi join một khóa học phải tạo chapter_user tương ứng với khóa học đó -> Done
+  3. Khi thêm một chapter mới, cần thêm chapter_user mới cho những người dùng hiện tại đang join khóa đó -> Done
 */
 
 export default function ListCourses({ navigation, route }) {
