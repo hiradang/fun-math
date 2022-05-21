@@ -34,8 +34,17 @@ function Lesson({ navigation, route }) {
   };
 
   const finish = () => {
-    navigation.navigate('Study');
-    axios.post(`${Config.API_URL}/course_user/exp`, {username, courseId: currentCourseId, exp: score}).then((res) => {});
+    
+    axios
+      .post(`${Config.API_URL}/course_user/exp`, {
+        username,
+        chapter_id,
+        courseId: currentCourseId,
+        exp: score,
+      })
+      .then((res) => {
+        navigation.navigate('Study');
+      });
   };
   return (
     <View style={styles.body}>
@@ -73,7 +82,7 @@ function Lesson({ navigation, route }) {
           changeType3Question={() => {
             setTypeQuestion(0);
             if (indexQuestion + 1 === listQuestion.length) {
-              finish()
+              finish();
             } else setIndexQuestion(indexQuestion + 1);
           }}
         />

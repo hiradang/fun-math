@@ -6,11 +6,16 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
+  Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Config from 'react-native-config';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
+
 import EditModal from './Add/EditModal';
 
 const { width, height } = Dimensions.get('window');
@@ -20,21 +25,53 @@ export default function ListChapterAdmin({ navigation, route }) {
   const [showAddChapterModal, setShowAddChapterModal] = useState(false);
   const [showEditNameModal, setShowEditNameModal] = useState(false);
   const [idEdit, setIdEdit] = useState();
+  const [nameEdit, setNameEdit] = useState('');
+  const [listChapter, setListChapter] = useState([]);
 
-  const listChapter = [
-    { id: 0, name: 'Chương 1', totalLesson: 5 },
-    { id: 1, name: 'Chương 2', totalLesson: 6 },
-    { id: 2, name: 'Chương 3', totalLesson: 7 },
-    { id: 3, name: 'Chương 4', totalLesson: 4 },
-    { id: 4, name: 'Chương 5', totalLesson: 5 },
-    { id: 5, name: 'Chương 6', totalLesson: 9 },
-    { id: 6, name: 'Chương 7', totalLesson: 10 },
-  ];
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/chapters/${courseId}`).then((res) => {
+      setListChapter(res.data);
+    });
+  }, []);
 
-  const deleteChapter = (id) => {};
+  const deleteChapter = (id) => {
+    axios.delete(`${Config.API_URL}/chapters/${id}`).then((res) => {
+      Toast.show({
+        type: 'successToast',
+        text1: 'Xóa chương học thành công',
+        visibilityTime: 2000,
+      });
+      const filteredChapter = listChapter.filter((chapter) => chapter.chapter_id !== id);
+      setListChapter(filteredChapter);
+    });
+  };
   const addNewChapter = (newChapterName) => {
     // Xử lý thêm chương
     // Bắn alert
+    axios
+      .post(`${Config.API_URL}/chapters`, { chapter_name: newChapterName, course_id: courseId })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.error) {
+          Toast.show({
+            type: 'errorToast',
+            text1: res.data.error,
+            visibilityTime: 2000,
+          });
+        } else {
+          Toast.show({
+            type: 'successToast',
+            text1: 'Thêm chương học thành công',
+            visibilityTime: 2000,
+          });
+          const newChapter = {
+            chapter_id: res.data.chapter_id,
+            chapter_name: res.data.chapter_name,
+            totalLesson: 0,
+          };
+          setListChapter([...listChapter, newChapter]);
+        }
+      });
     setShowAddChapterModal(false);
   };
 
@@ -42,6 +79,25 @@ export default function ListChapterAdmin({ navigation, route }) {
     // Xử lý thay tên chương
     // Bắn alert
     // id của chương cần thay tên lưu trong state idEdit
+    axios.post(`${Config.API_URL}/chapters/${idEdit}`, { chapter_name: newName }).then((res) => {
+      if (res.data.error) {
+        Toast.show({
+          type: 'errorToast',
+          text1: res.data.error,
+          visibilityTime: 2000,
+        });
+      } else {
+        Toast.show({
+          type: 'successToast',
+          text1: 'Sửa chương học thành công',
+          visibilityTime: 2000,
+        });
+        const index = listChapter.findIndex((chapter) => chapter.chapter_id === idEdit);
+        const filteredChapter = [...listChapter];
+        filteredChapter[index].chapter_name = newName;
+        setListChapter(filteredChapter);
+      }
+    });
     setShowEditNameModal(false);
   };
 
@@ -70,6 +126,7 @@ export default function ListChapterAdmin({ navigation, route }) {
       >
         <EditModal
           editOrAdd="edit chapter"
+          value={nameEdit}
           setVisible={() => setShowEditNameModal(false)}
           onPressHandle={editChapterName}
         />
@@ -86,11 +143,10 @@ export default function ListChapterAdmin({ navigation, route }) {
               <TouchableOpacity
                 style={styles.chapter}
                 onPress={() =>
-                  navigation.navigate('ListLessonAdmin', {
+                  navigation.navigate('LessonAdmin', {
                     courseName: courseName,
-                    courseId: courseId,
-                    chapterName: item.name,
-                    chapterId: item.id,
+                    chapterName: item.chapter_name,
+                    chapterId: item.chapter_id,
                   })
                 }
               >
@@ -99,7 +155,7 @@ export default function ListChapterAdmin({ navigation, route }) {
                 </View>
                 <View style={styles.nameAndLesson}>
                   <Text style={styles.nameChapter} numberOfLines={1}>
-                    {item.name}
+                    {item.chapter_name}
                   </Text>
                   <Text style={styles.lessonChapter} numberOfLines={1}>
                     Tổng số phép tính: {item.totalLesson ? item.totalLesson : 0}
@@ -108,7 +164,8 @@ export default function ListChapterAdmin({ navigation, route }) {
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    setIdEdit(item.id);
+                    setIdEdit(item.chapter_id);
+                    setNameEdit(item.chapter_name);
                     setShowEditNameModal(true);
                   }}
                 >
@@ -117,7 +174,18 @@ export default function ListChapterAdmin({ navigation, route }) {
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    deleteChapter(item.id);
+                    Alert.alert('Xóa', 'Bạn có chắc chắn muốn xóa khóa học này', [
+                      {
+                        text: 'Chắc chắn',
+                        style: 'cancel',
+                        onPress: () => {
+                          deleteChapter(item.chapter_id);
+                        },
+                      },
+                      {
+                        text: 'Hủy',
+                      },
+                    ]);
                   }}
                 >
                   <FontAwesome5 name={'trash'} size={16} color={'#ff3636'} />
@@ -182,7 +250,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   lessonChapter: {
-    fontSize: 17,
+    fontSize: 15,
     color: 'white',
     fontWeight: '600',
   },

@@ -4,8 +4,8 @@ import CustomButton from '../../../utils/CustomButton';
 
 const { width, height } = Dimensions.get('window');
 
-export default function EditModal({ editOrAdd, setVisible, onPressHandle }) {
-  const [name, setName] = useState('');
+export default function EditModal({ editOrAdd, setVisible, onPressHandle, value }) {
+  const [name, setName] = useState(value);
 
   let placeholder = '';
   if (editOrAdd === 'add course' || editOrAdd === 'edit course') placeholder = 'Tên khóa học';
@@ -27,6 +27,7 @@ export default function EditModal({ editOrAdd, setVisible, onPressHandle }) {
           value={name}
           style={styles.input}
           placeholder={placeholder}
+          placeholderTextColor="#7E7E7E"
           onChangeText={(value) => setName(value)}
         />
         <View style={styles.buttonContainer}>
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     marginTop: height * 0.28,
 
     width: width * 0.85,
-    height: height * 0.26,
+    height: height * 0.25,
     backgroundColor: 'white',
     borderRadius: 20,
     borderWidth: 1,
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 20,
     paddingHorizontal: 15,
+    color: '#000000',
   },
   buttonContainer: {
     display: 'flex',

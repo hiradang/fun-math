@@ -11,6 +11,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Config from 'react-native-config';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import CustomButton from '../utils/CustomButton';
@@ -19,7 +20,7 @@ import ConfirmModal from '../utils/ConfirmModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
-import axios from 'axios';
+
 
 export default function ListCourses({ navigation, route }) {
   const { currentCourseName, username } = useSelector((state) => state.taskReducer);

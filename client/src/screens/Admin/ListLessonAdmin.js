@@ -5,56 +5,54 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  Modal,
+  Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EditModal from './Add/EditModal';
+import Config from 'react-native-config';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const { width, height } = Dimensions.get('window');
 
 export default function ListLessonAdmin({ navigation, route }) {
-  const { courseName, courseId, chapterName, chapterId } = route.params;
-  const [showEditNameModal, setShowEditNameModal] = useState(false);
-  const [idEdit, setIdEdit] = useState();
+  const { courseName, chapterName, chapterId } = route.params;
 
-  const listLesson = [
-    { id: 0, name: '1 + 1' },
-    { id: 1, name: '1 + 2' },
-    { id: 2, name: '1 + 3' },
-    { id: 3, name: '1 + 4' },
-    { id: 4, name: '2 + 1' },
-    { id: 5, name: '3 + 2' },
-    { id: 6, name: '4 + 1' },
-  ];
+  // const listLesson = [
+  //   { id: 0, name: '1 + 1' },
+  //   { id: 1, name: '1 + 2' },
+  //   { id: 2, name: '1 + 3' },
+  //   { id: 3, name: '1 + 4' },
+  //   { id: 4, name: '2 + 1' },
+  //   { id: 5, name: '3 + 2' },
+  //   { id: 6, name: '4 + 1' },
+  // ];
 
-  const deleteLesson = (id) => {};
+  const [listLesson, setListLesson] = useState([]);
 
-  const editLessonName = (newName) => {
-    // Xử lý thay tên phép tính
-    // Bắn alert
-    // id của phép tính cần thay tên lưu trong state idEdit
-    setShowEditNameModal(false);
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      axios.get(`${Config.API_URL}/questions/${chapterId}`).then((res) => {
+        setListLesson(res.data);
+      });
+    });
+  }, [navigation]);
+  const deleteLesson = (id) => {
+    axios.delete(`${Config.API_URL}/questions/${id}`).then((res) => {
+      Toast.show({
+        type: 'successToast',
+        text1: 'Xóa bài học thành công',
+        visibilityTime: 2000,
+      });
+      const filteredQuestion = listLesson.filter((question) => question.question_id !== id);
+      setListLesson(filteredQuestion);
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Modal
-        visible={showEditNameModal}
-        transparent
-        onRequestClose={() => setShowEditNameModal(false)}
-        animationType="fade"
-        hardwareAccelerated
-      >
-        <EditModal
-          editOrAdd="edit lesson"
-          setVisible={() => setShowEditNameModal(false)}
-          onPressHandle={editLessonName}
-        />
-      </Modal>
-
       <Text style={styles.title}>{courseName} </Text>
       <Text style={styles.subTitle}>{chapterName} - DANH SÁCH PHÉP TÍNH</Text>
 
@@ -70,14 +68,17 @@ export default function ListLessonAdmin({ navigation, route }) {
                 </View>
                 <View style={styles.name}>
                   <Text style={styles.nameLesson} numberOfLines={1}>
-                    {item.name}
+                    {item.question_name}
                   </Text>
                 </View>
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    setIdEdit(item.id);
-                    setShowEditNameModal(true);
+                    navigation.navigate('EditLesson', {
+                      courseName: courseName,
+                      chapterName: chapterName,
+                      question_id: item.question_id,
+                    });
                   }}
                 >
                   <MaterialIcons name={'mode-edit'} size={20} color={'#1eb900'} />
@@ -85,7 +86,18 @@ export default function ListLessonAdmin({ navigation, route }) {
                 <TouchableOpacity
                   style={styles.icon}
                   onPress={() => {
-                    deleteLesson(item.id);
+                    Alert.alert('Xóa', 'Bạn có chắc chắn muốn xóa bài học này', [
+                      {
+                        text: 'Chắc chắn',
+                        style: 'cancel',
+                        onPress: () => {
+                          deleteLesson(item.question_id);
+                        },
+                      },
+                      {
+                        text: 'Hủy',
+                      },
+                    ]);
                   }}
                 >
                   <FontAwesome5 name={'trash'} size={16} color={'#ff3636'} />
@@ -95,7 +107,16 @@ export default function ListLessonAdmin({ navigation, route }) {
           }
         }}
       />
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          navigation.navigate('AddLesson', {
+            courseName: courseName,
+            chapterName: chapterName,
+            chapterId: chapterId,
+          })
+        }
+      >
         <FontAwesome5 name={'plus'} size={28} color={'white'} />
       </TouchableOpacity>
     </View>

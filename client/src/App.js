@@ -25,6 +25,12 @@ import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
 import Lesson from './screens/Lesson';
 import EditPass from './screens/EditPass';
+import ListCourseAdmin from './screens/Admin/ListCourseAdmin';
+import ListChapterAdmin from './screens/Admin/ListChapterAdmin';
+import ListLessonAdmin from './screens/Admin/ListLessonAdmin';
+import SettingAdmin from './screens/Admin/SettingAdmin';
+import AddLesson from './screens/Admin/Add/AddLesson';
+import EditLesson from './screens/Admin/Add/EditLesson';
 
 const Stack = createStackNavigator();
 
@@ -173,6 +179,108 @@ const App = () => {
               title: '',
               ...HeaderStyles,
             }}
+          />
+          <Stack.Screen
+            name="ChapterAdmin"
+            component={ListChapterAdmin}
+            options={({ navigation }) => ({
+              title: 'Khóa học',
+              ...HeaderStyles,
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('Cài đặt')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="CourseAdmin"
+            component={ListCourseAdmin}
+            options={({ navigation }) => ({
+              title: 'Khóa học',
+              ...HeaderStyles,
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('SettingAdmin')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="LessonAdmin"
+            component={ListLessonAdmin}
+            options={({ navigation }) => ({
+              title: 'Khóa học',
+              ...HeaderStyles,
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('SettingAdmin')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="AddLesson"
+            component={AddLesson}
+            options={({ navigation }) => ({
+              title: 'Khóa học',
+              ...HeaderStyles,
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('SettingAdmin')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="SettingAdmin"
+            options={({ navigation }) => ({
+              title: 'Cài đặt',
+              headerLeft: () => (
+                <AntDesign
+                  name="arrowleft"
+                  size={30}
+                  style={{ marginLeft: 20 }}
+                  color="black"
+                  onPress={() => navigation.goBack()}
+                />
+              ),
+              ...HeaderStyles,
+            })}
+            component={SettingAdmin}
+          />
+          <Stack.Screen
+            name="EditLesson"
+            component={EditLesson}
+            options={({ navigation }) => ({
+              title: 'Khóa học',
+              ...HeaderStyles,
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('Cài đặt')}
+                />
+              ),
+            })}
           />
           <Stack.Screen
             name="Tài khoản"

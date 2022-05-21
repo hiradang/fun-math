@@ -15,6 +15,7 @@ export default function Overview({ navigation }) {
 
   const [currentProgress, setCurrentProgress] = useState({});
   const [dataExp, setDataExp] = useState([]);
+
   useEffect(() => {
     axios
       .all([
@@ -124,7 +125,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
+      {/* {dataExp.length ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null} */}
     </View>
   );
 }

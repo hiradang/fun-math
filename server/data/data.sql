@@ -56,6 +56,11 @@ VALUES ("minhhuong", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAK
 "https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/minhhuong?alt=media&token=8093454e-5977-4271-b43d-9d89ccabb4e7", 
  1, 20, false, false);
 
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
+VALUES ("admin", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", "1", "Admin", 
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/defaultProfileImage.png?alt=media&token=790800d6-aac7-4359-a541-e73b3348e3cb", 
+ 1, 0, false, false);
+
 
 -- Chapter_User
 
@@ -149,3 +154,12 @@ INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 3 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1,4', '?+1=?', 'Đọc và hoàn thành phép toán', 3);
 
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 2 cái kẹo, Bình cho Loan thêm 0 cái nữa. Hỏi Loan có mấy cái kẹo?', '0,2', '2+?=?', 'Đọc và hoàn thành phép toán', 4)
+
+--trigger update_exp
+CREATE TRIGGER `update_exp` AFTER UPDATE ON `course_users`
+ FOR EACH ROW UPDATE users SET total_exp = total_exp + new.total_exp - old.total_exp WHERE username = new.username
+
+ // SELECT countLesson.course_id, sum(totalLesson) from (SELECT c.*, COUNT(q.chapter_id) as totalLesson FROM chapters c 
+//     LEFT JOIN questions q
+//     on c.chapter_id = q.chapter_id where c.course_id = 1
+//     GROUP BY c.chapter_id) countLesson GROUP by countLesson.course_id

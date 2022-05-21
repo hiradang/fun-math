@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Course_User } = require('../models');
+const { Chapter_User } = require('../models');
 const { User } = require('../models');
 const { Course } = require('../models');
 
@@ -52,13 +53,18 @@ router.post('/', async (req, res) => {
 
 // Update exp
 router.post('/exp', async (req, res) => {
-  const { username, courseId, exp } = req.body;
+  const { username, courseId, exp, chapter_id } = req.body;
   const course = await Course_User.findOne({
     where: {
       username: username,
       course_id: courseId,
     },
   });
+  await Chapter_User.update({
+    is_done: true
+  }, {
+    where: {chapter_id: chapter_id, username: username}
+  })
   await Course_User.update(
     {
       total_exp: course.total_exp + exp,
@@ -73,3 +79,4 @@ router.post('/exp', async (req, res) => {
   res.json(course);
 });
 module.exports = router;
+
