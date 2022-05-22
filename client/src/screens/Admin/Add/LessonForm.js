@@ -1,5 +1,9 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Dimensions, Image } from 'react-native';
 import React, { useState } from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
+
+import RNFS from 'react-native-fs';
+
 import CustomButton from '../../../utils/CustomButton';
 import Toast from 'react-native-toast-message';
 
@@ -36,7 +40,7 @@ function isNumber(str) {
   return reg.test(str);
 }
 
-export default function LessonForm({submitCourseFunction, objId}) {
+export default function LessonForm({ submitCourseFunction, data }) {
   // Form này dùng cho cả add và edit nếu add thì
   // objId gồm 3 cái id khóa học, chương và bài học muốn sửa
   // ko cần lấy ID để fetch data => Nếu là màn hình thêm mới bài học sẽ ko truyền objId
@@ -46,7 +50,10 @@ export default function LessonForm({submitCourseFunction, objId}) {
   // お願いします
 
   // state cho question name
-  const [questionName, setQuestionName] = useState('');
+  const [question, setQuestion] = useState({
+    question_name: data ? data.question.question_name : '',
+    question_image: data ? data.question.question_image : '',
+  });
 
   // state cho img
   // cái này t mới cho giao diện 1 chỗ để render và 1 button để load ảnh lên
@@ -54,20 +61,55 @@ export default function LessonForm({submitCourseFunction, objId}) {
 
   // state cho trắc nghiệm
   const [multiChoice, setMultichoice] = useState({
-    title: '',
-    question: '',
-    format: '',
-    answers: '',
-    correct: '',
+    question: data ? data.multiChoice.question : '',
+    format_question: data ? data.multiChoice.format_question : '',
+    answers: data ? data.multiChoice.answers : '',
+    correct_answer: data ? data.multiChoice.correct_answer.toString() : '',
+    question_image: data ? data.multiChoice.question_image : '',
   });
 
   // state cho tự luận
   const [fillBox, setFillBox] = useState({
-    title: '',
-    question: '',
-    format: '',
-    correct: '',
+    question_name: data ? data.fillBox.question_name : '',
+    question: data ? data.fillBox.question : '',
+    format_question: data ? data.fillBox.format_question : '',
+    correct_answer: data ? data.fillBox.correct_answer : '',
   });
+  const [isNewImage, setIsNewImage] = useState(false);
+  const [isNewImageMulti, setIsNewImageMulti] = useState(false);
+
+  const editLessonPicture = (newImageQuestion) => {
+    ImagePicker.openPicker({
+      width: 600,
+      height: 600,
+      cropping: true,
+    })
+      .then((newImage) => {
+        // Delete image in Android/emulator
+        if (newImageQuestion) {
+          RNFS.exists(question.question_image).then((exists) => {
+            if (exists) {
+              RNFS.unlink(question.question_image);
+            }
+          });
+          setQuestion({ ...question, question_image: newImage.path });
+          setIsNewImage(true);
+        } else {
+          RNFS.exists(multiChoice.question_image).then((exists) => {
+            if (exists) {
+              RNFS.unlink(multiChoice.question_image);
+            }
+          });
+          setMultichoice({ ...multiChoice, question_image: newImage.path });
+          setIsNewImageMulti(true);
+        }
+      })
+      .catch((error) => {
+        if (error.code === 'E_PICKER_CANCELLED') {
+          return false;
+        }
+      });
+  };
 
   const checkFullFilled = () => {
     for (let i in multiChoice) {
@@ -78,7 +120,7 @@ export default function LessonForm({submitCourseFunction, objId}) {
       if (fillBox[i].length === 0) return false;
     }
 
-    if (questionName.length === 0) return false;
+    if (question.question_name.length === 0) return false;
 
     // chỗ này viết thêm if nữa, nếu chưa có ảnh cx trả về false luôn Loan nhé
 
@@ -88,7 +130,6 @@ export default function LessonForm({submitCourseFunction, objId}) {
   const formatData = () => {
     for (let i in multiChoice) multiChoice[i] = multiChoice[i].trim();
     for (let i in fillBox) fillBox[i] = fillBox[i].trim();
-    setQuestionName(questionName.trim());
   };
 
   const [isSubmit, setIsSubmit] = useState(false);
@@ -106,7 +147,7 @@ export default function LessonForm({submitCourseFunction, objId}) {
 
   const submitHandler = () => {
     setIsSubmit(true);
-    if (checkFullFilled() === false) {
+    if (checkFullFilled() === false && !question.question_image && !multiChoice.question_image) {
       Toast.show({
         type: 'disableToast',
         text1: 'Bạn chưa nhập đầy đủ các trường',
@@ -116,7 +157,7 @@ export default function LessonForm({submitCourseFunction, objId}) {
       formatData();
       // Chỗ này truyền hết data vừa nhận, ảnh thì t ko xử lý nên ko biết truyền gì
       // Loan làm nếu truyền cái khác thì thêm vào nhá
-      submitCourse(questionName, multiChoice, fillBox);
+      submitCourseFunction(question, multiChoice, fillBox, isNewImage, isNewImageMulti);
     }
   };
 
@@ -125,20 +166,22 @@ export default function LessonForm({submitCourseFunction, objId}) {
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Tên bài học</Text>
         <TextInput
-          style={checkValid(questionName, 'text') ? styles.input : styles.inputInvalid}
+          style={checkValid(question.question_name, 'text') ? styles.input : styles.inputInvalid}
           placeholder="Nhập tên bài học"
-          value={questionName}
-          onChangeText={(value) => setQuestionName(value)}
+          value={question.question_name}
+          onChangeText={(value) => setQuestion({ ...question, question_name: value })}
         />
       </View>
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Ảnh bài học</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://br.atsit.in/vi/wp-content/uploads/2022/01/attack-on-titan-season-4-part-2-ngay-phat-hanh-va-so-tap.jpg',
-          }}
-        />
+        {question.question_image !== '' && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: question.question_image,
+            }}
+          />
+        )}
         <CustomButton
           text="Upload"
           textStyles={{ color: 'black', marginRight: 10, marginLeft: 0, fontSize: 16 }}
@@ -154,21 +197,21 @@ export default function LessonForm({submitCourseFunction, objId}) {
           iconName="arrow-circle-o-up"
           iconSize={24}
           iconColor="black"
-          //   onPressFunc={}
+          onPressFunc={() => editLessonPicture(true)}
         />
       </View>
       <Text style={styles.typeText}>Dạng trắc nghiệm</Text>
 
-      <View style={styles.wrapper}>
+      {/* <View style={styles.wrapper}>
         <Text style={styles.TileText}>Tiêu đề</Text>
         <TextInput
           style={checkValid(multiChoice.title, 'text') ? styles.input : styles.inputInvalid}
           multiline
           placeholder="Nhập tiêu đề"
           value={multiChoice.title}
-          onChangeText={(value) => (multiChoice.title = value)}
+          onChangeText={(value) => setMultichoice({ ...multiChoice, title: value })}
         />
-      </View>
+      </View> */}
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Câu hỏi</Text>
@@ -177,17 +220,19 @@ export default function LessonForm({submitCourseFunction, objId}) {
           multiline
           placeholder="Nhập câu hỏi"
           value={multiChoice.question}
-          onChangeText={(value) => (multiChoice.question = value)}
+          onChangeText={(value) => setMultichoice({ ...multiChoice, question: value })}
         />
       </View>
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Định dạng</Text>
         <TextInput
-          style={checkValid(multiChoice.format, 'format') ? styles.input : styles.inputInvalid}
+          style={
+            checkValid(multiChoice.format_question, 'format') ? styles.input : styles.inputInvalid
+          }
           placeholder="Nhập định dạng"
-          value={multiChoice.format}
-          onChangeText={(value) => (multiChoice.format = value)}
+          value={multiChoice.format_question}
+          onChangeText={(value) => setMultichoice({ ...multiChoice, format_question: value })}
         />
       </View>
 
@@ -197,17 +242,49 @@ export default function LessonForm({submitCourseFunction, objId}) {
           style={checkValid(multiChoice.answers, 'answers') ? styles.input : styles.inputInvalid}
           placeholder="Nhập đáp án"
           value={multiChoice.answers}
-          onChangeText={(value) => (multiChoice.answers = value)}
+          onChangeText={(value) => setMultichoice({ ...multiChoice, answers: value })}
         />
       </View>
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Đáp án đúng</Text>
         <TextInput
-          style={checkValid(multiChoice.correct, 'number') ? styles.input : styles.inputInvalid}
+          style={
+            checkValid(multiChoice.correct_answer, 'number') ? styles.input : styles.inputInvalid
+          }
           placeholder="Nhập đáp án đúng"
-          value={multiChoice.correct}
-          onChangeText={(value) => (multiChoice.correct = value)}
+          value={multiChoice.correct_answer}
+          onChangeText={(value) => setMultichoice({ ...multiChoice, correct_answer: value })}
+        />
+      </View>
+
+      <View style={styles.wrapper}>
+        <Text style={styles.TileText}>Ảnh câu hỏi</Text>
+        {multiChoice.question_image !== '' && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: multiChoice.question_image,
+            }}
+          />
+        )}
+
+        <CustomButton
+          text="Upload"
+          textStyles={{ color: 'black', marginRight: 10, marginLeft: 0, fontSize: 16 }}
+          buttonStyles={{
+            borderRadius: 10,
+            backgroundColor: 'white',
+            width: 120,
+            height: 40,
+            marginTop: 10,
+            marginLeft: width * 0.5 - 120 / 2 - 20,
+          }}
+          pos="right"
+          iconName="arrow-circle-o-up"
+          iconSize={24}
+          iconColor="black"
+          onPressFunc={() => editLessonPicture()}
         />
       </View>
 
@@ -216,11 +293,11 @@ export default function LessonForm({submitCourseFunction, objId}) {
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Tiêu đề</Text>
         <TextInput
-          style={checkValid(fillBox.title, 'text') ? styles.input : styles.inputInvalid}
+          style={checkValid(fillBox.question_name, 'text') ? styles.input : styles.inputInvalid}
           multiline
           placeholder="Nhập tiêu đề"
-          value={fillBox.title}
-          onChangeText={(value) => (fillBox.title = value)}
+          value={fillBox.question_name}
+          onChangeText={(value) => setFillBox({ ...fillBox, question_name: value })}
         />
       </View>
 
@@ -231,27 +308,27 @@ export default function LessonForm({submitCourseFunction, objId}) {
           multiline
           placeholder="Nhập câu hỏi"
           value={fillBox.question}
-          onChangeText={(value) => (fillBox.question = value)}
+          onChangeText={(value) => setFillBox({ ...fillBox, question: value })}
         />
       </View>
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Định dạng</Text>
         <TextInput
-          style={checkValid(fillBox.format, 'format') ? styles.input : styles.inputInvalid}
+          style={checkValid(fillBox.format_question, 'format') ? styles.input : styles.inputInvalid}
           placeholder="Nhập định dạng"
-          value={fillBox.format}
-          onChangeText={(value) => (fillBox.format = value)}
+          value={fillBox.format_question}
+          onChangeText={(value) => setFillBox({ ...fillBox, format_question: value })}
         />
       </View>
 
       <View style={styles.wrapper}>
         <Text style={styles.TileText}>Đáp án</Text>
         <TextInput
-          style={checkValid(fillBox.correct, 'answers') ? styles.input : styles.inputInvalid}
+          style={checkValid(fillBox.correct_answer, 'answers') ? styles.input : styles.inputInvalid}
           placeholder="Nhập đáp án"
-          value={fillBox.correct}
-          onChangeText={(value) => (fillBox.correct = value)}
+          value={fillBox.correct_answer}
+          onChangeText={(value) => setFillBox({ ...fillBox, correct_answer: value })}
         />
       </View>
 
@@ -301,6 +378,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 20,
     paddingHorizontal: 15,
+    color: '#000000',
   },
   inputInvalid: {
     width: '100%',

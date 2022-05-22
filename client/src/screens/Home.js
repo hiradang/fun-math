@@ -1,29 +1,33 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import Config from 'react-native-config';
 
+import { useSelector } from 'react-redux';
+
+import HeaderStyles from '../utils/HeaderStyles';
 import Overview from './Overview';
 import Study from './Study';
-import HeaderStyles from '../utils/HeaderStyles';
 
 const Tab = createBottomTabNavigator();
 
-export default function Home({ navigation, route }) {
-  // sau chỗ này các bạn lấy data thì thay tên khóa học vào đây
-  let currentCourse = 'Phép cộng';
-  if (typeof route.params?.newCourse !== 'undefined') currentCourse = route.params.newCourse;
+export default function Home({ navigation }) {
+  const { currentCourseName } = useSelector((state) => state.taskReducer);
+
   const userIconHandler = () => {
     navigation.navigate('Tài khoản');
   };
 
   const barsIconHandler = () => {
-    navigation.navigate('ListCourses', { currentCourse: currentCourse });
+    navigation.navigate('ListCourses');
   };
 
   const header = {
-    title: currentCourse,
+    title: currentCourseName,
     headerRight: () => {
       return (
         <TouchableOpacity onPress={userIconHandler}>

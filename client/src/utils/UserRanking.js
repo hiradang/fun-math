@@ -19,8 +19,6 @@ import PropTypes from 'prop-types';
 // - Mảng chứa các object trong đó chứa: link avatar, name (tên người dùng), điểm, username (tên đăng nhập)
 // - username người dùng hiện tại
 
-
-
 export default function UserRanking({ dataExp, userName, topExp }) {
   let length = dataExp.length;
   let userRank;
@@ -107,7 +105,7 @@ export default function UserRanking({ dataExp, userName, topExp }) {
         </View>
       );
     }
-  }
+  };
 
   return (
     <View style={{ ...styles.rankingContainer, flex: flexContainer }}>
@@ -177,7 +175,6 @@ const renderAvatar = (obj) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   rankingContainer: {

@@ -2,13 +2,46 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setCurrentCourseName,
+  setCurrentCourseId,
+  setUsername,
+  setName,
+  setProfilePhotoPath,
+  setTotalExp,
+} from '../redux/actions';
+import { createChannel } from '../utils/notification/PushNotification';
+import {
+  setBackgroundMessageHandler,
+  onMessage,
+} from '../utils/notification/RNFireBaseNotification';
+
 function Splash({ navigation }) {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setTimeout(() => {
       AsyncStorage.getItem('user').then((user) => {
         if (!JSON.parse(user)) navigation.replace('Start');
-        else navigation.replace('Home');
+        else {
+          const data = JSON.parse(user);
+          dispatch(setCurrentCourseName(data.currentCourseName));
+          dispatch(setCurrentCourseId(data.currentCourseId));
+          dispatch(setUsername(data.username));
+          dispatch(setName(data.name));
+          dispatch(setProfilePhotoPath(data.profilePhotoPath));
+          dispatch(setTotalExp(data.totalExp));
+          if (data.role === '0') navigation.replace('Home');
+          else navigation.replace('CourseAdmin');
+        }
       });
+
+      // Notification
+      // Create a channel for react-native-push-notification
+      createChannel();
+      // Handle background actions for firebase remote notification
+      setBackgroundMessageHandler();
     }, 2000);
   }, []);
   return (

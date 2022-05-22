@@ -1,29 +1,179 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import {
+  subscribeToTopic,
+  unsubscribeFromTopic,
+} from '../utils/notification/RNFireBaseNotification';
+import Config from 'react-native-config';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import ConfirmModal from '../utils/ConfirmModal';
 
 function Setting({ navigation }) {
-  const [isRemind, setRemind] = useState(false);
-  const [isNotiNewCourse, setNotiNewCourse] = useState(false);
-  const [isNotiUpdate, setNotiUpdate] = useState(false);
-  useEffect(() => {}, []);
+  const { currentCourseId, username } = useSelector((state) => state.taskReducer);
 
-  /// To-do
-  /**
-   * 1. Lưu các biến boolean ở trên vào Async Storage.
-   * 2. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
-   * 3. xử lý khi nhấn vào nút đăng xuất.
-   */
+  const [isNewCourseNoti, setNotiNewCourse] = useState();
+  const [isNewChapterNoti, setNotiNewChapter] = useState();
+  const [showModal, setShowModal] = useState(false);
+  const [isRemind, setRemind] = useState(false);
+  const [myDate, setMyDate] = useState(new Date());
+  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [reminderHour, setReminderHour] = useState('');
+  const [reminderMinute, setReminderMinute] = useState('');
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((user) => {
+      const data = JSON.parse(user);
+      setNotiNewCourse(data.isNewCourseNoti);
+      setNotiNewChapter(data.isNewChapterNoti);
+
+      if (data.reminderTime) {
+        setReminderHour(Math.floor(data.reminderTime / 60));
+        setReminderMinute(data.reminderTime % 60);
+        setRemind(true);
+      } else {
+        setReminderHour(0);
+        setReminderMinute(0);
+      }
+    });
+  }, []);
 
   const logOut = () => {
-    AsyncStorage.removeItem('user');
-    navigation.navigate('Start');
+    setShowModal(false);
+    axios
+      .post(`${Config.API_URL}/users/currentCourseName`, {
+        username: username,
+        currentCourseId: currentCourseId,
+      })
+      .then(() => {
+        AsyncStorage.clear();
+        navigation.navigate('Start');
+      });
+  };
+
+  const cancelLogOut = () => {
+    setShowModal(false);
+  };
+
+  const newCourseNotiHandler = () => {
+    // Đang subscribe -> Hủy subcribe
+    if (isNewCourseNoti) {
+      unsubscribeFromTopic('new-course');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Hủy nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    } else {
+      subscribeToTopic('new-course');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Đăng ký nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    }
+
+    const newState = !isNewCourseNoti;
+    setNotiNewCourse(newState);
+
+    axios
+      .post(`${Config.API_URL}/users/update`, {
+        isNewCourseNoti: newState,
+        username: username,
+      })
+      .then(() => {
+        AsyncStorage.mergeItem(
+          'user',
+          JSON.stringify({
+            isNewCourseNoti: newState,
+          })
+        );
+      });
+  };
+
+  const newChapterNotiHandler = () => {
+    if (isNewChapterNoti) {
+      unsubscribeFromTopic('new-chapter');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Hủy nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    } else {
+      subscribeToTopic('new-chapter');
+      Toast.show({
+        type: 'successToast',
+        text1: 'Đăng ký nhận thông báo thành công!',
+        visibilityTime: 2000,
+      });
+    }
+
+    const newState = !isNewChapterNoti;
+
+    axios
+      .post(`${Config.API_URL}/users/update`, {
+        isNewChapterNoti: newState,
+        username: username,
+      })
+      .then(() => {
+        AsyncStorage.mergeItem(
+          'user',
+          JSON.stringify({
+            isNewChapterNoti: newState,
+          })
+        );
+        setNotiNewChapter(newState);
+      });
+  };
+
+  const onChangeTimePicker = (event, selectedDate) => {
+    const currentDate = selectedDate || myDate;
+    setMyDate(currentDate);
+    setShowDateTimePicker(false);
+    const tempDate = new Date(selectedDate);
+    const tempHour = tempDate.getHours();
+    const tempMinute = tempDate.getMinutes();
+
+    console.log(tempHour, tempMinute);
+    setReminderHour(tempHour);
+    setReminderMinute(tempMinute);
+
+    // Call actions from server
+    axios.post(`${Config.API_URL}/notification/reminder`, {
+      topic: 'reminder',
+      minute: tempMinute,
+      hour: tempHour,
+      username: username,
+    });
+
+    AsyncStorage.mergeItem('user', JSON.stringify({ reminderTime: tempMinute + tempHour * 60 }));
+    Toast.show({
+      type: 'successToast',
+      text1: 'Cài đặt nhắc nhở thành công!',
+      visibilityTime: 2000,
+    });
   };
 
   return (
     <ScrollView style={styles.container}>
+      {/* Modal */}
+      {showModal ? (
+        <ConfirmModal
+          showModal={showModal}
+          negativeFunc={logOut}
+          cancelFunc={cancelLogOut}
+          positiveFunc={cancelLogOut}
+          header="Đăng xuất"
+          message="Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này?"
+          negativeMessage="Đồng ý"
+          positiveMessage="Ở lại"
+        />
+      ) : null}
       {/* Tài khoản */}
       <View style={styles.item}>
         <Text style={styles.title}>TÀI KHOẢN</Text>
@@ -37,9 +187,17 @@ function Setting({ navigation }) {
               onPress={() => navigation.navigate('Chỉnh sửa tài khoản')}
             />
           </View>
+          <View style={styles.row}>
+            <Text style={styles.text}>Chỉnh sửa mật khẩu</Text>
+            <FontAwesome5
+              size={24}
+              color="#14D39A"
+              name="pencil-alt"
+              onPress={() => navigation.navigate('Chỉnh sửa mật khẩu')}
+            />
+          </View>
         </View>
       </View>
-
       {/* Nhắc nhở */}
       <View style={styles.item}>
         <Text style={styles.title}>Nhắc nhở</Text>
@@ -51,30 +209,49 @@ function Setting({ navigation }) {
                 size={24}
                 color="#14D39A"
                 name="toggle-on"
-                onPress={() => setRemind(!isRemind)}
+                onPress={() => {
+                  setRemind(!isRemind);
+                  unsubscribeFromTopic('reminder');
+                  axios.post(`${Config.API_URL}/users/update`, {
+                    username: username,
+                    reminderTime: null,
+                  });
+                  AsyncStorage.mergeItem('user', JSON.stringify({ reminderTime: null }));
+                  setReminderHour(0);
+                  setReminderMinute(0);
+                  Toast.show({
+                    type: 'successToast',
+                    text1: 'Hủy nhận thông báo thành công!',
+                    visibilityTime: 2000,
+                  });
+                }}
               />
             ) : (
               <FontAwesome5
                 size={24}
                 color="#ccc"
                 name="toggle-off"
-                onPress={() => setRemind(!isRemind)}
+                onPress={() => {
+                  setRemind(!isRemind);
+                  subscribeToTopic('reminder');
+                }}
               />
             )}
           </View>
 
-          <View style={styles.row}>
-            <Text style={styles.text}>Thời gian</Text>
-            <Text style={styles.text}>20:00</Text>
-          </View>
-
-          <View style={styles.row}>
-            <Text style={styles.text}>Ngày</Text>
-            <Text style={styles.text}>T2 - T6</Text>
-          </View>
+          <TouchableOpacity onPress={() => setShowDateTimePicker(true)} disabled={!isRemind}>
+            <View style={styles.row}>
+              <Text style={[styles.text, isRemind ? { color: 'white' } : { color: '#999' }]}>
+                Thời gian
+              </Text>
+              <Text style={[styles.text, isRemind ? { color: 'white' } : { color: '#999' }]}>
+                {reminderHour.toString().length === 2 ? reminderHour : '0' + reminderHour}:
+                {reminderMinute.toString().length === 2 ? reminderMinute : '0' + reminderMinute}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-
       {/* Thông báo */}
       <View style={styles.item}>
         <Text style={styles.title}>Thông báo</Text>
@@ -84,49 +261,46 @@ function Setting({ navigation }) {
               <Text style={styles.text}>Nhận thông báo khi có khóa học mới</Text>
             </View>
 
-            {isNotiNewCourse ? (
+            {isNewCourseNoti ? (
               <FontAwesome5
                 size={24}
                 color="#14D39A"
                 name="toggle-on"
-                onPress={() => setNotiNewCourse(!isNotiNewCourse)}
+                onPress={newCourseNotiHandler}
               />
             ) : (
               <FontAwesome5
                 size={24}
                 color="#ccc"
                 name="toggle-off"
-                onPress={() => setNotiNewCourse(!isNotiNewCourse)}
+                onPress={newCourseNotiHandler}
               />
             )}
           </View>
 
           <View style={styles.row}>
             <View style={styles.textLeft}>
-              <Text style={styles.text}>
-                Nhận thông báo khi có bản cập nhật mới từ Google Play Store
-              </Text>
+              <Text style={styles.text}>Nhận thông báo khi có chương mới</Text>
             </View>
 
-            {isNotiUpdate ? (
+            {isNewChapterNoti ? (
               <FontAwesome5
                 size={24}
                 color="#14D39A"
                 name="toggle-on"
-                onPress={() => setNotiUpdate(!isNotiUpdate)}
+                onPress={newChapterNotiHandler}
               />
             ) : (
               <FontAwesome5
                 size={24}
                 color="#ccc"
                 name="toggle-off"
-                onPress={() => setNotiUpdate(!isNotiUpdate)}
+                onPress={newChapterNotiHandler}
               />
             )}
           </View>
         </View>
       </View>
-
       {/* Thông tin*/}
       <View style={styles.item}>
         <Text style={styles.title}>Thông tin</Text>
@@ -146,17 +320,32 @@ function Setting({ navigation }) {
           </View>
         </View>
       </View>
-
       {/* Đăng xuất*/}
       <View style={styles.item}>
         <Text style={styles.title}>Đăng xuất</Text>
         <View style={styles.content}>
           <View style={styles.row}>
             <Text style={styles.text}>Đăng xuất</Text>
-            <MaterialIcons size={24} color="#E46B6B" name="logout" onPress={logOut} />
+            <MaterialIcons
+              size={24}
+              color="#E46B6B"
+              name="logout"
+              onPress={() => setShowModal(true)}
+            />
           </View>
         </View>
       </View>
+      {/* Reminder time Picker */}
+      {showDateTimePicker && (
+        <DateTimePicker
+          mode="time"
+          testID="dateTimePicker"
+          value={myDate}
+          is24Hour={true}
+          display="default"
+          onChange={onChangeTimePicker}
+        />
+      )}
     </ScrollView>
   );
 }
@@ -167,13 +356,20 @@ const styles = StyleSheet.create({
     height: '100%',
     textAlign: 'center',
   },
+  box: {
+    width: 300,
+    height: 300,
+    backgroundColor: 'red',
+    marginBottom: 30,
+  },
   item: {
     marginTop: 20,
   },
   title: {
     textTransform: 'uppercase',
     color: 'white',
-    fontSize: 16,
+    fontSize: 17,
+    fontWeight: '600',
     paddingLeft: 20,
     marginBottom: 10,
   },
@@ -194,7 +390,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 15,
   },
   textLeft: {
     maxWidth: '90%',

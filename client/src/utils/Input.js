@@ -10,7 +10,7 @@ const Input = (props) => {
       <Text style={styles.text}>{props.title}</Text>
       <View style={styles.row}>
         <View style={[styles.icon, props.error && styles.iconError]}>
-          <FontAwesome5 name={props.icon} size={20} color={'#000000'} />
+          <FontAwesome5 name={props.icon} size={24} color={'#14D39A'} />
         </View>
         <TextInput
           value={props.value}
@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
     marginLeft: 20,
+    fontWeight: '500',
   },
   row: {
     height: 50,
     flexDirection: 'row',
   },
   input: {
-    // width: '280',
-    width: '80%',
+    width: '75%',
     height: 50,
     backgroundColor: '#ffffff',
     borderTopRightRadius: 20,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'red',
   },
   icon: {
-    width: 40,
+    width: 60,
     height: 50,
     backgroundColor: '#ffffff',
     marginTop: 10,

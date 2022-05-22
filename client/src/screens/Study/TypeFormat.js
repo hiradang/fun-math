@@ -1,93 +1,40 @@
-import { Dimensions, StyleSheet, Text, View, TextInput, ScrollView, Animated } from 'react-native';
-import React, { useState, useRef } from 'react';
+import { Dimensions, StyleSheet, Text, View, ScrollView, Animated } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import CustomButton from './CustomButton';
-import NumberInput from './NumberInput';
+import axios from 'axios';
+import Config from 'react-native-config';
+
+import CustomButton from '../../utils/CustomButton';
+import NumberInput from '../../utils/NumberInput';
+import NumberBox from './NumberBox';
+import SignBox from './SignBox';
 
 const { width, height } = Dimensions.get('window');
 
-const Sign = (props) => {
-  const item = props.sign;
-  if (item === '-') item = '–';
-  if (item === 'x') item = '✕';
-  if (item === ':') item = '÷';
-  return (
-    <View
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
 
-        backgroundColor: '#424D73',
-        borderRadius: 5,
-        width: width * 0.1,
-        height: height * 0.05,
-      }}
-    >
-      <Text
-        style={{
-          color: 'white',
-          fontSize: 24,
-          fontWeight: '500',
-        }}
-      >
-        {item}
-      </Text>
-    </View>
-  );
-};
 
-const NumberFilled = (props) => {
-  const number = props.number;
-  let widthBox = width * 0.11;
-  if (number > 99) {
-    widthBox = width * 0.15;
-  }
-  if (number > 999) {
-    widthBox = width * 0.19;
-  }
-  return (
-    <View
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        backgroundColor: '#424D73',
-        borderRadius: 5,
-        width: widthBox,
-        height: height * 0.078,
-      }}
-    >
-      <Text
-        style={{
-          color: 'white',
-          fontSize: 24,
-          fontWeight: '500',
-        }}
-      >
-        {number}
-      </Text>
-    </View>
-  );
-};
 
 export default function TypeFormat(props) {
   const [answers, setAnswers] = useState([]);
   const [buttonDisable, setButtonDisable] = useState(false);
   const [result, setResult] = useState('');
+  const [question_name, setQuestion_name] = useState();
+  const [dataQuestion, setDataQuestion] = useState({
+    question: '',
+    correct_answer: '',
+    format_question: '',
+  });
 
-  
-
-  // Lấy từ bảng Questions
-  const question_name = 'Đọc và hoàn thành phép toán';
-
-  // Láy từ bảng Type_Question
-  const dataQuestion = {
-    question: 'Loan có 2 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo ?',
-    correct_answer: '1,3',
-    format_question: '2+?=?',
-  };
+  useEffect(() => {
+    axios.get(`${Config.API_URL}/typeQuestions/${props.question_id}`).then((res) => {
+      setQuestion_name(res.data.question_name);
+      setDataQuestion({
+        question: res.data.question,
+        correct_answer: res.data.correct_answer,
+        format_question: res.data.format_question,
+      });
+    });
+  }, []);
 
   const correctAnswer = dataQuestion.correct_answer.split(',');
   const lengthCorrectAnswer = correctAnswer.length;
@@ -141,15 +88,17 @@ export default function TypeFormat(props) {
         visibilityTime: 2000,
       });
     } else {
-      if (checkAnswer(userAnswer)) {
-        setResult('correct');
-        start();
-        // gọi hàm cộng điểm
-        // gọi hàm chuyển sang câu khác
+      if (result) {
+        props.changeType3Question();
       } else {
-        setResult('incorrect');
-        start();
-        // gọi hàm chuyển sang câu khác
+        if (checkAnswer(userAnswer)) {
+          setResult('correct');
+          start();
+          props.changeScore();
+        } else {
+          setResult('incorrect');
+          start();
+        }
       }
     }
   };
@@ -213,7 +162,7 @@ export default function TypeFormat(props) {
 
           <View style={styles.calculationWrapper}>
             {dataConverted.map((item, index) => {
-              if (operation.includes(item)) return <Sign sign={item} key={index} />;
+              if (operation.includes(item)) return <SignBox item={item} key={index} />;
               else if (item === '?') {
                 return (
                   <NumberInput
@@ -225,7 +174,7 @@ export default function TypeFormat(props) {
                     result={result}
                   />
                 );
-              } else return <NumberFilled key={index} number={item} />;
+              } else return <NumberBox key={index} text={item} />;
             })}
           </View>
         </View>
@@ -266,14 +215,8 @@ export default function TypeFormat(props) {
           <CustomButton
             text={result !== '' ? 'Tiếp tục' : 'Trả lời'}
             buttonStyles={buttonDisable ? styles.buttonStyles : styles.buttonStylesDisabled}
-            textStyles={{
-              color: 'white',
-            }}
+            textStyles={{ color: 'white' }}
             onPressFunc={onPressButton}
-            // pos="right"
-            // iconName="chevron-right"
-            // iconSize={12}
-            // iconColor="white"
           />
         </View>
       </ScrollView>

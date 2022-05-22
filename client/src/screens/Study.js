@@ -1,31 +1,48 @@
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Toast from 'react-native-toast-message';
+import Config from 'react-native-config';
+import axios from 'axios';
+
+import { useSelector } from 'react-redux';
 
 export default function Study({ navigation }) {
-  const listChapter = [
-    { name: 'Chương 1', isDone: true },
-    { name: 'Chương 2', isDone: false },
-    { name: 'Chương 3', isDone: false },
-    { name: 'Chương 4', isDone: false },
-    { name: 'Chương 5', isDone: false },
-    { name: 'Chương 6', isDone: false },
-    { name: 'Chương 7', isDone: false },
-  ];
+  const { username, currentCourseId } = useSelector((state) => state.taskReducer);
+  const [chapters, setChapters] = useState([]);
 
-  const lengthOfList = listChapter.length;
+  useEffect(() => {
+    axios
+      .post(`${Config.API_URL}/chapter_user/getAllChapter`, {
+        username: username,
+        courseId: currentCourseId,
+      })
+      .then((res) => {
+        setChapters(res.data);
+      });
+  }, [currentCourseId, navigation]);
+
+  const lengthOfList = chapters.length;
 
   const onPressChapter = (item, index) => {
-    if (index == 0) navigation.navigate('ListLesson', { currentChapter: item.name, isDone: item.isDone });
+    if (index == 0)
+      navigation.navigate('ListLesson', {
+        currentChapter: item.chapter_name,
+        currentChapterId: item.chapter_id,
+        isDone: item.is_done,
+      });
     else {
-      if (listChapter[index - 1].isDone) {
-        navigation.navigate('ListLesson', { currentChapter: item.name, isDone: item.isDone });
+      if (chapters[index - 1].is_done) {
+        navigation.navigate('ListLesson', {
+          currentChapter: item.chapter_name,
+          currentChapterId: item.chapter_id,
+          isDone: item.is_done,
+        });
       } else {
         Toast.show({
           type: 'disableToast',
-          text1: `Hãy hoàn thành ${listChapter[index - 1].name}`,
+          text1: `Hãy hoàn thành ${chapters[index - 1].chapter_name}`,
           visibilityTime: 2000,
         });
       }
@@ -33,28 +50,28 @@ export default function Study({ navigation }) {
   };
 
   const checkDisabled = (chapter, index) =>
-    chapter.isDone || index == 0 || listChapter[index - 1].isDone;
+    chapter.is_done || index == 0 || chapters[index - 1].is_done;
 
   return (
     <ScrollView style={styles.container}>
-      {listChapter.map((item, index) => {
+      {chapters.map((item, index) => {
         return (
-          <View style={styles.chapterContainer} key={item.name}>
+          <View style={styles.chapterContainer} key={item.chapter_id}>
             {index == 0 && <View style={{ height: 25 }}></View>}
             <TouchableOpacity onPress={() => onPressChapter(item, index)}>
               <View style={checkDisabled(item, index) ? styles.chapter : styles.chapterDisabled}>
                 <FontAwesome5
-                  name={item.isDone ? 'book' : 'book-open'}
+                  name={item.is_done ? 'book' : 'book-open'}
                   size={50}
                   color={checkDisabled(item, index) ? '#54135A' : '#EBEBE4'}
-                  style={item.isDone ? styles.iconDone : styles.iconNotDone}
+                  style={item.is_done ? styles.iconDone : styles.iconNotDone}
                 />
               </View>
             </TouchableOpacity>
             <Text
               style={checkDisabled(item, index) ? styles.chapterName : styles.chapterNameDisabled}
             >
-              {item.name}
+              {item.chapter_name}
             </Text>
             {index < lengthOfList - 1 && (
               <Entypo

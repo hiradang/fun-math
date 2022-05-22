@@ -6,19 +6,27 @@ import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import { Dimensions } from 'react-native';
+
+import {
+  setCurrentCourseName,
+  setCurrentCourseId,
+  setUsername,
+  setName,
+  setProfilePhotoPath,
+  setTotalExp,
+} from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Input from '../../utils/Input';
 import CustomButton from '../../utils/CustomButton';
 
 function LogIn({ navigation }) {
-  const [username, setUsername] = useState('');
+  const [username, setInputUsername] = useState('');
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
   const [errorText, setErrorText] = useState(false);
-  // useEffect(() => {
-  //   axios.get(`${Config.API_URL}/courses`).then((res) => {
-  //     setCourses(res.data);
-  //   });
-  // }, []);
+
+  const dispatch = useDispatch();
 
   const submit = () => {
     setOnSubmit(true);
@@ -37,11 +45,32 @@ function LogIn({ navigation }) {
             text1: 'Đăng nhập thành công',
             visibilityTime: 2000,
           });
+
+          dispatch(setCurrentCourseName(res.data.current_course_name));
+          dispatch(setCurrentCourseId(res.data.current_course_id));
+          dispatch(setUsername(username));
+          dispatch(setName(res.data.name));
+          dispatch(setProfilePhotoPath(res.data.profile_photo_path));
+          dispatch(setTotalExp(res.data.total_exp));
+
+          // Save to Async Storage
           AsyncStorage.setItem(
             'user',
-            JSON.stringify({ username: username, name: res.data.name, role: res.data.role_id })
+            JSON.stringify({
+              username: username,
+              name: res.data.name,
+              role: res.data.role_id,
+              currentCourseName: res.data.current_course_name,
+              currentCourseId: res.data.current_course_id,
+              profilePhotoPath: res.data.profile_photo_path,
+              totalExp: res.data.tota_exp,
+              isNewCourseNoti: res.data.is_new_course_noti,
+              isNewChapterNoti: res.data.is_new_chapter_noti,
+              reminderTime: res.data.reminder_time,
+            })
           ).then(() => {
-            navigation.navigate('Home');
+            if (res.data.role_id === '0') navigation.replace('Home')
+            else navigation.replace('CourseAdmin')
           });
         }
       });
@@ -62,7 +91,7 @@ function LogIn({ navigation }) {
             navigation.goBack();
           }}
         >
-          <Ionicons name="chevron-back" size={25} color="#ffffff" />
+          <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
         <View style={styles.container}>
@@ -73,7 +102,7 @@ function LogIn({ navigation }) {
             error={(onSubmit && username === '') || errorText}
             icon="user"
             onChangeText={(value) => {
-              setUsername(value);
+              setInputUsername(value);
               setErrorText(false);
             }}
           />
@@ -110,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height * 0.1,
   },
   text: {
-    fontSize: 36,
+    fontSize: 32,
     color: '#ffffff',
     marginTop: 10,
     marginLeft: 20,
