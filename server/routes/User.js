@@ -35,6 +35,7 @@ router.post('/login', async (req, res) => {
           total_exp: user.total_exp,
           is_new_course_noti: user.is_new_course_noti,
           is_new_chapter_noti: user.is_new_chapter_noti,
+          reminder_time: user.reminder_time,
         });
       }
     });
@@ -121,8 +122,15 @@ router.post('/changePass', async (req, res) => {
 
 // Update user info
 router.post('/update', async (req, res) => {
-  const { username, password, name, profilePhotoPath, isNewCourseNoti, isNewChapterNoti } =
-    req.body;
+  const {
+    username,
+    password,
+    name,
+    profilePhotoPath,
+    isNewCourseNoti,
+    isNewChapterNoti,
+    reminderTime,
+  } = req.body;
   const updateQuery = {};
   if (password) {
     await bcrypt.hash(password, 10).then((hash) => {
@@ -141,8 +149,9 @@ router.post('/update', async (req, res) => {
   if (isNewChapterNoti !== null) {
     updateQuery['is_new_chapter_noti'] = isNewChapterNoti;
   }
-  res.json(updateQuery);
+  updateQuery['reminder_time'] = reminderTime;
   User.update(updateQuery, { where: { username: username } });
+  res.json('OK');
 });
 
 // Get exp of all user
