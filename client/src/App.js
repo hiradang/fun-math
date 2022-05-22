@@ -21,7 +21,6 @@ import Setting from './screens/Setting';
 import EditProfile from './screens/EditProfile';
 import ListLesson from './screens/ListLesson';
 
-
 const Stack = createStackNavigator();
 
 const toastConfig = {
@@ -145,6 +144,51 @@ const App = () => {
           component={Home}
           options={{
             header: () => null,
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={ListCourseAdmin}
+          options={{
+            title: 'Quản trị khóa học',
+            headerTitleAlign: 'center',
+            ...HeaderStyles,
+          }}
+        />
+        <Stack.Screen
+          name="ListChapterAdmin"
+          component={ListChapterAdmin}
+          options={{
+            title: 'Quản trị chương',
+            headerTitleAlign: 'center',
+            ...HeaderStyles,
+          }}
+        />
+        <Stack.Screen
+          name="ListLessonAdmin"
+          component={ListLessonAdmin}
+          options={{
+            title: 'Quản trị bài học',
+            headerTitleAlign: 'center',
+            ...HeaderStyles,
+          }}
+        />
+        <Stack.Screen
+          name="AddLesson"
+          component={AddLesson}
+          options={{
+            title: 'Tạo bài học',
+            headerTitleAlign: 'center',
+            ...HeaderStyles,
+          }}
+        />
+        <Stack.Screen
+          name="EditLesson"
+          component={EditLesson}
+          options={{
+            title: 'Chỉnh sửa bài học',
+            headerTitleAlign: 'center',
+            ...HeaderStyles,
           }}
         />
         <Stack.Screen

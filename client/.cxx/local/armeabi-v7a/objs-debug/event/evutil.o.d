@@ -1,0 +1,38 @@
+C:\Users\DELL\dev\fun-math\client\.cxx/local/armeabi-v7a/objs-debug/event/evutil.o: \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\evutil.c \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\event-config.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\evconfig-private.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\util.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\visibility.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\util-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\log-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\time-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\ipv6-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\mm-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\evthread-internal.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\thread.h \
+  C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\strlcpy-internal.h
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\event-config.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\evconfig-private.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\util.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\visibility.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\util-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\log-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\time-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\ipv6-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\mm-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\evthread-internal.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\include\event2\thread.h:
+
+C:\Users\DELL\dev\fun-math\client\node_modules\react-native\ReactAndroid\build\third-party-ndk\libevent\strlcpy-internal.h:
