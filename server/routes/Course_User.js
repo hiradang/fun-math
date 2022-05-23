@@ -48,8 +48,8 @@ router.post('/create', async (req, res) => {
     await Chapter_User.create({
       chapter_id: listChapter[i].chapter_id,
       username: username,
-      is_done: false
-    })
+      is_done: false,
+    });
   }
   res.json('OK');
 });
@@ -77,6 +77,14 @@ router.post('/', async (req, res) => {
 router.post('/exp', async (req, res) => {
   const { username, courseId, exp, chapter_id, totalLesson } = req.body;
 
+  await Chapter_User.update(
+    {
+      is_done: true,
+    },
+    {
+      where: { chapter_id: chapter_id, username: username },
+    }
+  );
   const course = await Course_User.findOne({
     where: {
       username: username,
@@ -107,14 +115,6 @@ router.post('/exp', async (req, res) => {
     is_done = true;
   }
 
-  await Chapter_User.update(
-    {
-      is_done: true,
-    },
-    {
-      where: { chapter_id: chapter_id, username: username },
-    }
-  );
   await Course_User.update(
     {
       total_exp: course.total_exp + exp,

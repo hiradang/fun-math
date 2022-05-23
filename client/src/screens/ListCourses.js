@@ -20,8 +20,6 @@ import ConfirmModal from '../utils/ConfirmModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentCourseName, setCurrentCourseId } from '../redux/actions';
 
-
-
 export default function ListCourses({ navigation, route }) {
   const { currentCourseName, username } = useSelector((state) => state.taskReducer);
   const dispatch = useDispatch();
@@ -78,6 +76,7 @@ export default function ListCourses({ navigation, route }) {
 
           // RES2
           const tempAllCourses = res2.data.map((course) => {
+            console.log('res2', course);
             return {
               course_name: course.course_name,
               course_id: course.course_id,

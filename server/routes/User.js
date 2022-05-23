@@ -56,23 +56,23 @@ router.post('/', async (req, res) => {
         total_exp: 0,
         profile_photo_path: defaultProfilePath,
       });
-      Course_User.create({
-        course_id: 1,
-        username: username,
-        current_chapter: 0,
-        question_all_count: 100,
-        question_learnt_count: 0,
-        is_done: false,
-        total_exp: 0,
-      });
-      const listChapter = await Chapter.findAll({ where: { course_id: 1 } });
-      for (let i = 0; i < listChapter.length; i++) {
-        await Chapter_User.create({
-          chapter_id: listChapter[i].chapter_id,
-          username: username,
-          is_done: false,
-        });
-      }
+      // Course_User.create({
+      //   course_id: 1,
+      //   username: username,
+      //   current_chapter: 0,
+      //   question_all_count: 100,
+      //   question_learnt_count: 0,
+      //   is_done: false,
+      //   total_exp: 0,
+      // });
+      // const listChapter = await Chapter.findAll({ where: { course_id: 1 } });
+      // for (let i = 0; i < listChapter.length; i++) {
+      //   await Chapter_User.create({
+      //     chapter_id: listChapter[i].chapter_id,
+      //     username: username,
+      //     is_done: false,
+      //   });
+      // }
     });
     res.json('SUCCESS');
   }
@@ -135,9 +135,12 @@ router.post('/update', async (req, res) => {
 
 // Get exp of all user
 router.get('/getExp', async (req, res) => {
-  const allUserExp = await User.findAll({
-    attributes: ['username', 'name', 'profile_photo_path', 'total_exp'],
-  });
+  const allUserExp = await User.findAll(
+    {
+      attributes: ['username', 'name', 'profile_photo_path', 'total_exp'],
+    },
+    { where: { role_id: '0' } }
+  );
   res.json(allUserExp);
 });
 
