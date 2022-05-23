@@ -6,7 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import Toast from 'react-native-toast-message';
 
 import { Provider } from 'react-redux';
@@ -285,15 +284,6 @@ const App = () => {
           <Stack.Screen
             name="Tài khoản"
             options={({ navigation }) => ({
-              headerLeft: () => (
-                <AntDesign
-                  name="arrowleft"
-                  size={30}
-                  style={{ marginLeft: 20 }}
-                  color="black"
-                  onPress={() => navigation.goBack()}
-                />
-              ),
               headerRight: () => (
                 <AntDesign
                   name="setting"
@@ -310,15 +300,6 @@ const App = () => {
           <Stack.Screen
             name="Cài đặt"
             options={({ navigation }) => ({
-              headerLeft: () => (
-                <AntDesign
-                  name="arrowleft"
-                  size={30}
-                  style={{ marginLeft: 20 }}
-                  color="black"
-                  onPress={() => navigation.goBack()}
-                />
-              ),
               ...HeaderStyles,
             })}
             component={Setting}
@@ -326,39 +307,11 @@ const App = () => {
           <Stack.Screen
             name="Chỉnh sửa mật khẩu"
             options={({ navigation }) => ({
-              headerLeft: () => (
-                <AntDesign
-                  name="arrowleft"
-                  size={30}
-                  style={{ marginLeft: 20 }}
-                  color="black"
-                  onPress={() => navigation.goBack()}
-                />
-              ),
+              ...HeaderStyles,
             })}
             component={EditPass}
           />
-          <Stack.Screen
-            name="Chỉnh sửa tài khoản"
-            options={({ navigation, route }) => ({
-              headerLeft: () => (
-                <AntDesign
-                  name="arrowleft"
-                  size={30}
-                  style={{ marginLeft: 20 }}
-                  color="black"
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                />
-              ),
-              // headerRight: () => (
-              //   <Feather name="check" size={30} style={{ marginRight: 20 }} color="black" />
-              // ),
-              // ...HeaderStyles,
-            })}
-            component={EditProfile}
-          />
+          <Stack.Screen name="Chỉnh sửa tài khoản" options={() => ({})} component={EditProfile} />
         </Stack.Navigator>
         <Toast config={toastConfig} />
       </NavigationContainer>

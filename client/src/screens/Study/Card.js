@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: Dimensions.get('window').width * 0.4,
-    height: Dimensions.get('window').height * 0.13,
+    height: Dimensions.get('window').height * 0.11,
     marginRight: '5%',
     marginLeft: '5%',
     marginBottom: 15,
@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'black',
-    fontSize: 35,
+    fontSize: 24,
+    fontWeight: '500',
   },
 });
 export default Card;

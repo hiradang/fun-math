@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 
 import Tutorial from './Study/Tutorial';
 import MultipleChoice from './Study/MultipleChoice';
 import TypeFormat from './Study/TypeFormat';
+
+const { width, height } = Dimensions.get('screen');
 
 function Lesson({ navigation, route }) {
   const [listQuestion, setListQuestion] = useState([]);
@@ -16,6 +18,7 @@ function Lesson({ navigation, route }) {
   const {chapter_id, isDone} = route.params;
   const [indexQuestion, setIndexQuestion] = useState(0);
   const { username, currentCourseId } = useSelector((state) => state.taskReducer);
+
   useEffect(() => {
     axios
       .get(`${Config.API_URL}/questions/${chapter_id}`)
@@ -25,6 +28,7 @@ function Lesson({ navigation, route }) {
       })
       .catch((e) => console.log(e));
   }, []);
+
   const exit = () => {
     Alert.alert(
       'Thoát phiên học',
@@ -49,10 +53,10 @@ function Lesson({ navigation, route }) {
   return (
     <View style={styles.body}>
       <View style={styles.header}>
-        <FontAwesome
+        <AntDesign
           name="close"
-          size={30}
-          style={{ marginLeft: 10 }}
+          size={28}
+          style={{ marginLeft: 16 }}
           color="black"
           onPress={exit}
         />
@@ -99,34 +103,31 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     backgroundColor: '#3D67FF',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // flexDirection: 'column',
   },
   header: {
-    backgroundColor: 'white',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
     width: '100%',
+    height: height * 0.07,
     borderBottomColor: '#DDDDDD',
     borderBottomWidth: 3,
-    justifyContent: 'space-between',
   },
   score: {
     borderRadius: 50,
-    width: '25%',
-    height: 40,
-    borderColor: '#DDDDDD',
-    borderWidth: 2,
+    width: '24%',
+    height: 36,
     marginRight: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#E4E4E4',
   },
   textScore: {
     color: 'black',
     fontSize: 20,
-    // fontWeight: 40
+    fontWeight: '600',
   },
 });
 export default Lesson;

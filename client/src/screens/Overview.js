@@ -15,41 +15,44 @@ export default function Overview({ navigation }) {
 
   const [currentProgress, setCurrentProgress] = useState({});
   const [dataExp, setDataExp] = useState([]);
+
   useEffect(() => {
-    axios
-      .all([
-        axios.post(`${Config.API_URL}/course_user`, {
-          username: username,
-          courseId: currentCourseId,
-        }),
-        axios.get(`${Config.API_URL}/course_user/courseId/${currentCourseId}`),
-      ])
-      .then(
-        axios.spread((res1, res2) => {
-          const course = res1.data;
-          const temp = {
-            currentExp: course.total_exp,
-            currentChapter: course.current_chapter,
-            currentChapterName: course.Chapter.chapter_name,
-            questionAllCount: course.Course.question_all_count,
-            questionLearntCount: course.question_learnt_count,
-            isDone: course.is_done,
-          };
-
-          setCurrentProgress(temp);
-
-          // Res2
-          let temp2 = res2.data.map((user) => {
-            return {
-              url: user.User.profile_photo_path,
-              exp: user.total_exp,
-              userName: user.username,
-              name: user.User.name,
+    navigation.addListener('focus', () => {
+      axios
+        .all([
+          axios.post(`${Config.API_URL}/course_user`, {
+            username: username,
+            courseId: currentCourseId,
+          }),
+          axios.get(`${Config.API_URL}/course_user/courseId/${currentCourseId}`),
+        ])
+        .then(
+          axios.spread((res1, res2) => {
+            const course = res1.data;
+            const temp = {
+              currentExp: course.total_exp,
+              currentChapter: course.current_chapter,
+              currentChapterName: course.Chapter.chapter_name,
+              questionAllCount: course.Course.question_all_count,
+              questionLearntCount: course.question_learnt_count,
+              isDone: course.is_done,
             };
-          });
-          setDataExp(temp2);
-        })
-      );
+
+            setCurrentProgress(temp);
+
+            // Res2
+            let temp2 = res2.data.map((user) => {
+              return {
+                url: user.User.profile_photo_path,
+                exp: user.total_exp,
+                userName: user.username,
+                name: user.User.name,
+              };
+            });
+            setDataExp(temp2);
+          })
+        );
+    });
   }, [currentCourseId, navigation]);
   return (
     <View style={styles.container}>
@@ -126,7 +129,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {dataExp ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
+      {dataExp.length ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
     </View>
   );
 }
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   },
   progress: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: 'black',
   },
   crLesson: {

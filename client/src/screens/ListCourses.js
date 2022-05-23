@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   Modal,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -152,7 +151,7 @@ export default function ListCourses({ navigation, route }) {
           <View>
             {course.hasJoined ? (
               <CustomButton
-                buttonStyles={{ backgroundColor: '#555', width: 150, height: 50 }}
+                buttonStyles={{ backgroundColor: '#555', width: 140, height: 46 }}
                 textStyles={{ color: 'white', fontSize: 14 }}
                 text="Đã tham gia"
                 onPressFunc={() => {
@@ -208,7 +207,7 @@ export default function ListCourses({ navigation, route }) {
               <Text style={styles.modalHeaderText}>Tất cả các khóa học</Text>
               <AntDesign
                 name="down"
-                size={32}
+                size={24}
                 color="#CBD6FF"
                 onPress={() => setShowModal(false)}
               />
@@ -247,7 +246,7 @@ export default function ListCourses({ navigation, route }) {
 
       <View style={styles.buttonContainer}>
         <CustomButton
-          buttonStyles={{ backgroundColor: '#000000', width: 200, height: 60, marginTop: 20 }}
+          buttonStyles={{ backgroundColor: 'black', width: 200, height: 60, marginTop: 20 }}
           textStyles={{ color: 'white' }}
           text={'Xem thêm'}
           onPressFunc={() => setShowModal(true)}
@@ -325,7 +324,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     width: '100%',
     height: '74%',
-    borderColor: '#000',
+    borderColor: '#333333',
     borderWidth: 1,
   },
   modalHeader: {
@@ -333,10 +332,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 30,
+    marginBottom: 10,
   },
   modalHeaderText: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#CBD6FF',
     fontWeight: '600',
   },
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   },
   nameCourseModal: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: 'black',
     minWidth: 150,
   },

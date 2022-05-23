@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height * 0.05,
   },
   text: {
-    fontSize: 36,
+    fontSize: 32,
     color: '#ffffff',
     marginTop: 10,
     marginLeft: 20,

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Config from 'react-native-config';
 import Toast from 'react-native-toast-message';
@@ -9,7 +8,6 @@ import CustomButton from '../../utils/CustomButton';
 import Card from './Card';
 import NumberBox from './NumberBox';
 import SignBox from './SignBox';
-
 const { width, height } = Dimensions.get('window');
 
 function MultipleChoice(props) {
@@ -79,7 +77,7 @@ function MultipleChoice(props) {
       <View style={styles.image}>
         <Image
           source={{ uri: urlImage }}
-          style={{ width: 400, height: 250 }}
+          style={{ width: width, height: height * 0.28 }}
           resizeMode="contain"
         ></Image>
       </View>
@@ -110,10 +108,7 @@ function MultipleChoice(props) {
       {data && (
         <View style={{ flex: 1, justifyContent: 'flex-start' }}>
           <CustomButton
-            // buttonStyles={styles.button}
             textStyles={{ color: 'white' }}
-            // pos="right"
-            // iconName="next"
             buttonStyles={idSelect !== null ? styles.buttonStyles : styles.buttonStylesDisabled}
             text={checkAnswer ? 'Tiếp tục' : 'Trả lời'}
             onPressFunc={nextQuestion}
@@ -131,31 +126,42 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    backgroundColor: '#2662BB',
+    display: 'flex',
     justifyContent: 'center',
+
     width: '100%',
+    height: 70,
+    paddingHorizontal: 20,
+    backgroundColor: '#2662BB',
   },
   container: {
-    marginTop: '5%',
+    marginBottom: '5%',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   text: {
-    color: 'white',
     fontSize: 20,
-    padding: 10,
+    color: 'white',
+    fontWeight: '600',
   },
+  image: {},
   question: {
+    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+
+    width: width * 0.8,
+    marginHorizontal: width * 0.1,
+    marginVertical: width * 0.08,
   },
   button: {
-    backgroundColor: '#000000',
+    backgroundColor: 'black',
     width: 200,
     height: 60,
   },
   buttonStyles: {
-    backgroundColor: '#000000',
+    backgroundColor: 'black',
     width: 200,
     height: 60,
   },

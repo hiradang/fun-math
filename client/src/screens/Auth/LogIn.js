@@ -64,6 +64,9 @@ function LogIn({ navigation }) {
               currentCourseId: res.data.current_course_id,
               profilePhotoPath: res.data.profile_photo_path,
               totalExp: res.data.tota_exp,
+              isNewCourseNoti: res.data.is_new_course_noti,
+              isNewChapterNoti: res.data.is_new_chapter_noti,
+              reminderTime: res.data.reminder_time,
             })
           ).then(() => {
             if (res.data.role_id === '0') navigation.replace('Home')
@@ -88,7 +91,7 @@ function LogIn({ navigation }) {
             navigation.goBack();
           }}
         >
-          <Ionicons name="chevron-back" size={25} color="#ffffff" />
+          <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
         <View style={styles.container}>
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height * 0.1,
   },
   text: {
-    fontSize: 36,
+    fontSize: 32,
     color: '#ffffff',
     marginTop: 10,
     marginLeft: 20,

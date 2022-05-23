@@ -1,46 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Pressable } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import React from 'react';
+import { View, Text, Dimensions,  } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
-import CustomButton from '../../utils/CustomButton';
 
 function SignBox(props) {
-  var item = '';
-  if (props.item === '-') item = '–';
-  if (props.item === 'x') item = '✕';
-  if (props.item === ':') item = '÷';
-  else item = props.item;
+  const item = props.item;
+  if (item === '-') item = '–';
+  if (item === 'x') item = '✕';
+  if (item === ':') item = '÷';
   return (
-    <Pressable style={[styles.body]}>
-      <View>
-        <Text style={styles.text}>{item}</Text>
-      </View>
-    </Pressable>
+    <View
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        backgroundColor: '#424D73',
+        borderRadius: 5,
+        width: width * 0.1,
+        height: height * 0.05,
+      }}
+    >
+      <Text
+        style={{
+          color: 'white',
+          fontSize: 24,
+          fontWeight: '500',
+        }}
+      >
+        {item}
+      </Text>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  body: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 42,
-    height: 34,
-    marginTop: '5%',
-    marginRight: '2%',
-    marginLeft: '3%',
-    borderRadius: 5,
-    backgroundColor: '#424D73',
-  },
-  title: {
-    //   flex: 1,
-    backgroundColor: '#2662BB',
-    justifyContent: 'center',
-    height: 70,
-    width: '100%',
-  },
-  text: {
-    color: 'white',
-    fontSize: 25,
-  },
-});
+
 export default SignBox;

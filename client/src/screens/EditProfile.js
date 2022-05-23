@@ -6,21 +6,11 @@ import { setProfilePhotoPath } from '../redux/actions';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import Config from 'react-native-config';
-import Feather from 'react-native-vector-icons/Feather';
 import ImagePicker from 'react-native-image-crop-picker';
 import Storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
 import CustomButton from '../utils/CustomButton';
-
-/*
-  0.1. Viết API để người dùng join khóa học --> done
-   -> Q: Số lượng câu hỏi trong mỗi khóa học
-  1. Làm thông báo ?? Firebase ???
-  2. Lưu các biến boolean ở trên vào Async Storage. (thông báo, nhắc nhở,...)
-  3. Làm trang tài khoản, số ngày học, khóa học, điểm tích lũy (done), phép tính,........
-  4. Xử lý khi toggle ở nhắc nhở được mở hay tắt -> hiển thị thời gian và ngày cho phù hợp.
-*/
 
 function EditProfile() {
   const { username, name, profilePhotoPath } = useSelector((state) => state.taskReducer);
@@ -180,6 +170,9 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderRadius: 125,
+
+    borderWidth: 1,
+    borderColor: '#CCD4F3',
   },
   editIconContainer: {
     backgroundColor: 'white',
@@ -198,7 +191,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   title: {
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '500',
     color: 'white',
   },
   inputContainer: {
@@ -215,11 +209,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     backgroundColor: 'white',
+    fontSize: 20,
     borderRadius: 20,
     paddingHorizontal: 60,
   },
   saveButton: {
-    // backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

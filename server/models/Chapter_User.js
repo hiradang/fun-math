@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+  }, {
+    timestamps: false
   });
   Chapter_User.associate = (models) => {
     Chapter_User.belongsTo(models.Chapter, {

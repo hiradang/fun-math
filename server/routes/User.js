@@ -33,6 +33,9 @@ router.post('/login', async (req, res) => {
           current_course_name: user.Course.course_name,
           profile_photo_path: user.profile_photo_path,
           total_exp: user.total_exp,
+          is_new_course_noti: user.is_new_course_noti,
+          is_new_chapter_noti: user.is_new_chapter_noti,
+          reminder_time: user.reminder_time,
         });
       }
     });
@@ -55,6 +58,8 @@ router.post('/', async (req, res) => {
         current_course_id: 1,
         total_exp: 0,
         profile_photo_path: defaultProfilePath,
+        is_new_course_noti: false,
+        is_new_chapter_noti: false,
       });
       // Course_User.create({
       //   course_id: 1,
@@ -117,7 +122,15 @@ router.post('/changePass', async (req, res) => {
 
 // Update user info
 router.post('/update', async (req, res) => {
-  const { username, password, name, profilePhotoPath } = req.body;
+  const {
+    username,
+    password,
+    name,
+    profilePhotoPath,
+    isNewCourseNoti,
+    isNewChapterNoti,
+    reminderTime,
+  } = req.body;
   const updateQuery = {};
   if (password) {
     await bcrypt.hash(password, 10).then((hash) => {
@@ -130,7 +143,15 @@ router.post('/update', async (req, res) => {
   if (profilePhotoPath) {
     updateQuery['profile_photo_path'] = profilePhotoPath;
   }
+  if (isNewCourseNoti !== null) {
+    updateQuery['is_new_course_noti'] = isNewCourseNoti;
+  }
+  if (isNewChapterNoti !== null) {
+    updateQuery['is_new_chapter_noti'] = isNewChapterNoti;
+  }
+  updateQuery['reminder_time'] = reminderTime;
   User.update(updateQuery, { where: { username: username } });
+  res.json('OK');
 });
 
 // Get exp of all user

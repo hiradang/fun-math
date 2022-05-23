@@ -15,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Config from 'react-native-config';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import { triggerNotification } from '../../utils/notification/RNFireBaseNotification';
 
 import EditModal from './Add/EditModal';
 
@@ -70,6 +71,13 @@ export default function ListChapterAdmin({ navigation, route }) {
             totalLesson: 0,
           };
           setListChapter([...listChapter, newChapter]);
+
+          // push notification to users who has subscribed to the topic
+          triggerNotification({
+            topic: 'new-chapter',
+            courseName: courseName,
+            chapterName: res.data.chapter_name,
+          });
         }
       });
     setShowAddChapterModal(false);
@@ -100,6 +108,22 @@ export default function ListChapterAdmin({ navigation, route }) {
     });
     setShowEditNameModal(false);
   };
+
+  const renderItem = ({ item, index, drag, isActive }) => (
+    <TouchableOpacity style={styles.chapter}>
+      <View style={styles.courseIconWrapper}>
+        <AntDesign name="staro" size={35} color="#333333" />
+      </View>
+      <View style={styles.nameAndLesson}>
+        <Text style={styles.nameChapter} numberOfLines={1}>
+          {item.name}
+        </Text>
+        <Text style={styles.lessonChapter} numberOfLines={1}>
+          Tổng số phép tính: {item.totalLesson ? item.totalLesson : 0}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>

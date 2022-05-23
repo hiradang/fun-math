@@ -11,6 +11,11 @@ import {
   setProfilePhotoPath,
   setTotalExp,
 } from '../redux/actions';
+import { createChannel } from '../utils/notification/PushNotification';
+import {
+  setBackgroundMessageHandler,
+  onMessage,
+} from '../utils/notification/RNFireBaseNotification';
 
 function Splash({ navigation }) {
   const dispatch = useDispatch();
@@ -27,11 +32,16 @@ function Splash({ navigation }) {
           dispatch(setName(data.name));
           dispatch(setProfilePhotoPath(data.profilePhotoPath));
           dispatch(setTotalExp(data.totalExp));
-          console.log(data.role)
-          if (data.role === '0') navigation.replace('Home')
-          else navigation.replace('CourseAdmin')
+          if (data.role === '0') navigation.replace('Home');
+          else navigation.replace('CourseAdmin');
         }
       });
+
+      // Notification
+      // Create a channel for react-native-push-notification
+      createChannel();
+      // Handle background actions for firebase remote notification
+      setBackgroundMessageHandler();
     }, 2000);
   }, []);
   return (

@@ -33,14 +33,13 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
     marginLeft: 20,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   row: {
     height: 50,
     flexDirection: 'row',
   },
   input: {
-    // width: '280',
     width: '75%',
     height: 50,
     backgroundColor: '#ffffff',

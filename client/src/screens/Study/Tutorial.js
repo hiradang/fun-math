@@ -16,17 +16,21 @@ function Tutorial(props) {
   return (
     <View style={styles.body}>
       <View style={styles.title}>
-        <Text style={styles.text}>{props.indexQuestion}/{props.totalLesson} phép tính đã học</Text>
+        <Text style={styles.text}>
+          {props.indexQuestion}/{props.totalLesson} phép tính đã học
+        </Text>
       </View>
       <View style={styles.container}>
-        <Image source={{ uri: urlImage }} style={{width: 400, height: 400}} resizeMode="contain"></Image>
+        <Image
+          source={{ uri: urlImage }}
+          style={{ width: 400, height: 400 }}
+          resizeMode="contain"
+        ></Image>
       </View>
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <CustomButton
           buttonStyles={styles.button}
           textStyles={{ color: 'white' }}
-          // pos="right"
-          // iconName="next"
           text={'Tiếp tục'}
           onPressFunc={() => props.changeTypeQuestion()}
         />
@@ -40,26 +44,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // flexDirection: 'column',
   },
   title: {
-    //   flex: 1,
     backgroundColor: '#2662BB',
     justifyContent: 'center',
     height: 70,
+    paddingHorizontal: 20,
     width: '100%',
+  },
+  text: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '600',
   },
   container: {
     flex: 5,
     marginTop: '20%',
-  },
-  text: {
-    color: 'white',
-
-    fontSize: 20,
-    paddingLeft: 20,
   },
   button: {
     backgroundColor: '#000000',

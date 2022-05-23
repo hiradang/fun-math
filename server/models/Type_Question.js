@@ -1,31 +1,37 @@
 module.exports = (sequelize, DataTypes) => {
-  const Type_Question = sequelize.define('Type_Question', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+  const Type_Question = sequelize.define(
+    'Type_Question',
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      question_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      question: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      correct_answer: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      format_question: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      question_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
-    question_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    question: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    correct_answer: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    format_question: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    question_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  });
+    {
+      timestamps: false,
+    }
+  );
   Type_Question.associate = (models) => {
     Type_Question.belongsTo(models.Question, {
       onDelete: 'cascade',

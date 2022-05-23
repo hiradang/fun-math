@@ -1,5 +1,40 @@
 use funmath;
 
+-- trigger
+CREATE TRIGGER `update_exp` AFTER UPDATE ON `course_users`
+ FOR EACH ROW UPDATE users SET total_exp = total_exp + new.total_exp - old.total_exp WHERE username = new.username;
+
+CREATE TRIGGER `addQuestion` AFTER INSERT ON `questions` FOR EACH ROW UPDATE chapters 
+SET question_all_count = question_all_count + 1 WHERE chapter_id = new.chapter_id;
+
+CREATE TRIGGER `addQuestionCourse` AFTER UPDATE ON `chapters` FOR EACH ROW UPDATE courses 
+SET question_all_count = question_all_count + new.question_all_count - old.question_all_count 
+WHERE course_id = new.course_id;
+
+CREATE TRIGGER `deleteQuestion` AFTER DELETE ON `questions` FOR EACH ROW UPDATE chapters 
+SET question_all_count = question_all_count - 1 WHERE chapter_id = old.chapter_id;
+
+CREATE TRIGGER `deleteChapter_user` AFTER DELETE ON `chapters`
+ FOR EACH ROW DELETE from chapter_users WHERE chapter_id = old.chapter_id;
+
+ CREATE TRIGGER `deleteChapter` AFTER DELETE ON `chapters`
+ FOR EACH ROW DELETE from questions WHERE chapter_id = old.chapter_id;
+
+ CREATE TRIGGER `deleteMultiChoice` AFTER DELETE ON `questions`
+ FOR EACH ROW DELETE from multichoice_questions WHERE question_id = old.question_id;
+
+ CREATE TRIGGER `deleteTypeQuestion` AFTER DELETE ON `questions`
+ FOR EACH ROW DELETE from type_questions WHERE question_id = old.question_id;
+
+ CREATE TRIGGER `deleteCourse` AFTER DELETE ON `courses`
+ FOR EACH ROW DELETE from chapters WHERE course_id = old.course_id;
+
+ CREATE TRIGGER `deleteCourse_User` AFTER UPDATE ON `courses`
+ FOR EACH ROW DELETE from course_users WHERE course_id = old.course_id;
+
+ CREATE TRIGGER `insertChapter` AFTER INSERT ON `chapters`
+ FOR EACH ROW UPDATE course_users set is_done = 0 WHERE course_id = new.course_id;
+
 -- Course
 INSERT INTO courses (course_id, course_name, question_all_count)
 VALUES (1, "Phép cộng", 0);
@@ -20,83 +55,58 @@ VALUES (1, "Chương 1", 5, 1);
 INSERT INTO chapters (chapter_id, chapter_name, question_all_count, course_id)
 VALUES (2, "Chương 2", 0, 1);
 
-INSERT INTO chapters (chapter_id, chapter_name, question_all_count, course_id)
-VALUES (3, "Chương 3", 0, 1);
-
-INSERT INTO chapters (chapter_id, chapter_name, question_all_count, course_id)
-VALUES (4, "Chương 4", 0, 1);
-
-INSERT INTO chapters (chapter_id, chapter_name, question_all_count, course_id)
-VALUES (5, "Chương 5", 0, 1);
 
 -- User
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("binhdang", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Đặng Thị Bình", 
-"https://png.pngtree.com/png-clipart/20201223/ourlarge/pngtree-cat-technology-sense-cat-avatar-png-image_2591263.jpg", 
-"Phép cộng", 1, 1000);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/binhdang?alt=media&token=5f798c1f-4e0c-478d-bb35-1e7af7e9b416", 
+ 1,0, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("loanbui", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Bùi Thị Út Loan", 
-"https://thumbs.dreamstime.com/b/rottweiler-198912637.jpg", 
-"Phép cộng", 1, 100);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/loanbui?alt=media&token=d9f39c37-dc5a-4c54-96e0-7112c207fb80", 
+ 1, 0, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("maihoa", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Đặng Thị Thanh Hoa", 
-"https://thumbs.dreamstime.com/b/giraffe-avatar-wearing-suit-illustration-cartoon-45383618.jpg", 
-"Phép cộng", 1, 200);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/maihoa?alt=media&token=4f162103-a54d-4142-ae02-c10ba03c6b8b", 
+ 1, 0, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("maihuy", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Trịnh Mai Huy", 
-"https://png.pngtree.com/png-vector/20191027/ourlarge/pngtree-cute-tiger-avatar-with-a-yellow-background-png-image_1873462.jpg", 
-"Phép cộng", 1, 400);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/defaultProfileImage.png?alt=media&token=790800d6-aac7-4359-a541-e73b3348e3cb", 
+ 1, 0, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
 VALUES ("minhhuong", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 0, "Lê Minh Hương", 
-"https://allimages.sgp1.digitaloceanspaces.com/tipeduvn/2022/02/50-Anh-Meo-Cute-Ngau-Hinh-Avatar-Meo-De-Thuong.jpg", 
-"Phép cộng", 1, 500);
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/minhhuong?alt=media&token=8093454e-5977-4271-b43d-9d89ccabb4e7", 
+ 1, 0, false, false);
 
-INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp)
-VALUES ("admin", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", 1, "Admin", 
-"https://thumbs.dreamstime.com/b/rottweiler-198912637.jpg", 
-"Phép cộng", 1, 100);
+INSERT INTO users (username, password, role_id, name, profile_photo_path, current_course_id, total_exp, is_new_course_noti, is_new_chapter_noti)
+VALUES ("admin", "$2b$10$oBJRzu3lSpfo0m711zMGgeeJF3g/CbEHS.dY0IbyqYtMFUvMzAKXy", "1", "Admin", 
+"https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/defaultProfileImage.png?alt=media&token=790800d6-aac7-4359-a541-e73b3348e3cb", 
+ 1, 0, false, false);
 
 
 -- Chapter_User
 
 INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (1, true, "binhdang");
+VALUES (1, false, "binhdang");
 
 INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (2, true, "binhdang");
+VALUES (2, false, "binhdang");
 
 INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (3, false, "binhdang");
-
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (4, false, "binhdang");
-
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (5, false, "binhdang");
-
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (1, true, "loanbui");
+VALUES (1, false, "loanbui");
 
 INSERT INTO chapter_users (chapter_id, is_done, username)
 VALUES (2, false, "loanbui");
 
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (3, false, "loanbui");
-
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (4, false, "loanbui");
-
-INSERT INTO chapter_users (chapter_id, is_done, username)
-VALUES (5, false, "loanbui");
 
 -- Course_User
 INSERT INTO course_users (course_id, username, current_chapter, question_learnt_count, is_done, total_exp)
-VALUES (1, "binhdang", 1, 10, False, 10);
+VALUES (1, "binhdang", 1, 0, False, 0);
 
 INSERT INTO course_users (course_id, username, current_chapter, question_learnt_count, is_done, total_exp)
 VALUES (2, "binhdang", 1, 0, False, 0);
@@ -108,7 +118,7 @@ INSERT INTO course_users (course_id, username, current_chapter, question_learnt_
 VALUES (4, "binhdang", 1, 0, False, 0);
 
 INSERT INTO course_users (course_id, username, current_chapter, question_learnt_count, is_done, total_exp)
-VALUES (1, "loanbui", 1, 10, False, 0);
+VALUES (1, "loanbui", 1, 0, False, 0);
 
 INSERT INTO course_users (course_id, username, current_chapter, question_learnt_count, is_done, total_exp)
 VALUES (2, "loanbui", 1, 0, False, 0);
@@ -151,7 +161,7 @@ insert into multichoice_questions (question, correct_answer, answers, format_que
 
 insert into multichoice_questions (question, correct_answer, answers, format_question, question_image,question_id) values ("Điền số nấm còn thiếu giúp bạn chó nhé!", 1, "1,2,3,0", "4+?=5", 'https://firebasestorage.googleapis.com/v0/b/funmath-80422.appspot.com/o/4%20%2B%201%20%3D%205%20-%20Question.png?alt=media&token=5c228a06-4874-4231-ab47-37429c2d6470',8);
 
---type question
+-- type question
 
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Loan có 1 cái kẹo, Bình cho Loan thêm 1 cái nữa. Hỏi Loan có mấy cái kẹo?', '1', '1+?=2', 'Đọc và hoàn thành phép toán', 1);
 
@@ -169,37 +179,3 @@ INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `
 
 INSERT INTO `type_questions`( `question`, `correct_answer`, `format_question`, `question_name` ,`question_id`) VALUES ('Huy có 4 cái kẹo, Bình cho Huy thêm 1 cái nữa. Hỏi Huy có mấy cái kẹo?', '4,5', '?+1=?', 'Đọc và hoàn thành phép toán', 8);
 
---trigger update_exp
-CREATE TRIGGER `update_exp` AFTER UPDATE ON `course_users`
- FOR EACH ROW UPDATE users SET total_exp = total_exp + new.total_exp - old.total_exp WHERE username = new.username
-
-CREATE TRIGGER `addQuestion` AFTER INSERT ON `questions` FOR EACH ROW UPDATE chapters 
-SET question_all_count = question_all_count + 1 WHERE chapter_id = new.chapter_id
-
-CREATE TRIGGER `addQuestionCourse` AFTER UPDATE ON `chapters` FOR EACH ROW UPDATE courses 
-SET question_all_count = question_all_count + new.question_all_count - old.question_all_count 
-WHERE course_id = new.course_id
-
-CREATE TRIGGER `deleteQuestion` AFTER DELETE ON `questions` FOR EACH ROW UPDATE chapters 
-SET question_all_count = question_all_count - 1 WHERE chapter_id = old.chapter_id
-
-CREATE TRIGGER `deleteChapter_user` AFTER DELETE ON `chapters`
- FOR EACH ROW DELETE from chapter_users WHERE chapter_id = old.chapter_id
-
- CREATE TRIGGER `deleteChapter` AFTER DELETE ON `chapters`
- FOR EACH ROW DELETE from questions WHERE chapter_id = old.chapter_id
-
- CREATE TRIGGER `deleteMultiChoice` AFTER DELETE ON `questions`
- FOR EACH ROW DELETE from multichoice_questions WHERE question_id = old.question_id
-
- CREATE TRIGGER `deleteTypeQuestion` AFTER DELETE ON `questions`
- FOR EACH ROW DELETE from type_questions WHERE question_id = old.question_id
-
- CREATE TRIGGER `deleteCourse` AFTER DELETE ON `courses`
- FOR EACH ROW DELETE from chapters WHERE course_id = old.course_id
-
- CREATE TRIGGER `deleteCourse_User` AFTER UPDATE ON `courses`
- FOR EACH ROW DELETE from course_users WHERE course_id = old.course_id
-
- CREATE TRIGGER `insertChapter` AFTER INSERT ON `chapters`
- FOR EACH ROW UPDATE course_users set is_done = 0 WHERE course_id = new.course_id
