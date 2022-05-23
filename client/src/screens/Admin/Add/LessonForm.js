@@ -6,48 +6,11 @@ import RNFS from 'react-native-fs';
 
 import CustomButton from '../../../utils/CustomButton';
 import Toast from 'react-native-toast-message';
+import { isVietnamese, isFormatQuestion, isAnswers, isNumber } from '../../../utils/ValidateForm';
 
 const { width, height } = Dimensions.get('window');
-function removeVietnameseTones(str) {
-  if (str === null || str === undefined) return str;
-  str = str.toLowerCase();
-  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
-  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
-  str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
-  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
-  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
-  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
-  str = str.replace(/đ/g, 'd');
-  return str;
-}
-function isVietnamese(str) {
-  var re = /^[a-zA-Z0-9!%?)( +=:,.-]{2,}$/g; // regex here
-  return re.test(removeVietnameseTones(str));
-}
-
-function isFormatQuestion(str) {
-  var re = /^[x0-9?)(+=:-]{2,}$/g; // regex here
-  return re.test(str);
-}
-
-function isAnswers(str) {
-  var re = /^[0-9)(,]{2,}$/g; // regex here
-  return re.test(str);
-}
-
-function isNumber(str) {
-  var reg = /^\d+$/;
-  return reg.test(str);
-}
 
 export default function LessonForm({ submitCourseFunction, data }) {
-  // Form này dùng cho cả add và edit nếu add thì
-  // objId gồm 3 cái id khóa học, chương và bài học muốn sửa
-  // ko cần lấy ID để fetch data => Nếu là màn hình thêm mới bài học sẽ ko truyền objId
-  // nếu nta edit thì sẽ truyền, nên nếu objId ko truyền gì thì Loan mấy cái state dưới này cứ để trống như t đang để
-  // Còn nếu có objId thì phải fetch data rồi cho vào các state
-  // Hơi phắc tạp 1 tí nma t đã cố gắng làm có thể để 1 cái dùng cho 2 nơi :<
-  // お願いします
 
   // state cho question name
   const [question, setQuestion] = useState({
@@ -55,9 +18,6 @@ export default function LessonForm({ submitCourseFunction, data }) {
     question_image: data ? data.question.question_image : '',
   });
 
-  // state cho img
-  // cái này t mới cho giao diện 1 chỗ để render và 1 button để load ảnh lên
-  // Loan làm thì xem lưu state cái ảnh như nào nhé
 
   // state cho trắc nghiệm
   const [multiChoice, setMultichoice] = useState({
@@ -121,8 +81,6 @@ export default function LessonForm({ submitCourseFunction, data }) {
     }
 
     if (question.question_name.length === 0) return false;
-
-    // chỗ này viết thêm if nữa, nếu chưa có ảnh cx trả về false luôn Loan nhé
 
     return true;
   };
