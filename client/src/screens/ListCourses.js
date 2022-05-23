@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -44,29 +38,35 @@ export default function ListCourses({ navigation, route }) {
       ])
       .then(
         axios.spread((res1, res2) => {
-          const courses = res1.data.map((course) => {
-            return {
-              course_id: course.course_id,
-              course_name: course.Course.course_name,
-              username: course.username,
-              current_chapter: course.current_chapter,
-              current_chapterName: course.Chapter.chapter_name,
-              question_all_count: course.Course.question_all_count,
-              question_learnt_count: course.question_learnt_count,
-              is_done: course.is_done,
-              total_exp: course.total_exp,
-            };
-          });
+          if (res1.data.length > 0) {
+            const courses = res1.data.map((course) => {
+              return {
+                course_id: course.course_id,
+                course_name: course.Course.course_name,
+                username: course.username,
+                current_chapter: course.current_chapter,
+                current_chapterName: course.Chapter.chapter_name,
+                question_all_count: course.Course.question_all_count,
+                question_learnt_count: course.question_learnt_count,
+                is_done: course.is_done,
+                total_exp: course.total_exp,
+              };
+            });
 
-          // Set selCourse
-          let tempSelCourse = courses.find((obj) => obj.course_name === currentCourseName);
-          setSelCourse(tempSelCourse);
+            // Set selCourse
+            let tempSelCourse = courses.find((obj) => obj.course_name === currentCourseName);
+            if (tempSelCourse !== undefined) setSelCourse(tempSelCourse);
+            else setSelCourse('');
 
-          // Set notAllowSelCourses
-          let tempNotAllowSelCourses = courses.filter(
-            (obj) => obj.course_name !== currentCourseName
-          );
-          setNotAllowSelCourses(tempNotAllowSelCourses);
+            // Set notAllowSelCourses
+            let tempNotAllowSelCourses = courses.filter(
+              (obj) => obj.course_name !== currentCourseName
+            );
+            setNotAllowSelCourses(tempNotAllowSelCourses);
+          } else {
+            setSelCourse('');
+            setNotAllowSelCourses([]);
+          }
 
           // Set Joined Courses Id
           let joinedCourseId = res1.data.map((course) => {
@@ -75,7 +75,6 @@ export default function ListCourses({ navigation, route }) {
 
           // RES2
           const tempAllCourses = res2.data.map((course) => {
-            console.log('res2', course);
             return {
               course_name: course.course_name,
               course_id: course.course_id,
@@ -235,8 +234,18 @@ export default function ListCourses({ navigation, route }) {
       ) : null}
 
       {/* Studying Course */}
-      <Text style={styles.selectedCourseTitle}>Khóa đang học</Text>
-      {renderCourse(selCourse)}
+      {selCourse !== '' ? (
+        <>
+          <Text style={styles.selectedCourseTitle}>Khóa đang học</Text>
+          {renderCourse(selCourse)}
+        </>
+      ) : (
+        <>
+          <Text style={styles.selectedCourseTitle}>Bạn chưa bắt đầu khóa học nào</Text>
+          <View style={{ height: 25, width: '100%' }}></View>
+        </>
+      )}
+
       {notAllowSelCourses.length > 0 ? (
         <>
           <Text style={styles.selectedCourseTitle}>Khóa khác đã tham gia</Text>

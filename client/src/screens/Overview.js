@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import Config from 'react-native-config';
 
@@ -13,11 +14,13 @@ export default function Overview({ navigation }) {
     (state) => state.taskReducer
   );
 
-  const [currentProgress, setCurrentProgress] = useState({});
+  console.log(currentCourseId, currentCourseName);
+
+  const [currentProgress, setCurrentProgress] = useState(null);
   const [dataExp, setDataExp] = useState([]);
 
-  useEffect(() => {
-    navigation.addListener('focus', () => {
+  useFocusEffect(
+    React.useCallback(() => {
       axios
         .all([
           axios.post(`${Config.API_URL}/course_user`, {
@@ -29,16 +32,18 @@ export default function Overview({ navigation }) {
         .then(
           axios.spread((res1, res2) => {
             const course = res1.data;
-            const temp = {
-              currentExp: course.total_exp,
-              currentChapter: course.current_chapter,
-              currentChapterName: course.Chapter.chapter_name,
-              questionAllCount: course.Course.question_all_count,
-              questionLearntCount: course.question_learnt_count,
-              isDone: course.is_done,
-            };
-
-            setCurrentProgress(temp);
+            if (course === null) setCurrentProgress('');
+            else {
+              const temp = {
+                currentExp: course.total_exp,
+                currentChapter: course.current_chapter,
+                currentChapterName: course.Chapter.chapter_name,
+                questionAllCount: course.Course.question_all_count,
+                questionLearntCount: course.question_learnt_count,
+                isDone: course.is_done,
+              };
+              setCurrentProgress(temp);
+            }
 
             // Res2
             let temp2 = res2.data.map((user) => {
@@ -52,73 +57,89 @@ export default function Overview({ navigation }) {
             setDataExp(temp2);
           })
         );
-    });
-  }, [currentCourseId, navigation]);
+    }, [currentCourseId])
+  );
+
   return (
     <View style={styles.container}>
-      {!currentProgress.isDone && currentProgress.questionLearntCount > 0 && (
-        <View style={styles.isNotDone}>
-          <View>
-            <Text style={styles.progress}>
-              Bài học tiếp theo: {currentProgress.currentChapterName}
-            </Text>
-            <Text style={styles.crLesson}>
-              Đã học {currentProgress.questionLearntCount}/{currentProgress.questionAllCount} phép
-              tính trong khóa học.
-            </Text>
-          </View>
-          <View style={styles.button}>
-            <CustomButton
-              text="Tiếp tục học"
-              buttonStyles={{
-                backgroundColor: 'black',
-                width: '90%',
-                height: 50,
-              }}
-              textStyles={{
-                color: 'white',
-              }}
-              onPressFunc={() =>
-                navigation.navigate('ListLesson', {
-                  currentChapter: currentProgress.currentChapterName,
-                  currentChapterId: currentProgress.currentChapter,
-                  isDone: false,
-                })
-              }
-            />
+      {currentProgress === '' && (
+        <View style={styles.isDone}>
+          <Text style={{ ...styles.progress, fontSize: 18 }}>
+            Bạn chưa tham gia khóa học nào!!!
+          </Text>
+          <View style={styles.isDoneIcon}>
+            <FontAwesome name="hand-o-right" size={40} color="black" />
+            <FontAwesome name="hand-o-left" size={40} color="black" />
           </View>
         </View>
       )}
-      {!currentProgress.isDone && currentProgress.questionLearntCount == 0 && (
-        <View style={styles.isNotDone}>
-          <View>
-            <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
-              Khám phá thế giới của {currentCourseName} ngay thôi nào!
-            </Text>
+      {currentProgress !== null &&
+        !currentProgress.isDone &&
+        currentProgress.questionLearntCount > 0 && (
+          <View style={styles.isNotDone}>
+            <View>
+              <Text style={styles.progress}>
+                Bài học tiếp theo: {currentProgress.currentChapterName}
+              </Text>
+              <Text style={styles.crLesson}>
+                Đã học {currentProgress.questionLearntCount}/{currentProgress.questionAllCount} phép
+                tính trong khóa học.
+              </Text>
+            </View>
+            <View style={styles.button}>
+              <CustomButton
+                text="Tiếp tục học"
+                buttonStyles={{
+                  backgroundColor: 'black',
+                  width: '90%',
+                  height: 50,
+                }}
+                textStyles={{
+                  color: 'white',
+                }}
+                onPressFunc={() =>
+                  navigation.navigate('ListLesson', {
+                    currentChapter: currentProgress.currentChapterName,
+                    currentChapterId: currentProgress.currentChapter,
+                    isDone: false,
+                  })
+                }
+              />
+            </View>
           </View>
-          <View style={styles.button}>
-            <CustomButton
-              text="Bắt đầu học"
-              buttonStyles={{
-                backgroundColor: 'black',
-                width: '90%',
-                height: 50,
-              }}
-              textStyles={{
-                color: 'white',
-              }}
-              onPressFunc={() =>
-                navigation.navigate('ListLesson', {
-                  currentChapter: currentProgress.currentChapterName,
-                  currentChapterId: currentProgress.currentChapter,
-                  isDone: false,
-                })
-              }
-            />
+        )}
+      {currentProgress !== null &&
+        !currentProgress.isDone &&
+        currentProgress.questionLearntCount == 0 && (
+          <View style={styles.isNotDone}>
+            <View>
+              <Text style={{ ...styles.progress, textAlign: 'center', fontSize: 18 }}>
+                Khám phá thế giới của {currentCourseName} ngay thôi nào!
+              </Text>
+            </View>
+            <View style={styles.button}>
+              <CustomButton
+                text="Bắt đầu học"
+                buttonStyles={{
+                  backgroundColor: 'black',
+                  width: '90%',
+                  height: 50,
+                }}
+                textStyles={{
+                  color: 'white',
+                }}
+                onPressFunc={() =>
+                  navigation.navigate('ListLesson', {
+                    currentChapter: currentProgress.currentChapterName,
+                    currentChapterId: currentProgress.currentChapter,
+                    isDone: false,
+                  })
+                }
+              />
+            </View>
           </View>
-        </View>
-      )}
-      {currentProgress.isDone && (
+        )}
+      {currentProgress !== null && currentProgress.isDone && (
         <View style={styles.isDone}>
           <Text style={{ ...styles.progress, fontSize: 18 }}>
             Bạn đã hoàn thành khóa học này!!!
@@ -129,7 +150,7 @@ export default function Overview({ navigation }) {
           </View>
         </View>
       )}
-      {dataExp.length ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
+      {dataExp.length > 0 ? <UserRanking dataExp={dataExp} userName={username} topExp={3} /> : null}
     </View>
   );
 }

@@ -12,25 +12,26 @@ const defaultProfilePath =
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
   const user = await User.findOne({
     where: { username: username },
-    include: [{ model: Course, atrributes: ['course_name'] }],
   });
   if (user) {
-    bcrypt.compare(password, user.password).then((match) => {
+    bcrypt.compare(password, user.password).then(async (match) => {
       if (!match) res.json({ error: 'Mật khẩu không chính xác' });
       else {
-        //   const accessToken = jwt.sign({ id: user.username, role: user.role }, 'importantsecret', {
-        //     expiresIn: '24h',
-        //   });
-        //   res.cookie('token', accessToken);
-        //  res.json({ username: user.username, role: user.role, accessToken });
+        let course = {};
+        if (user.course_id != null) {
+          course = await Course.findOne({
+            where: { course_id: user.course_id },
+          });
+        }
         res.json({
           username: user.username,
           name: user.name,
           role_id: user.role_id,
           current_course_id: user.current_course_id,
-          current_course_name: user.Course.course_name,
+          current_course_name: course != {} ? course.course_name : null,
           profile_photo_path: user.profile_photo_path,
           total_exp: user.total_exp,
           is_new_course_noti: user.is_new_course_noti,
@@ -55,7 +56,6 @@ router.post('/', async (req, res) => {
         password: hash,
         role_id: role_id,
         name: name,
-        current_course_id: 1,
         total_exp: 0,
         profile_photo_path: defaultProfilePath,
         is_new_course_noti: false,
@@ -156,12 +156,10 @@ router.post('/update', async (req, res) => {
 
 // Get exp of all user
 router.get('/getExp', async (req, res) => {
-  const allUserExp = await User.findAll(
-    {
-      attributes: ['username', 'name', 'profile_photo_path', 'total_exp'],
-    },
-    { where: { role_id: '0' } }
-  );
+  const allUserExp = await User.findAll({
+    where: { role_id: '0' },
+    attributes: ['username', 'name', 'profile_photo_path', 'total_exp'],
+  });
   res.json(allUserExp);
 });
 

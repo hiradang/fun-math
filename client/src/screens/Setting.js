@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -139,7 +139,6 @@ function Setting({ navigation }) {
     const tempHour = tempDate.getHours();
     const tempMinute = tempDate.getMinutes();
 
-    console.log(tempHour, tempMinute);
     setReminderHour(tempHour);
     setReminderMinute(tempMinute);
 
@@ -336,7 +335,7 @@ function Setting({ navigation }) {
         </View>
       </View>
       {/* Reminder time Picker */}
-      {showDateTimePicker && (
+      {showDateTimePicker ? (
         <DateTimePicker
           mode="time"
           testID="dateTimePicker"
@@ -345,6 +344,8 @@ function Setting({ navigation }) {
           display="default"
           onChange={onChangeTimePicker}
         />
+      ) : (
+        <></>
       )}
     </ScrollView>
   );

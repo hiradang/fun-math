@@ -27,7 +27,7 @@ export default function Home({ navigation }) {
   };
 
   const header = {
-    title: currentCourseName,
+    title: currentCourseName ? currentCourseName: '',
     headerRight: () => {
       return (
         <TouchableOpacity onPress={userIconHandler}>

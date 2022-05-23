@@ -37,12 +37,6 @@ export default function ListCourseAdmin({ navigation }) {
     });
   }, []);
 
-  // const listCourse = [
-  //   { id: 0, name: 'Phép cộng', totalChapter: 15 },
-  //   { id: 1, name: 'Phép trừ', totalChapter: 20 },
-  //   { id: 2, name: 'Phép nhân', totalChapter: 10 },
-  //   { id: 3, name: 'Phép chia', totalChapter: 25 },
-  // ];
 
   const deleteCourse = (id) => {
     axios.delete(`${Config.API_URL}/courses/${id}`).then((res) => {
@@ -165,13 +159,13 @@ export default function ListCourseAdmin({ navigation }) {
           >
             <View style={styles.courseIconWrapper}>
               {item.course_name === 'Phép cộng' && (
-                <Octicons course_name="plus" size={35} color="#333333" />
+                <Octicons name="plus" size={35} color="#333333" />
               )}
               {item.course_name === 'Phép nhân' && (
-                <Octicons course_name="x" size={35} color="#333333" />
+                <Octicons name="x" size={35} color="#333333" />
               )}
               {item.course_name === 'Phép trừ' && (
-                <Octicons course_name="dash" size={35} color="#333333" />
+                <Octicons name="dash" size={35} color="#333333" />
               )}
               {item.course_name === 'Phép chia' && (
                 <MaterialCommunityIcons name="division" size={35} color="#333333" />

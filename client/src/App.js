@@ -183,24 +183,8 @@ const App = () => {
             name="ChapterAdmin"
             component={ListChapterAdmin}
             options={({ navigation }) => ({
-              title: 'Khóa học',
-              ...HeaderStyles,
-              headerRight: () => (
-                <AntDesign
-                  name="setting"
-                  size={30}
-                  style={{ marginRight: 20 }}
-                  color="black"
-                  onPress={() => navigation.navigate('Cài đặt')}
-                />
-              ),
-            })}
-          />
-          <Stack.Screen
-            name="CourseAdmin"
-            component={ListCourseAdmin}
-            options={({ navigation }) => ({
-              title: 'Khóa học',
+              title: 'Quản trị chương',
+              headerTitleAlign: 'center',
               ...HeaderStyles,
               headerRight: () => (
                 <AntDesign
@@ -214,10 +198,30 @@ const App = () => {
             })}
           />
           <Stack.Screen
+            name="CourseAdmin"
+            component={ListCourseAdmin}
+            options={({ navigation }) => ({
+              title: 'Quản trị khóa học',
+              ...HeaderStyles,
+              headerTitleAlign: 'center',
+              headerRight: () => (
+                <AntDesign
+                  name="setting"
+                  size={30}
+                  style={{ marginRight: 20 }}
+                  color="black"
+                  onPress={() => navigation.navigate('SettingAdmin')}
+                />
+              ),
+              headerLeft: () => null,
+            })}
+          />
+          <Stack.Screen
             name="LessonAdmin"
             component={ListLessonAdmin}
             options={({ navigation }) => ({
-              title: 'Khóa học',
+              title: 'Quản trị bài học',
+              headerTitleAlign: 'center',
               ...HeaderStyles,
               headerRight: () => (
                 <AntDesign
@@ -251,15 +255,6 @@ const App = () => {
             name="SettingAdmin"
             options={({ navigation }) => ({
               title: 'Cài đặt',
-              headerLeft: () => (
-                <AntDesign
-                  name="arrowleft"
-                  size={30}
-                  style={{ marginLeft: 20 }}
-                  color="black"
-                  onPress={() => navigation.goBack()}
-                />
-              ),
               ...HeaderStyles,
             })}
             component={SettingAdmin}

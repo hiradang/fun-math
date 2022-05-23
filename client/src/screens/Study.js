@@ -13,14 +13,16 @@ export default function Study({ navigation }) {
   const [chapters, setChapters] = useState([]);
 
   useEffect(() => {
-    axios
-      .post(`${Config.API_URL}/chapter_user/getAllChapter`, {
-        username: username,
-        courseId: currentCourseId,
-      })
-      .then((res) => {
-        setChapters(res.data);
-      });
+    navigation.addListener('focus', () => {
+      axios
+        .post(`${Config.API_URL}/chapter_user/getAllChapter`, {
+          username: username,
+          courseId: currentCourseId,
+        })
+        .then((res) => {
+          setChapters(res.data);
+        });
+    });
   }, [currentCourseId, navigation]);
 
   const lengthOfList = chapters.length;
