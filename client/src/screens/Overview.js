@@ -14,8 +14,6 @@ export default function Overview({ navigation }) {
     (state) => state.taskReducer
   );
 
-  console.log(currentCourseId, currentCourseName);
-
   const [currentProgress, setCurrentProgress] = useState(null);
   const [dataExp, setDataExp] = useState([]);
 

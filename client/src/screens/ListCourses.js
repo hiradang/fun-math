@@ -151,7 +151,7 @@ export default function ListCourses({ navigation, route }) {
             {course.hasJoined ? (
               <CustomButton
                 buttonStyles={{ backgroundColor: '#555', width: 140, height: 46 }}
-                textStyles={{ color: 'white', fontSize: 14 }}
+                textStyles={{ color: 'white', fontSize: 12 }}
                 text="Đã tham gia"
                 onPressFunc={() => {
                   Toast.show({

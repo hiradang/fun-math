@@ -178,7 +178,7 @@ function Setting({ navigation }) {
         <Text style={styles.title}>TÀI KHOẢN</Text>
         <View style={styles.content}>
           <View style={styles.row}>
-            <Text style={styles.text}>Chỉnh sửa profile</Text>
+            <Text style={styles.text}>Chỉnh sửa thông tin cá nhân</Text>
             <FontAwesome5
               size={24}
               color="#14D39A"
